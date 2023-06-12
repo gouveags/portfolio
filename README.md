@@ -1,6 +1,6 @@
 # Portfolio Hello, welcome to my portfolio project.
 
-![image]("C:\Users\gabri\OneDrive\Área de Trabalho\Screenshot.png")
+![image](https://github.com/gouveags/portfolio/blob/main/mainPage.png)
 
 ## Tools used:
 
@@ -14,4 +14,4 @@
 
 ### Gabriel Gouvêa
 
-### Linkedin: https://www.linkedin.com/school/aluracursos/
+### Linkedin: https://www.linkedin.com/in/gouveags/
