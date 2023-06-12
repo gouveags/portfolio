@@ -1,4 +1,6 @@
-# Portfolio Hello, welcome to my portfolio project.
+# Portfolio 
+
+Hello, welcome to my portfolio project.
 
 ![image](https://github.com/gouveags/portfolio/blob/main/mainPage.png)
 
