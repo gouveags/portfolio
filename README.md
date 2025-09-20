@@ -5,8 +5,8 @@ Hello, my name is Gabriel Silva Gouvêa and this is my portfolio.
 Here are my contacts, feel free to reach out:
 
 - Email: [gabrielsgouvea@hotmail.com](mailto:gabrielsgouvea@hotmail.com)
-- GitHub: [gouveags](https://www.github.com/gouveags/)
-- LinkedIn: [gouveags](https://www.linkedin.com/in/gouveags/)
+- GitHub: [github.com/gouveags/](https://www.github.com/gouveags/)
+- LinkedIn: [linkedin.com/in/gouveags/](https://www.linkedin.com/in/gouveags/)
 - Portfolio: [gouveagsportfolio.vercel.app](https://gouveagsportfolio.vercel.app/)
 
 
