@@ -1,19 +1,7 @@
 # Portfolio 
 
-Hello, welcome to my portfolio project.
+Hello, my name is Gabriel Silva Gouvêa and this is my portfolio.
 
-![image](https://github.com/gouveags/portfolio/blob/main/mainPage.png)
-
-## Tools used:
-
-* HTML
-
-* CSS
-
-* Flexbox
-
-### Made by:
-
-### Gabriel Gouvêa
-
-### Linkedin: https://www.linkedin.com/in/gouveags/
+- Linkedin: https://www.linkedin.com/in/gouveags/
+- GitHub: https://www.github.com/gouveags/
+- Portfolio: https://www.gouveagsportfolio.vercel.app/
