@@ -1,0 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --background-color: #000000;
+  --text-color: #F6F6F6;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
