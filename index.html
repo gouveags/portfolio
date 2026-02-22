@@ -3,332 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gabriel Silva Gouvêa - Software Engineer - Portfolio</title>
-    <meta name="description" content="Hey, I'm Gabriel Silva Gouvêa, a Software Engineer currently working at MOVEdot AI (YC F25). I love solving problems, and to me, coding is just a tool to do so. My personal goals are to spread the gospel of Jesus Christ, be an awesome husband and future father, and become one of the top 1% software engineers in the world. Welcome to my portfolio!">
-    <meta name="keywords" content="Software Engineer, Portfolio, AI, Agents, Jesus Christ, Christianity, Christian, Gabriel,Gabriel Silva Gouvêa, Gabriel Gouvêa, Gouvêa, Motorsport, Data Analysis, Full-Stack Development, JavaScript, Python, TypeScript, MOVEdot AI, Y Combinator, Formula SAE, Telemetry, Real-time Systems, Node.js, WebSockets, AWS, Neo4j, PGVector, RAG Systems, Educational Technology">
+    <title>Gabriel Silva Gouvea | Software Engineer Portfolio</title>
+    <meta name="description" content="Gabriel Silva Gouvea is a software engineer at MOVEdot AI (YC F25), building multi-agent systems for motorsport analytics, AI products, and real-time platforms.">
+    <meta name="keywords" content="Software Engineer, Portfolio, AI, Agents, Motorsport, Full-Stack, JavaScript, Python, TypeScript, MOVEdot AI, Y Combinator, Formula SAE, Telemetry, AWS, Neo4j, PGVector">
     <link rel="icon" type="image/png" href="./assets/favicon.png">
     <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
-    <link rel="stylesheet" href="./styles/new_version.css">
-    <link href="https://fonts.googleapis.com" rel="preconnect"/>
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/style.css">
 </head>
 <body>
+    <a class="skip-link" href="#home">Skip to content</a>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="navbar-content">
-                <div class="navbar-brand">Gabriel Gouvêa</div>
-                <div class="navbar-nav">
-                    <a href="#home" class="nav-link">Home</a>
-                    <a href="#about" class="nav-link">About</a>
-                    <a href="#experience" class="nav-link">Experience</a>
-                    <a href="#projects" class="nav-link">Projects</a>
-                    <a href="#contact" class="nav-link">Contact</a>
-                </div>
-                <button class="mobile-menu-button" id="mobile-menu-button">
-                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
+    <header class="site-header" id="top">
+        <nav class="navbar" aria-label="Main navigation">
+            <a href="#home" class="brand">Gabriel Gouvea</a>
+            <button class="mobile-menu-button" id="mobile-menu-button" aria-label="Toggle menu" aria-controls="mobile-menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="navbar-nav" id="navbar-nav">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#experience" class="nav-link">Experience</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="./assets/CV_Gabriel_Silva_Gouvea_en-US.pdf" class="resume-link" download>Resume</a>
             </div>
-        </div>
-        <!-- Mobile menu -->
+        </nav>
         <div class="mobile-menu" id="mobile-menu">
             <a href="#home" class="nav-link">Home</a>
             <a href="#about" class="nav-link">About</a>
             <a href="#experience" class="nav-link">Experience</a>
             <a href="#projects" class="nav-link">Projects</a>
             <a href="#contact" class="nav-link">Contact</a>
+            <a href="./assets/CV_Gabriel_Silva_Gouvea_en-US.pdf" class="nav-link" download>Resume</a>
         </div>
-    </nav>
+    </header>
 
-    <!-- Home Section -->
-    <section id="home" class="section hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Gabriel Silva Gouvêa</h1>
-            <h2 class="hero-subtitle">Software Engineer</h2>
+    <main>
+        <section id="home" class="section hero reveal">
+            <p class="hero-kicker">Software Engineer | AI Systems | Motorsport Analytics</p>
+            <h1 class="hero-title">Gabriel Silva Gouvea</h1>
             <p class="hero-description">
-                Hey, I'm Gabriel Silva Gouvêa, a Software Engineer currently working at MOVEdot AI (YC F25). I love solving problems, and to me, coding is just a tool to do so. My personal goals are to spread the gospel of Jesus Christ, be an awesome husband and future father, and become one of the top 1% software engineers in the world. Welcome to my portfolio!
+                I build AI-powered products and real-time software that help people make better decisions faster. Currently at MOVEdot AI (YC F25), focused on multi-agent workflows for motorsport performance.
             </p>
-            <div class="hero-buttons">
-                <a href="#about" class="hero-button hero-button-primary">About Me</a>
-                <a href="#experience" class="hero-button hero-button-secondary">Experience</a>
-                <a href="#projects" class="hero-button hero-button-secondary">Projects</a>
-                <a href="#contact" class="hero-button hero-button-secondary">Contact</a>
+            <div class="hero-actions">
+                <a href="#projects" class="button button-primary">View Projects</a>
+                <a href="#contact" class="button button-secondary">Get in Touch</a>
             </div>
-            <div class="hero-social">
-                <a href="https://github.com/gouveags" class="social-link" target="_blank" rel="noopener noreferrer">
-                    <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
-                    </svg>
-                </a>
-                <a href="https://linkedin.com/in/gouveags" class="social-link" target="_blank" rel="noopener noreferrer">
-                    <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
-                    </svg>
-                </a>
+            <ul class="hero-metrics" aria-label="Profile highlights">
+                <li><strong>5+</strong><span>years building production software</span></li>
+                <li><strong>3</strong><span>domains: AI, education, motorsport</span></li>
+                <li><strong>2</strong><span>languages: Portuguese and English</span></li>
+            </ul>
+            <div class="hero-social" aria-label="Social links">
+                <a href="https://github.com/gouveags" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://linkedin.com/in/gouveags" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="mailto:gabrielgouvea@poli.ufrj.br">Email</a>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- About Section -->
-      <!-- About Section -->
-    <section id="about" class="section about">
-        <div class="about-container">
-            <div class="about-header">
-                <h2 class="about-title">About Me</h2>
-                <p class="about-subtitle">Get to know me better</p>
+        <section id="about" class="section about reveal">
+            <div class="section-heading">
+                <p class="section-kicker">About</p>
+                <h2>Engineer first, product thinker always</h2>
             </div>
-            <div class="about-content">
-                <div>
-                    <img alt="Gabriel Silva Gouvêa" class="about-image" src="./assets/me.png"/>
-                </div>
-                <div class="about-text">
-                    <h3 class="about-name">Gabriel Silva Gouvêa</h3>
-                    <p class="about-role">Software Engineer</p>
-                    <p class="about-location">Rio de Janeiro, RJ</p>
-                    <div class="about-description">
-                        <p>
-                            Hey, I'm Gabriel Silva Gouvêa, a Software Engineer currently working at MOVEdot AI (YC F25). I love solving problems, and to me, coding is just a tool to do so. I specialize in AI-driven solutions, full-stack development, and motorsport data analysis, building multi-agent orchestration systems that help race teams analyze performance data in real-time.
-                        </p>
-                        <p>
-                            My experience spans from building award-winning educational AI platforms at Realms IP.TV to developing telemetry systems for Formula SAE racing teams. I specialize in JavaScript/TypeScript, Python, and modern web technologies, with a strong focus on creating scalable, maintainable applications.
-                        </p>
-                        <p>
-                            My personal goals are to spread the gospel of Jesus Christ, be an awesome husband and future father, and become one of the top 1% software engineers in the world. I'm fluent in both Portuguese and English, and I'm passionate about using technology to solve complex problems and make a positive impact in the world of motorsports and education.
-                        </p>
-                    </div>
+            <div class="about-layout">
+                <figure class="about-photo-frame">
+                    <img src="./assets/me.png" alt="Portrait of Gabriel Silva Gouvea" class="about-image">
+                </figure>
+                <div class="about-copy">
+                    <p>
+                        I care about shipping software that solves concrete problems. At MOVEdot AI, I design and maintain multi-agent orchestration systems that cut race analysis from hours to minutes.
+                    </p>
+                    <p>
+                        Previously at Realms IP.TV, I helped build EduxGen.AI, an award-winning educational platform. I also developed telemetry tooling for Formula SAE, from embedded data capture to live visualization.
+                    </p>
+                    <p>
+                        Core stack: JavaScript, TypeScript, Python, AWS, WebSockets, Neo4j, and PGVector. Outside work, I am motivated by faith, family, and long-term technical excellence.
+                    </p>
+                    <ul class="about-points">
+                        <li>Building scalable AI systems with pragmatic architecture</li>
+                        <li>Strong end-to-end ownership across backend and frontend</li>
+                        <li>Experience in high-pressure, data-intensive environments</li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Experience Section -->
-    <section id="experience" class="section experience">
-        <div class="experience-container">
-            <div class="experience-header">
-                <h2 class="experience-title">Experience</h2>
-                <p class="experience-subtitle">A timeline of my professional journey</p>
+        <section id="experience" class="section experience reveal">
+            <div class="section-heading">
+                <p class="section-kicker">Experience</p>
+                <h2>Professional timeline</h2>
             </div>
             <div class="timeline">
-                <div class="timeline-line"></div>
-                <div class="timeline-item">
-                    <div class="timeline-icon">
-                        <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24">
-                            <path d="M216,56H176V48a24,24,0,0,0-24-24H104A24,24,0,0,0,80,48v8H40A16,16,0,0,0,24,72V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V72A16,16,0,0,0,216,56ZM96,48a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96ZM216,72v41.61A184,184,0,0,1,128,136a184.07,184.07,0,0,1-88-22.38V72ZM216,200H40V131.64A200.19,200.19,0,0,0,128,152a200.25,200.25,0,0,0,88-20.37V200Z"></path>
-                        </svg>
-                    </div>
-                    <div class="timeline-content">
-                        <h3>Software Engineer at MOVEdot AI (YC F25)</h3>
-                        <p class="timeline-date">May 2025 – Present</p>
-                        <div class="timeline-description">
-                            <ul>
-                                <li>Designed and maintained the company's core multi-agent orchestration system for motorsport data analysis (Stint/Deep Analysis Agents), enabling race teams to cut lap analysis time from hours to minutes.</li>
-                                <li>Integrated assistant-ui and custom canvas interface to provide real-time performance insights to clients including IndyCar teams.</li>
-                                <li>Built a manual video synchronization tool using AWS Lambda, MediaConvert, and S3, improving data alignment across race events.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-icon">
-                        <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24">
-                            <path d="M216,56H176V48a24,24,0,0,0-24-24H104A24,24,0,0,0,80,48v8H40A16,16,0,0,0,24,72V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V72A16,16,0,0,0,216,56ZM96,48a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96ZM216,72v41.61A184,184,0,0,1,128,136a184.07,184.07,0,0,1-88-22.38V72ZM216,200H40V131.64A200.19,200.19,0,0,0,128,152a200.25,200.25,0,0,0,88-20.37V200Z"></path>
-                        </svg>
-                    </div>
-                    <div class="timeline-content">
-                        <h3>Software Engineer at Realms IP.TV</h3>
-                        <p class="timeline-date">Jan. 2023 – Apr. 2025</p>
-                        <div class="timeline-description">
-                            <ul>
-                                <li>Led the development of EduxGen.AI, an award-winning AI educational material generator (backend LLM, websockets, FFmpeg and frontend UI). 2025 Bett Awards finalist for "AI for Teaching and Assessment" and "Tech & Learning Awards of Excellence 2024" Winner.</li>
-                                <li>Designed CGS (Content Generation System), a new and improved backend for EduxGen.AI with custom agent orchestration and enhanced scalability. Worked on an in-house websockets engine.</li>
-                                <li>Developed and optimized Persona-Knowledge (Python RAG System) using Neo4j and PGVector, significantly reducing Docker image size and build time by 70%.</li>
-                                <li>Integrated AWS S3 and implemented CI/CD best practices for improved deployment efficiency.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-icon">
-                        <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24">
-                            <path d="M216,56H176V48a24,24,0,0,0-24-24H104A24,24,0,0,0,80,48v8H40A16,16,0,0,0,24,72V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V72A16,16,0,0,0,216,56ZM96,48a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96ZM216,72v41.61A184,184,0,0,1,128,136a184.07,184.07,0,0,1-88-22.38V72ZM216,200H40V131.64A200.19,200.19,0,0,0,128,152a200.25,200.25,0,0,0,88-20.37V200Z"></path>
-                        </svg>
-                    </div>
-                    <div class="timeline-content">
-                        <h3>Data Acquisition Engineer - Icarus Formula SAE</h3>
-                        <p class="timeline-date">May 2020 – Jun. 2021 / Jan. 2022 - Sep. 2022</p>
-                        <div class="timeline-description">
-                            <ul>
-                                <li>Developed a real-time vehicle telemetry system with C++ microcontroller routines and a C# live data visualization application.</li>
-                                <li>Managed a team and 12 projects, implementing agile methodologies to improve delivery and productivity as Power train Manager.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <article class="timeline-item">
+                    <p class="timeline-date">May 2025 - Present</p>
+                    <h3>Software Engineer at MOVEdot AI (YC F25)</h3>
+                    <ul>
+                        <li>Designed and maintained multi-agent orchestration for motorsport race analysis.</li>
+                        <li>Integrated assistant interfaces and custom canvases for real-time team insights.</li>
+                        <li>Built video synchronization workflows with AWS Lambda, MediaConvert, and S3.</li>
+                    </ul>
+                </article>
+                <article class="timeline-item">
+                    <p class="timeline-date">Jan 2023 - Apr 2025</p>
+                    <h3>Software Engineer at Realms IP.TV</h3>
+                    <ul>
+                        <li>Led development of EduxGen.AI, an award-winning AI educational product.</li>
+                        <li>Designed a scalable content generation backend with custom agent orchestration.</li>
+                        <li>Optimized RAG infrastructure with Neo4j and PGVector, reducing build time by 70%.</li>
+                    </ul>
+                </article>
+                <article class="timeline-item">
+                    <p class="timeline-date">May 2020 - Sep 2022</p>
+                    <h3>Data Acquisition Engineer at Icarus Formula SAE</h3>
+                    <ul>
+                        <li>Developed real-time telemetry stack across microcontroller and desktop tooling.</li>
+                        <li>Managed technical projects and delivery pipelines in team leadership roles.</li>
+                    </ul>
+                </article>
             </div>
-            <a href="./assets/CV_Gabriel_Silva_Gouvea_en-US.pdf" download class="download-button">
-                <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24">
-                    <path d="M216,152v56a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V152a8,8,0,0,1,16,0v48H200v-48a8,8,0,0,1,16,0ZM93.66,133.66,120,160V40a8,8,0,0,1,16,0V160l26.34-26.34a8,8,0,0,1,11.32,11.32l-40,40a8,8,0,0,1-11.32,0l-40-40a8,8,0,0,1,11.32-11.32Z"></path>
-                </svg>
-                <span>Download Resume (PDF)</span>
-            </a>
-        </div>
-    </section>
+            <a href="./assets/CV_Gabriel_Silva_Gouvea_en-US.pdf" download class="button button-primary resume-cta">Download Resume (PDF)</a>
+        </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="section projects">
-        <div class="projects-container">
-            <div class="projects-header">
-                <h2 class="projects-title">My Projects</h2>
-                <p class="projects-subtitle">A collection of my work and personal endeavors in AI, motorsport technology, and software development.</p>
+        <section id="projects" class="section projects reveal">
+            <div class="section-heading">
+                <p class="section-kicker">Projects</p>
+                <h2>Selected work</h2>
             </div>
             <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image">
-                        <div class="text-center text-white">
-                            <svg class="project-icon" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                            </svg>
-                            <h3 class="project-icon-title">AI Agent Infrastructure</h3>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">MOVEdot AI Multi-Agent System</h3>
-                        <div class="project-tags">
-                            <span class="project-tag">LangGraph</span>
-                            <span class="project-tag">Python</span>
-                            <span class="project-tag">AWS</span>
-                        </div>
-                        <p class="project-description">Designed and maintained the company's core multi-agent orchestration system for motorsport data analysis, enabling race teams to cut lap analysis time from hours to minutes.</p>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image green">
-                        <div class="text-center text-white">
-                            <svg class="project-icon" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                            </svg>
-                            <h3 class="project-icon-title">Educational AI Platform</h3>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">EduxGen.AI</h3>
-                        <div class="project-tags">
-                            <span class="project-tag">Node.js</span>
-                            <span class="project-tag">WebSockets</span>
-                            <span class="project-tag">FFmpeg</span>
-                        </div>
-                        <p class="project-description">Award-winning AI educational material generator with backend LLM, websockets, FFmpeg and frontend UI. 2025 Bett Awards finalist and Tech & Learning Awards of Excellence 2024 Winner.</p>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image red">
-                        <div class="text-center text-white">
-                            <svg class="project-icon" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                            <h3 class="project-icon-title">Racing Telemetry</h3>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Formula SAE Telemetry System</h3>
-                        <div class="project-tags">
-                            <span class="project-tag">C++</span>
-                            <span class="project-tag">C#</span>
-                            <span class="project-tag">Microcontroller</span>
-                        </div>
-                        <p class="project-description">Developed a real-time vehicle telemetry system with C++ microcontroller routines and a C# live data visualization application for Formula SAE racing team.</p>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image purple">
-                        <div class="text-center text-white">
-                            <svg class="project-icon" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                            </svg>
-                            <h3 class="project-icon-title">RAG System</h3>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Persona-Knowledge RAG System</h3>
-                        <div class="project-tags">
-                            <span class="project-tag">Python</span>
-                            <span class="project-tag">Neo4j</span>
-                            <span class="project-tag">PGVector</span>
-                        </div>
-                        <p class="project-description">Developed and optimized a Python RAG system using Neo4j and PGVector, significantly reducing Docker image size and build time by 70%.</p>
-                    </div>
-                </div>
+                <article class="project-card">
+                    <p class="project-type">AI Infrastructure</p>
+                    <h3>MOVEdot AI Multi-Agent System</h3>
+                    <p>Core orchestration and analysis pipeline that helps race engineers process telemetry and strategy insights quickly.</p>
+                    <ul class="project-tags">
+                        <li>LangGraph</li>
+                        <li>Python</li>
+                        <li>AWS</li>
+                    </ul>
+                </article>
+                <article class="project-card">
+                    <p class="project-type">Education Technology</p>
+                    <h3>EduxGen.AI</h3>
+                    <p>Award-winning AI learning content generator with real-time communication and media processing support.</p>
+                    <ul class="project-tags">
+                        <li>Node.js</li>
+                        <li>WebSockets</li>
+                        <li>FFmpeg</li>
+                    </ul>
+                </article>
+                <article class="project-card">
+                    <p class="project-type">Motorsport Systems</p>
+                    <h3>Formula SAE Telemetry</h3>
+                    <p>End-to-end real-time telemetry stack including data acquisition firmware and live visualization dashboards.</p>
+                    <ul class="project-tags">
+                        <li>C++</li>
+                        <li>C#</li>
+                        <li>Embedded</li>
+                    </ul>
+                </article>
+                <article class="project-card">
+                    <p class="project-type">Data + Retrieval</p>
+                    <h3>Persona-Knowledge RAG</h3>
+                    <p>Python RAG system backed by Neo4j and PGVector for high-context retrieval and faster deployments.</p>
+                    <ul class="project-tags">
+                        <li>Python</li>
+                        <li>Neo4j</li>
+                        <li>PGVector</li>
+                    </ul>
+                </article>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="section contact">
-        <div class="contact-container">
-            <div class="contact-header">
-                <h2 class="contact-title">Get in Touch</h2>
-                <p class="contact-subtitle">
-                    I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions. Feel free to reach out!
-                </p>
+        <section id="contact" class="section contact reveal">
+            <div class="section-heading">
+                <p class="section-kicker">Contact</p>
+                <h2>Let's build something meaningful</h2>
             </div>
             <div class="contact-grid">
                 <div class="contact-info">
-                    <h3>Contact Information</h3>
-                    <p>Let's connect and build something amazing together.</p>
-                    <div class="contact-links">
-                        <a class="contact-link" href="mailto:gabrielgouvea@poli.ufrj.br">
-                            <span class="material-symbols-outlined contact-link-icon">mail</span>
-                            <span>gabrielgouvea@poli.ufrj.br</span>
-                        </a>
-                        <a class="contact-link" href="https://linkedin.com/in/gouveags">
-                            <svg class="contact-link-icon" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
-                            </svg>
-                            <span>LinkedIn</span>
-                        </a>
-                        <a class="contact-link" href="https://github.com/gouveags">
-                            <svg class="contact-link-icon" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
-                            </svg>
-                            <span>GitHub</span>
-                        </a>
-                    </div>
+                    <p>I am open to software engineering opportunities, AI product work, and collaborations in motorsport or education technology.</p>
+                    <ul>
+                        <li><a href="mailto:gabrielgouvea@poli.ufrj.br">gabrielgouvea@poli.ufrj.br</a></li>
+                        <li><a href="https://linkedin.com/in/gouveags" target="_blank" rel="noopener noreferrer">linkedin.com/in/gouveags</a></li>
+                        <li><a href="https://github.com/gouveags" target="_blank" rel="noopener noreferrer">github.com/gouveags</a></li>
+                    </ul>
                 </div>
-                <div class="contact-form">
-                    <h3>Send a Message</h3>
-                    <form id="contact-form">
-                        <div class="form-group">
-                            <label class="sr-only" for="name">Name</label>
-                            <input class="form-input" id="name" name="name" placeholder="Your Name" type="text" required/>
-                        </div>
-                        <div class="form-group">
-                            <label class="sr-only" for="email">Email</label>
-                            <input class="form-input" id="email" name="email" placeholder="Your Email" type="email" required/>
-                        </div>
-                        <div class="form-group">
-                            <label class="sr-only" for="message">Message</label>
-                            <textarea class="form-input form-textarea" id="message" name="message" placeholder="Your Message" rows="4" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button class="form-button" type="submit">Send Message</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
+                <form id="contact-form" class="contact-form" novalidate>
+                    <label for="name">Name</label>
+                    <input id="name" name="name" type="text" required>
 
-    <!-- Footer -->
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" required>
+
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+
+                    <button type="submit" class="button button-primary">Send Message</button>
+                    <p id="form-status" class="form-status" aria-live="polite"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
     <footer class="footer">
-        <div class="footer-container">
-            <p class="footer-text">© 2025 Gabriel Silva Gouvêa. All rights reserved.</p>
-        </div>
+        <p>&copy; <span id="year"></span> Gabriel Silva Gouvea. All rights reserved.</p>
     </footer>
 
     <script src="./scripts/main.js"></script>
