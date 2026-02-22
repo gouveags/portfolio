@@ -4,7 +4,7 @@ This document explains the main design and engineering decisions behind this por
 
 ## Project Goal
 
-The core goal is simple: make it easy for someone to understand who Gabriel Silva Gouvêa is, what he has built, and how to contact him, in under a minute.
+The core goal is simple: make it easy for someone to understand who I'm, what I've built, and how to contact me, all in under a minute.
 
 That means:
 - strong first impression
