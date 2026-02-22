@@ -124,6 +124,16 @@ body::before {
   color: var(--text);
   border-color: rgba(255, 122, 24, 0.5);
   background: rgba(255, 122, 24, 0.12);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.link-icon {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+  flex-shrink: 0;
 }
 
 .mobile-menu-button {
@@ -284,16 +294,23 @@ main {
 }
 
 .hero-social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.36rem 0.62rem;
+  border-radius: 999px;
+  border: 1px solid rgba(25, 200, 255, 0.2);
+  background: rgba(25, 200, 255, 0.06);
   color: var(--text-muted);
   text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: color 160ms ease, border-color 160ms ease;
+  transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease;
 }
 
 .hero-social a:hover,
 .hero-social a:focus-visible {
   color: var(--text);
   border-color: var(--cool);
+  background: rgba(25, 200, 255, 0.14);
 }
 
 .about-layout {
@@ -476,6 +493,9 @@ main {
 }
 
 .contact-info a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   color: #d9efff;
   text-decoration: none;
 }
