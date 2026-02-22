@@ -239,6 +239,7 @@ main {
   padding: 0.72rem 1.25rem;
   border: 1px solid transparent;
   font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
   font-family: inherit;
   transition: transform 180ms var(--easing), box-shadow 180ms var(--easing), background-color 180ms var(--easing);
@@ -546,12 +547,17 @@ main {
 }
 
 .reveal {
-  opacity: 0;
-  transform: translateY(22px);
+  opacity: 1;
+  transform: none;
   transition: opacity 560ms var(--easing), transform 560ms var(--easing);
 }
 
-.reveal.is-visible {
+.js .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.js .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -566,6 +572,10 @@ main {
   .project-card {
     transition: none;
     transform: none;
+  }
+
+  .js .reveal {
+    opacity: 1;
   }
 }
 
