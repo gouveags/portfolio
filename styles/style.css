@@ -207,7 +207,7 @@ main {
 .timeline-date,
 .project-type,
 .blog-meta,
-.telemetry-label {
+.signal-label {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.75rem;
   font-weight: 700;
@@ -319,6 +319,9 @@ main {
   position: relative;
   min-height: 570px;
   padding: 1rem;
+  display: grid;
+  grid-template-rows: auto minmax(150px, 1fr) auto auto;
+  gap: 0.8rem;
   border: 1px solid var(--ink);
   background:
     linear-gradient(rgba(243, 234, 214, 0.09) 1px, transparent 1px),
@@ -330,7 +333,7 @@ main {
 }
 
 .hero-panel::before {
-  content: "MOVEdot / AI systems / telemetry";
+  content: "software / ai / systems";
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -341,59 +344,104 @@ main {
   writing-mode: vertical-rl;
 }
 
-.telemetry-card {
+.hero-panel::after {
+  content: "";
   position: absolute;
-  top: 1.3rem;
-  left: 1.3rem;
-  width: 190px;
+  inset: auto -20% 28% -20%;
+  height: 2px;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(22, 124, 102, 0.2), var(--red), rgba(34, 90, 159, 0.35), transparent);
+  box-shadow: 0 0 36px rgba(226, 59, 34, 0.42);
+  animation: signalSweep 4.6s linear infinite;
+}
+
+.code-signal-card {
+  position: relative;
+  z-index: 2;
+  width: min(220px, 60%);
   padding: 0.9rem;
   border: 1px solid var(--line-dark);
   background: rgba(243, 234, 214, 0.08);
   color: var(--paper);
 }
 
-.telemetry-card strong {
+.code-signal-card strong {
   display: block;
   margin: 0.3rem 0 0.1rem;
   color: #f7f0df;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 1.7rem;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: 4rem;
+  font-weight: 400;
+  line-height: 0.82;
 }
 
-.telemetry-card small {
+.code-signal-card small {
+  display: block;
   color: rgba(243, 234, 214, 0.62);
 }
 
-.track-map {
-  position: absolute;
-  inset: 7.5rem 2.4rem 8.8rem 2.4rem;
-  border: 12px solid var(--paper);
-  border-left-color: var(--red);
-  border-bottom-color: var(--green);
-  border-radius: 49% 51% 42% 58% / 36% 55% 45% 64%;
-  transform: rotate(-16deg);
-  filter: drop-shadow(0 0 26px rgba(226, 59, 34, 0.28));
+.repo-console {
+  position: relative;
+  z-index: 1;
+  min-height: 150px;
+  padding: 1rem;
+  border: 1px solid var(--line-dark);
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(243, 234, 214, 0.78);
+  font-family: "JetBrains Mono", monospace;
+  font-size: clamp(0.68rem, 1.2vw, 0.82rem);
+  text-transform: uppercase;
 }
 
-.track-map span {
-  position: absolute;
-  width: 11px;
-  height: 11px;
-  background: var(--gold);
-  border-radius: 50%;
-  box-shadow: 0 0 0 7px rgba(200, 145, 46, 0.16);
+.repo-console p + p {
+  margin-top: 0.75rem;
 }
 
-.track-map span:nth-child(1) { top: 8%; left: 26%; }
-.track-map span:nth-child(2) { top: 34%; right: 2%; }
-.track-map span:nth-child(3) { bottom: 10%; right: 22%; }
-.track-map span:nth-child(4) { bottom: 25%; left: 0; }
+.repo-console span {
+  color: var(--red);
+}
+
+.repo-console i {
+  display: inline-block;
+  width: 0.75em;
+  height: 1.25em;
+  margin-top: 1rem;
+  background: var(--paper);
+  animation: cursorBlink 900ms steps(1) infinite;
+}
+
+.language-stack {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 0.48rem;
+}
+
+.language-stack span {
+  display: grid;
+  grid-template-columns: 10ch minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  color: rgba(243, 234, 214, 0.7);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.language-stack span::after {
+  content: "";
+  height: 9px;
+  width: calc(var(--size) * 10%);
+  background: linear-gradient(90deg, var(--red), var(--green), var(--blue));
+  box-shadow: 0 0 18px rgba(22, 124, 102, 0.32);
+  animation: barPulse 3.4s ease-in-out infinite;
+}
 
 .hero-metrics {
-  position: absolute;
-  left: 1rem;
-  right: 1rem;
-  bottom: 1rem;
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   list-style: none;
@@ -699,13 +747,43 @@ main {
 }
 
 .js .reveal {
-  opacity: 0;
-  transform: translateY(24px);
+  opacity: 1;
+  transform: none;
 }
 
 .js .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@keyframes signalSweep {
+  0% {
+    transform: translateX(-35%) rotate(-6deg);
+  }
+  100% {
+    transform: translateX(35%) rotate(-6deg);
+  }
+}
+
+@keyframes cursorBlink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes barPulse {
+  0%,
+  100% {
+    filter: saturate(0.9);
+  }
+  50% {
+    filter: saturate(1.6);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -719,6 +797,12 @@ main {
   .project-card {
     transition: none;
     transform: none;
+  }
+
+  .hero-panel::after,
+  .repo-console i,
+  .language-stack span::after {
+    animation: none;
   }
 
   .js .reveal {
@@ -741,7 +825,45 @@ main {
   }
 
   .hero-panel {
-    min-height: 480px;
+    min-height: 0;
+    grid-template-columns: 220px minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .hero-panel::before {
+    display: none;
+  }
+
+  .code-signal-card,
+  .repo-console,
+  .language-stack,
+  .hero-metrics {
+    position: relative;
+    inset: auto;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+  }
+
+  .code-signal-card {
+    width: 100%;
+  }
+
+  .repo-console,
+  .language-stack {
+    grid-column: auto;
+  }
+
+  .repo-console {
+    min-height: 0;
+  }
+
+  .hero-metrics {
+    grid-column: 1 / -1;
+    width: 100%;
   }
 
   .about-layout,
@@ -785,25 +907,38 @@ main {
   }
 
   .hero-panel {
-    min-height: 440px;
-  }
-
-  .track-map {
-    inset: 7rem 1.6rem 9.2rem;
-  }
-
-  .hero-metrics {
     grid-template-columns: 1fr;
   }
 
+  .code-signal-card {
+    width: 100%;
+  }
+
+  .language-stack span {
+    grid-template-columns: 8ch minmax(0, 1fr);
+  }
+
+  .hero-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .hero-metrics li {
-    min-height: auto;
-    border-right: 0;
-    border-bottom: 1px solid var(--line-dark);
+    min-height: 100px;
+    border-right: 1px solid var(--line-dark);
+    border-bottom: 0;
+    padding: 0.65rem;
   }
 
   .hero-metrics li:last-child {
-    border-bottom: 0;
+    border-right: 0;
+  }
+
+  .hero-metrics strong {
+    font-size: 2.3rem;
+  }
+
+  .hero-metrics span {
+    font-size: 0.58rem;
   }
 
   .timeline-item {
