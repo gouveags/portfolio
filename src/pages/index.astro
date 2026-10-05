@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
+import WallpaperDots from '../components/WallpaperDots.astro';
 import { apps } from '../data/navigation';
 ---
 <Layout title="Home" pageTitle="Home" filename="welcome.md" kind="home" description="Gabriel Gouvêa. Software engineer building AI products, backend systems, and developer tools. Make yourself at home.">
@@ -18,6 +19,7 @@ import { apps } from '../data/navigation';
     <div class="mobile-welcome"><p class="eyebrow">Gabriel Gouvêa</p><h1>Hey.<br />Welcome in.</h1><p>A few things I build, write,<br />and enjoy learning about.</p></div>
     <nav class="app-grid" aria-label="Apps">{apps.slice(1).map(app => <a href={app.path}><span class="app-icon"><Icon name={app.icon} /></span><span>{app.title}</span></a>)}</nav>
     <button class="home-search js-only" data-action="search"><Icon name="magnifying-glass" /><span>Find a page, project or note</span></button>
+    <WallpaperDots />
     <div class="mobile-home-credit"><a href="/credits/">Photo credits</a><span>·</span><button class="js-only" data-action="wallpaper-next">Wallpaper <Icon name="arrow-right" /></button><button class="js-only" data-action="wallpaper-pause" aria-label="Pause wallpaper motion" aria-pressed="false">Pause</button></div>
   </div>
 </Layout>

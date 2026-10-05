@@ -2538,13 +2538,7 @@ h3 {
 body:has(
     #wallpaper-picture:is([data-wallpaper="ferrari"], [data-wallpaper="spa"])
   )
-  :is(
-    .home-whisper,
-    .wallpaper-credit,
-    .wallpaper-controls,
-    .mobile-welcome,
-    .mobile-home-credit
-  ) {
+  :is(.home-whisper, .wallpaper-credit, .mobile-welcome) {
   background: #000;
   border-radius: 8px;
   box-shadow: 0 0 0 10px #000;
@@ -2564,4 +2558,70 @@ body:has(
   background: #000;
   border-radius: 4px;
   box-shadow: 0 0 0 4px #000;
+}
+
+/* Selection indicators float over the photograph without a surrounding panel. */
+.enhanced .wallpaper-dots.js-only {
+  display: flex !important;
+}
+.wallpaper-dots {
+  gap: 2px;
+  background: transparent;
+}
+.wallpaper-dot {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+}
+.wallpaper-dot span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #aaa;
+  box-shadow:
+    0 0 0 1px #222,
+    0 1px 3px #000;
+}
+.wallpaper-dot[aria-pressed="true"] span {
+  width: 16px;
+  border-radius: 4px;
+  background: #fff;
+}
+.wallpaper-dot:hover span {
+  background: #fff;
+}
+.wallpaper-dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 0;
+  box-shadow: 0 0 0 2px #222;
+}
+.wallpaper-controls {
+  flex-wrap: wrap;
+  max-width: 220px;
+  justify-content: flex-end;
+}
+.wallpaper-controls .wallpaper-dots {
+  flex-basis: 100%;
+  justify-content: flex-end;
+}
+.wallpaper-controls,
+.mobile-home-credit {
+  color: #eee;
+  text-shadow:
+    0 1px 3px #000,
+    0 0 3px #000;
+}
+@media (max-width: 799px) {
+  .mobile-home > .wallpaper-dots {
+    justify-content: center;
+    margin-top: 8px;
+  }
+  .enhanced .wallpaper-dots + .mobile-home-credit {
+    margin-top: 4px;
+  }
 }

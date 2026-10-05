@@ -1,5 +1,6 @@
 ---
 import Icon from '../components/Icon.astro';
+import WallpaperDots from '../components/WallpaperDots.astro';
 import { apps } from '../data/navigation';
 import { getCollection } from 'astro:content';
 import '@fontsource-variable/inter';
@@ -82,7 +83,7 @@ const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title:
       <nav class="dock" aria-label="Main navigation">
         {apps.filter(a => !['/about/', '/guide/'].includes(a.path)).map(app => <a href={app.path} data-app-link aria-current={path === app.path ? 'page' : kind === 'article' && app.path === '/blog/' ? 'true' : undefined}><Icon name={app.icon} /><span>{app.title}</span><i aria-hidden="true"></i></a>)}
       </nav>
-      <div class="wallpaper-controls js-only"><span>Wallpaper</span><button class="icon-button" data-action="wallpaper-previous" aria-label="Previous wallpaper"><Icon name="caret-left" /></button><button class="icon-button" data-action="wallpaper-next" aria-label="Next wallpaper"><Icon name="caret-right" /></button><button class="pause-button" data-action="wallpaper-pause" aria-label="Pause wallpaper motion" aria-pressed="false"><Icon name="pause" /><span>Pause</span></button></div>
+      <div class="wallpaper-controls js-only"><WallpaperDots /><span>Wallpaper</span><button class="icon-button" data-action="wallpaper-previous" aria-label="Previous wallpaper"><Icon name="caret-left" /></button><button class="icon-button" data-action="wallpaper-next" aria-label="Next wallpaper"><Icon name="caret-right" /></button><button class="pause-button" data-action="wallpaper-pause" aria-label="Pause wallpaper motion" aria-pressed="false"><Icon name="pause" /><span>Pause</span></button></div>
     </footer>
     <nav class="mobile-nav" aria-label="Phone navigation">
       <button data-action="back" class="js-only"><Icon name="arrow-left" /><span>Back</span></button>

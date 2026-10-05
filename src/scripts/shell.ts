@@ -1273,6 +1273,14 @@ function initializeWallpapers(): void {
   let cycleTimer: ReturnType<typeof setTimeout> | undefined;
 
   function updatePauseControls(): void {
+    document
+      .querySelectorAll<HTMLButtonElement>('[data-action="wallpaper-select"]')
+      .forEach((button) => {
+        button.setAttribute(
+          "aria-pressed",
+          String(button.dataset.wallpaperId === wallpapers[index]!.id),
+        );
+      });
     const motionPaused = paused || reducedMotion.matches || document.hidden;
     document.body.classList.toggle("motion-paused", motionPaused);
     picture!.classList.toggle("motion-paused", motionPaused);
@@ -1353,6 +1361,16 @@ function initializeWallpapers(): void {
     if (!(event.target instanceof Element)) return;
     const action =
       event.target.closest<HTMLElement>("[data-action]")?.dataset.action;
+    if (action === "wallpaper-select") {
+      const button = event.target.closest<HTMLElement>("[data-wallpaper-id]");
+      const selectedIndex = wallpapers.findIndex(
+        (photo) => photo.id === button?.dataset.wallpaperId,
+      );
+      if (selectedIndex < 0) return;
+      event.preventDefault();
+      index = selectedIndex;
+      showWallpaper(true);
+    }
     if (action === "wallpaper-next" || action === "wallpaper-previous") {
       event.preventDefault();
       index =
