@@ -31,7 +31,7 @@ test("all available apps tile within the desktop and recover from focus, close a
     await page.locator(`#search-results a[href="${path}"]`).first().click();
   }
   await expect(visibleApps(page)).toHaveCount(routes.length - 1);
-  const resize = visibleApps(page).first().locator(".window-resize");
+  const resize = visibleApps(page).first().locator('[data-resize-edge="se"]');
   await resize.focus();
   for (let i = 0; i < 20; i++) await page.keyboard.press("ArrowLeft");
   await page.setViewportSize({ width: 800, height: 700 });

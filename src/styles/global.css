@@ -257,14 +257,24 @@ kbd {
   animation: wallpaper-drift 36s ease-in-out infinite alternate;
 }
 /* Fill the viewport without letterboxing or additional photo effects. */
-.wallpaper picture:is([data-wallpaper="ferrari"], [data-wallpaper="spa"]) img {
+.wallpaper
+  picture:is(
+    [data-wallpaper="ferrari"],
+    [data-wallpaper="spa"],
+    [data-wallpaper="hamilton-victory"]
+  )
+  img {
   object-fit: cover;
   filter: grayscale(1);
   animation: none;
   transform: none;
 }
 .wallpaper:has(
-    picture:is([data-wallpaper="ferrari"], [data-wallpaper="spa"])
+    picture:is(
+      [data-wallpaper="ferrari"],
+      [data-wallpaper="spa"],
+      [data-wallpaper="hamilton-victory"]
+    )
   ):after {
   opacity: 0;
 }
@@ -443,6 +453,14 @@ kbd {
   overflow: hidden;
   box-shadow: 0 10px 35px #0003;
 }
+.window-reading {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  background: #222;
+  border-bottom: 1px solid #555;
+  color: #fff;
+  font-size: 12px;
+}
 .window-resize {
   display: none;
 }
@@ -450,20 +468,90 @@ kbd {
   .enhanced .window-resize {
     display: block;
     position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 24px;
-    height: 24px;
-    z-index: 2;
-    cursor: nwse-resize;
+    z-index: 3;
     touch-action: none;
-    border-radius: 5px 0 0 0;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+  }
+  .window-resize[data-resize-edge="n"],
+  .window-resize[data-resize-edge="s"] {
+    left: 16px;
+    right: 16px;
+    height: 8px;
+    cursor: ns-resize;
+  }
+  .window-resize[data-resize-edge="n"] {
+    top: 0;
+  }
+  .window-resize[data-resize-edge="s"] {
+    bottom: 0;
+  }
+  .window-resize[data-resize-edge="e"],
+  .window-resize[data-resize-edge="w"] {
+    top: 16px;
+    bottom: 16px;
+    width: 8px;
+    cursor: ew-resize;
+  }
+  .window-resize[data-resize-edge="e"] {
+    right: 0;
+  }
+  .window-resize[data-resize-edge="w"] {
+    left: 0;
+  }
+  .window-resize[data-resize-edge="nw"],
+  .window-resize[data-resize-edge="ne"],
+  .window-resize[data-resize-edge="sw"],
+  .window-resize[data-resize-edge="se"] {
+    width: 16px;
+    height: 16px;
+  }
+  .window-resize[data-resize-edge="nw"] {
+    top: 0;
+    left: 0;
+    cursor: nwse-resize;
+  }
+  .window-resize[data-resize-edge="ne"] {
+    top: 0;
+    right: 0;
+    cursor: nesw-resize;
+  }
+  .window-resize[data-resize-edge="sw"] {
+    bottom: 0;
+    left: 0;
+    cursor: nesw-resize;
+  }
+  .window-resize[data-resize-edge="se"] {
+    bottom: 0;
+    right: 0;
+    cursor: nwse-resize;
     background: repeating-linear-gradient(
         135deg,
         transparent 0 3px,
         #999 3px 4px
       )
-      bottom 5px right 5px / 10px 10px no-repeat;
+      bottom 3px right 3px / 8px 8px no-repeat;
+  }
+  #workspace[data-layout="tiled"] .window-titlebar {
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+  .app-window.is-moving .window-titlebar {
+    cursor: grabbing;
+  }
+  .app-window.is-snap-target {
+    outline: 3px solid white;
+    outline-offset: -5px;
+  }
+  .app-window.is-highlighted {
+    border-color: white;
+    box-shadow: 0 0 0 2px #fff8;
+  }
+  .window-titlebar:focus-visible {
+    outline: 2px solid white;
+    outline-offset: -4px;
   }
   .window-resize:focus-visible {
     outline: 2px solid white;
@@ -609,7 +697,7 @@ kbd {
   font-size: 11px;
   line-height: 1.7;
   color: #b5b5b5;
-  max-width: 28%;
+  max-width: min(200px, 28%);
   padding-bottom: 7px;
 }
 .wallpaper-credit small {
@@ -633,9 +721,13 @@ kbd {
   background: #000;
   border-radius: 21px;
   height: 78px;
+  max-width: min(900px, calc(100vw - 500px));
+  overflow-x: auto;
+  scrollbar-width: thin;
   align-items: stretch;
 }
 .dock a {
+  flex: 0 0 75px;
   position: relative;
   min-width: 75px;
   display: flex;
@@ -646,6 +738,12 @@ kbd {
   font-size: 10px;
   border-radius: 8px;
   padding: 0 5px;
+}
+.dock a span:not(.icon) {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .dock .icon {
   width: 24px;
@@ -674,8 +772,8 @@ kbd {
   align-items: center;
   flex-direction: column;
   gap: 2px;
-  width: 140px;
-  flex: 0 0 140px;
+  width: 174px;
+  flex: 0 0 174px;
   color: #aaa;
   font-size: 10px;
   padding-bottom: 6px;
@@ -2590,14 +2688,15 @@ h3 {
 
 /* Floating copy stays over the photograph without a readability panel. */
 .wallpaper-credit,
-.mobile-welcome,
-body[data-page-kind="home"] .mobile-header .brand,
 .app-grid a > span:last-child {
   text-shadow:
     0 1px 3px #000,
     0 0 4px #000;
 }
-.home-whisper {
+.home-whisper,
+.mobile-welcome,
+body[data-page-kind="home"] .mobile-header .brand,
+body[data-page-kind="home"] .mobile-header .local-clock {
   text-shadow:
     -0.75px 0 #000,
     0.75px 0 #000,
@@ -2952,4 +3051,99 @@ body[data-page-kind="home"] .mobile-header > .icon-button .icon {
 }
 .personal-welcome .welcome-actions .button {
   text-shadow: none;
+}
+
+/* Keep the mobile introduction legible over bright photos without a backing panel. */
+@media (max-width: 799px) {
+  .mobile-welcome.personal-welcome p,
+  .mobile-welcome.personal-welcome h1,
+  .mobile-welcome.personal-welcome .text-link,
+  .mobile-welcome.personal-welcome .welcome-socials a {
+    color: #fff;
+    font-weight: 500;
+  }
+  .mobile-welcome .button {
+    text-shadow: none;
+  }
+}
+body:has(
+    #wallpaper-picture:is(
+      [data-wallpaper="ferrari"],
+      [data-wallpaper="hamilton-victory"]
+    )
+  )
+  .home-whisper {
+  text-shadow:
+    0 1px 1px #fff,
+    0 0 1px #fff;
+}
+body:has(
+    #wallpaper-picture:is(
+      [data-wallpaper="ferrari"],
+      [data-wallpaper="hamilton-victory"]
+    )
+  )
+  .home-whisper
+  :is(.eyebrow, p) {
+  color: #171717;
+}
+@media (max-width: 799px) {
+  body:has(
+      #wallpaper-picture:is(
+        [data-wallpaper="ferrari"],
+        [data-wallpaper="hamilton-victory"]
+      )
+    )
+    .mobile-welcome {
+    text-shadow:
+      0 1px 1px #fff,
+      0 0 1px #fff;
+  }
+  body:has(
+      #wallpaper-picture:is(
+        [data-wallpaper="ferrari"],
+        [data-wallpaper="hamilton-victory"]
+      )
+    )
+    .mobile-welcome.personal-welcome
+    :is(p, h1, .text-link, .welcome-socials a) {
+    color: #171717;
+  }
+}
+@media (max-width: 799px) {
+  body[data-page-kind="home"]:has(
+      #wallpaper-picture:is(
+        [data-wallpaper="ferrari"],
+        [data-wallpaper="hamilton-victory"]
+      )
+    )
+    .mobile-header
+    :is(.brand, .local-clock, [data-clock-date]) {
+    color: #171717;
+    text-shadow:
+      0 1px 1px #fff,
+      0 0 1px #fff;
+  }
+  body[data-page-kind="home"]:has(
+      #wallpaper-picture:is(
+        [data-wallpaper="ferrari"],
+        [data-wallpaper="hamilton-victory"]
+      )
+    )
+    .mobile-header
+    > .icon-button
+    .icon {
+    color: #171717;
+    filter: drop-shadow(0 1px 1px #fff);
+  }
+}
+
+@media (max-width: 799px) {
+  body:has(#wallpaper-picture[data-wallpaper="ferrari"])
+    .mobile-welcome.personal-welcome
+    .welcome-socials
+    a {
+    color: #fff;
+    text-shadow: 0 1px 2px #000;
+  }
 }

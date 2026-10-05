@@ -21,6 +21,8 @@ type ShellState = {
   focused: boolean;
   homeHidden?: boolean;
   index: number;
+  columns?: number[];
+  rows?: number[];
 };
 type NavigateOptions = {
   history?: "push" | "replace" | "pop";
@@ -123,6 +125,83 @@ function initializeShell(host: HTMLElement): void {
   let tilePaths: string[] = [];
   let columns: number[] = [];
   let rows: number[] = [];
+  let savedTiling:
+    { paths: string; columns: number[]; rows: number[] } | undefined;
+  let cancelGesture: (() => void) | undefined;
+  const highlightTimers = new WeakMap<
+    HTMLElement,
+    ReturnType<typeof setTimeout>
+  >();
+
+  function highlight(node: HTMLElement): void {
+    clearTimeout(highlightTimers.get(node));
+    node.classList.add("is-highlighted");
+    highlightTimers.set(
+      node,
+      setTimeout(() => node.classList.remove("is-highlighted"), 900),
+    );
+  }
+
+  function moveWindow(path: string, destination: number): void {
+    const origin = visiblePaths.indexOf(path);
+    if (
+      origin < 0 ||
+      destination < 0 ||
+      destination >= visiblePaths.length ||
+      origin === destination
+    )
+      return;
+    const savedColumns = [...columns],
+      savedRows = [...rows];
+    saveHistory("replace", location.href);
+    visiblePaths.splice(origin, 1);
+    visiblePaths.splice(destination, 0, path);
+    activePath = path;
+    render();
+    columns = savedColumns;
+    rows = savedRows;
+    applyTracks();
+    saveHistory("push", path);
+    announce(`${windows.get(path)?.title} moved to tile ${destination + 1}`);
+  }
+
+  function syncDock(): void {
+    const dock = document.querySelector<HTMLElement>(".dock");
+    if (!dock) return;
+    dock
+      .querySelectorAll<HTMLAnchorElement>("[data-window-link]")
+      .forEach((link) => {
+        if (!windows.has(routePath(new URL(link.href).pathname))) link.remove();
+      });
+    for (const entry of windows.values()) {
+      if (
+        entry.kind !== "article" ||
+        Array.from(dock.querySelectorAll<HTMLAnchorElement>("a")).some(
+          (link) => routePath(new URL(link.href).pathname) === entry.path,
+        )
+      )
+        continue;
+      const link = document.createElement("a");
+      link.href = entry.path;
+      link.dataset.appLink = "";
+      link.dataset.windowLink = "";
+      const icon = entry.node.querySelector(".window-title .icon");
+      if (icon) link.append(icon.cloneNode(true));
+      const label = document.createElement("span");
+      label.textContent = entry.title;
+      link.append(label, document.createElement("i"));
+      link.title = entry.title;
+      dock.append(link);
+    }
+    dock.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
+      const entry = windows.get(routePath(new URL(link.href).pathname));
+      link.dataset.windowState = !entry
+        ? "closed"
+        : entry.minimized
+          ? "minimized"
+          : "open";
+    });
+  }
 
   function applyTracks(): void {
     host.style.gridTemplateColumns = columns
@@ -136,6 +215,12 @@ function initializeShell(host: HTMLElement): void {
   function layoutWindows(visible: string[]): void {
     const key = `${desktop.matches}:${host.dataset.layout}:${visible.join(",")}`;
     if (key === layoutKey) return;
+    if (columns.length)
+      savedTiling = {
+        paths: tilePaths.join(","),
+        columns: [...columns],
+        rows: [...rows],
+      };
     layoutKey = key;
     tilePaths = visible;
     host.style.removeProperty("grid-template-columns");
@@ -143,23 +228,67 @@ function initializeShell(host: HTMLElement): void {
     windows.forEach(({ node }) => {
       node.style.removeProperty("width");
       node.style.removeProperty("height");
+      for (const property of [
+        "margin-left",
+        "margin-top",
+        "max-width",
+        "max-height",
+      ])
+        node.style.removeProperty(property);
     });
     columns = [];
     rows = [];
     if (!desktop.matches || visible.length < 2) return;
     const count = Math.ceil(Math.sqrt(visible.length));
-    columns = Array(count).fill(1);
-    rows = Array(Math.ceil(visible.length / count)).fill(1);
+    columns =
+      savedTiling?.paths === visible.join(",")
+        ? [...savedTiling.columns]
+        : Array(count).fill(1);
+    rows =
+      savedTiling?.paths === visible.join(",")
+        ? [...savedTiling.rows]
+        : Array(Math.ceil(visible.length / count)).fill(1);
     applyTracks();
   }
 
-  function resizeWindow(node: HTMLElement, dx: number, dy: number): void {
+  function resizeWindow(
+    node: HTMLElement,
+    dx: number,
+    dy: number,
+    edge = "se",
+  ): void {
     if (!desktop.matches || node.hidden) return;
     if (tilePaths.length < 2) {
       const bounds = node.getBoundingClientRect();
       const area = host.getBoundingClientRect();
-      node.style.width = `${Math.max(Math.min(240, area.width), Math.min(area.width, bounds.width + dx))}px`;
-      node.style.height = `${Math.max(Math.min(120, area.height), Math.min(area.height, bounds.height + dy))}px`;
+      const left = parseFloat(node.style.marginLeft) || 0;
+      const top = parseFloat(node.style.marginTop) || 0;
+      let nextLeft = left,
+        nextTop = top;
+      let width = bounds.width,
+        height = bounds.height;
+      if (edge.includes("w")) {
+        nextLeft = Math.max(0, Math.min(left + width - 240, left + dx));
+        width += left - nextLeft;
+      } else if (edge.includes("e"))
+        width = Math.max(
+          Math.min(240, area.width),
+          Math.min(area.width - left, width + dx),
+        );
+      if (edge.includes("n")) {
+        nextTop = Math.max(0, Math.min(top + height - 120, top + dy));
+        height += top - nextTop;
+      } else if (edge.includes("s"))
+        height = Math.max(
+          Math.min(120, area.height),
+          Math.min(area.height - top, height + dy),
+        );
+      node.style.marginLeft = `${nextLeft}px`;
+      node.style.marginTop = `${nextTop}px`;
+      node.style.maxWidth = `calc(100% - ${nextLeft}px)`;
+      node.style.maxHeight = `calc(100% - ${nextTop}px)`;
+      node.style.width = `${width}px`;
+      node.style.height = `${height}px`;
       return;
     }
     const index = tilePaths.indexOf(node.dataset.path || "");
@@ -172,10 +301,11 @@ function initializeShell(host: HTMLElement): void {
       delta: number,
       extent: number,
       minimumPixels: number,
+      side: number,
     ): void {
       if (tracks.length < 2 || !delta) return;
-      const neighbor =
-        current === tracks.length - 1 ? current - 1 : current + 1;
+      const neighbor = current + side;
+      if (neighbor < 0 || neighbor >= tracks.length) return;
       const total = tracks.reduce((sum, value) => sum + value, 0);
       const pixels = Math.max(1, extent - gap * (tracks.length - 1));
       const minimum = Math.min(
@@ -189,8 +319,24 @@ function initializeShell(host: HTMLElement): void {
       tracks[current]! += change;
       tracks[neighbor]! -= change;
     }
-    adjust(columns, index % columns.length, dx, area.width, 160);
-    adjust(rows, Math.floor(index / columns.length), dy, area.height, 100);
+    if (edge.includes("e") || edge.includes("w"))
+      adjust(
+        columns,
+        index % columns.length,
+        edge.includes("w") ? -dx : dx,
+        area.width,
+        160,
+        edge.includes("w") ? -1 : 1,
+      );
+    if (edge.includes("n") || edge.includes("s"))
+      adjust(
+        rows,
+        Math.floor(index / columns.length),
+        edge.includes("n") ? -dy : dy,
+        area.height,
+        100,
+        edge.includes("n") ? -1 : 1,
+      );
     applyTracks();
   }
 
@@ -251,49 +397,198 @@ function initializeShell(host: HTMLElement): void {
         '[data-filter-target][aria-pressed="true"]',
       )
       .forEach((button) => applyFilter(button, false));
-    const resize = document.createElement("button");
-    resize.type = "button";
-    resize.className = "window-resize";
-    resize.setAttribute("aria-label", `Resize ${title}`);
-    resize.title = "Drag to resize, or use arrow keys (Shift for larger steps)";
-    resize.addEventListener("keydown", (event) => {
-      const step = event.shiftKey ? 64 : 24;
-      const directions: Record<string, [number, number]> = {
-        ArrowLeft: [-step, 0],
-        ArrowRight: [step, 0],
-        ArrowUp: [0, -step],
-        ArrowDown: [0, step],
-      };
-      const delta = directions[event.key];
-      if (!delta) return;
-      event.preventDefault();
-      resizeWindow(node, ...delta);
-    });
-    let drag: { x: number; y: number } | undefined;
-    resize.addEventListener("pointerdown", (event) => {
-      if (event.button !== 0) return;
-      event.preventDefault();
-      drag = { x: event.clientX, y: event.clientY };
-      resize.setPointerCapture(event.pointerId);
-      resize.focus({ preventScroll: true });
-    });
-    resize.addEventListener("pointermove", (event) => {
-      if (!drag) return;
-      resizeWindow(node, event.clientX - drag.x, event.clientY - drag.y);
-      drag = { x: event.clientX, y: event.clientY };
-    });
-    resize.addEventListener("lostpointercapture", () => {
-      drag = undefined;
-    });
-    resize.addEventListener("pointerup", (event) => {
-      drag = undefined;
-      if (resize.hasPointerCapture(event.pointerId))
-        resize.releasePointerCapture(event.pointerId);
-    });
-    resize.addEventListener("pointercancel", () => {
-      drag = undefined;
-    });
-    node.append(resize);
+    for (const action of ["minimize", "close"]) {
+      const control = node.querySelector<HTMLButtonElement>(
+        `[data-action="${action}"]`,
+      );
+      if (control)
+        control.setAttribute(
+          "aria-label",
+          `${action === "close" ? "Close" : "Minimize"} ${title}`,
+        );
+    }
+    const read = document.createElement("button");
+    read.type = "button";
+    read.className = "window-reading";
+    read.dataset.action = "read-page";
+    read.textContent = "Read full page";
+    read.hidden = true;
+    node.querySelector(".window-titlebar")?.after(read);
+    const edges = ["se", "e", "s", "w", "n", "ne", "nw", "sw"];
+    for (const edge of edges) {
+      const resize = document.createElement("button");
+      resize.type = "button";
+      resize.className = "window-resize";
+      resize.dataset.resizeEdge = edge;
+      resize.tabIndex = edge === "se" ? 0 : -1;
+      resize.setAttribute(
+        "aria-label",
+        edge === "se"
+          ? `Resize ${title}`
+          : `${edge.toUpperCase()} resize edge for ${title}`,
+      );
+      resize.title =
+        "Drag an edge to resize. Arrow keys resize; Shift takes larger steps.";
+      resize.addEventListener("keydown", (event) => {
+        const step = event.shiftKey ? 64 : 24;
+        const directions: Record<string, [number, number]> = {
+          ArrowLeft: [-step, 0],
+          ArrowRight: [step, 0],
+          ArrowUp: [0, -step],
+          ArrowDown: [0, step],
+        };
+        const delta = directions[event.key];
+        if (!delta) return;
+        event.preventDefault();
+        // Keyboard resizing uses the available interior boundary on an outer tile.
+        const index = tilePaths.indexOf(path);
+        const keyboardEdge =
+          tilePaths.length < 2
+            ? "se"
+            : `${Math.floor(index / columns.length) < rows.length - 1 ? "s" : "n"}${index % columns.length < columns.length - 1 ? "e" : "w"}`;
+        resizeWindow(node, ...delta, keyboardEdge);
+        saveHistory("replace", location.href);
+      });
+      resize.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0 || !desktop.matches) return;
+        event.preventDefault();
+        event.stopPropagation();
+        cancelGesture?.();
+        const savedColumns = [...columns],
+          savedRows = [...rows];
+        const savedStyle = node.getAttribute("style");
+        let previous = { x: event.clientX, y: event.clientY };
+        const finish = (rollback: boolean) => {
+          resize.removeEventListener("pointermove", move);
+          resize.removeEventListener("pointerup", up);
+          resize.removeEventListener("pointercancel", cancel);
+          resize.removeEventListener("lostpointercapture", cancel);
+          cancelGesture = undefined;
+          if (rollback) {
+            columns = savedColumns;
+            rows = savedRows;
+            if (savedStyle === null) node.removeAttribute("style");
+            else node.setAttribute("style", savedStyle);
+            if (columns.length) applyTracks();
+          } else saveHistory("replace", location.href);
+          if (resize.hasPointerCapture(event.pointerId))
+            resize.releasePointerCapture(event.pointerId);
+        };
+        const move = (pointer: PointerEvent) => {
+          resizeWindow(
+            node,
+            pointer.clientX - previous.x,
+            pointer.clientY - previous.y,
+            edge,
+          );
+          previous = { x: pointer.clientX, y: pointer.clientY };
+        };
+        const up = () => finish(false);
+        const cancel = () => finish(true);
+        cancelGesture = cancel;
+        resize.addEventListener("pointermove", move);
+        resize.addEventListener("pointerup", up);
+        resize.addEventListener("pointercancel", cancel);
+        resize.addEventListener("lostpointercapture", cancel);
+        resize.setPointerCapture(event.pointerId);
+      });
+      node.append(resize);
+    }
+    const titlebar = node.querySelector<HTMLElement>(".window-titlebar");
+    if (titlebar) {
+      titlebar.tabIndex = 0;
+      titlebar.setAttribute(
+        "aria-label",
+        `Move ${title}. Drag onto another tile, or use Alt and arrow keys.`,
+      );
+      titlebar.addEventListener("keydown", (event) => {
+        if (
+          event.target !== titlebar ||
+          !event.altKey ||
+          !desktop.matches ||
+          focusMode ||
+          tilePaths.length < 2
+        )
+          return;
+        const offsets: Record<string, number> = {
+          ArrowLeft: -1,
+          ArrowRight: 1,
+          ArrowUp: -columns.length,
+          ArrowDown: columns.length,
+        };
+        const offset = offsets[event.key];
+        if (offset === undefined) return;
+        event.preventDefault();
+        moveWindow(path, visiblePaths.indexOf(path) + offset);
+      });
+      titlebar.addEventListener("pointerdown", (event) => {
+        if (
+          event.button !== 0 ||
+          !desktop.matches ||
+          focusMode ||
+          tilePaths.length < 2 ||
+          (event.target instanceof Element && event.target.closest("button, a"))
+        )
+          return;
+        event.preventDefault();
+        event.stopPropagation();
+        cancelGesture?.();
+        const startViewport = { width: innerWidth, height: innerHeight };
+        let destination: HTMLElement | undefined;
+        let moved = false;
+        const finish = (commit: boolean) => {
+          commit =
+            commit &&
+            innerWidth === startViewport.width &&
+            innerHeight === startViewport.height;
+          titlebar.removeEventListener("pointermove", move);
+          titlebar.removeEventListener("pointerup", up);
+          titlebar.removeEventListener("pointercancel", cancel);
+          titlebar.removeEventListener("lostpointercapture", cancel);
+          const target = destination?.dataset.path;
+          destination?.classList.remove("is-snap-target");
+          node.classList.remove("is-moving");
+          cancelGesture = undefined;
+          if (titlebar.hasPointerCapture(event.pointerId))
+            titlebar.releasePointerCapture(event.pointerId);
+          if (commit && target && moved)
+            moveWindow(path, visiblePaths.indexOf(target));
+          else if (commit && !moved) selectWindow(path);
+        };
+        const move = (pointer: PointerEvent) => {
+          if (
+            !moved &&
+            Math.hypot(
+              pointer.clientX - event.clientX,
+              pointer.clientY - event.clientY,
+            ) < 6
+          )
+            return;
+          moved = true;
+          node.classList.add("is-moving");
+          destination?.classList.remove("is-snap-target");
+          destination = Array.from(windows.values()).find((entry) => {
+            if (entry.node.hidden || entry.path === path) return false;
+            const rect = entry.node.getBoundingClientRect();
+            return (
+              pointer.clientX >= rect.left &&
+              pointer.clientX <= rect.right &&
+              pointer.clientY >= rect.top &&
+              pointer.clientY <= rect.bottom
+            );
+          })?.node;
+          destination?.classList.add("is-snap-target");
+        };
+        const up = () => finish(true);
+        const cancel = () => finish(false);
+        cancelGesture = cancel;
+        titlebar.addEventListener("pointermove", move);
+        titlebar.addEventListener("pointerup", up);
+        titlebar.addEventListener("pointercancel", cancel);
+        titlebar.addEventListener("lostpointercapture", cancel);
+        titlebar.setPointerCapture(event.pointerId);
+      });
+    }
     windows.set(path, entry);
     document.dispatchEvent(new Event("portfolio:window-mounted"));
     return entry;
@@ -320,6 +615,8 @@ function initializeShell(host: HTMLElement): void {
       focused: focusMode,
       homeHidden,
       index: historyIndex,
+      columns: [...columns],
+      rows: [...rows],
     };
   }
 
@@ -367,6 +664,14 @@ function initializeShell(host: HTMLElement): void {
         focused && entry.path === activePath,
       );
       entry.node.setAttribute("aria-label", entry.title);
+      const read =
+        entry.node.querySelector<HTMLButtonElement>(".window-reading");
+      if (read)
+        read.hidden =
+          !desktop.matches ||
+          focused ||
+          visible.length < 3 ||
+          entry.path !== activePath;
       entry.node
         .querySelectorAll<HTMLButtonElement>('[data-action="focus"]')
         .forEach((button) => {
@@ -374,6 +679,7 @@ function initializeShell(host: HTMLElement): void {
             "aria-pressed",
             String(focused && entry.path === activePath),
           );
+          if (button.classList.contains("window-reading")) return;
           button.setAttribute(
             "aria-label",
             focused && entry.path === activePath
@@ -448,6 +754,7 @@ function initializeShell(host: HTMLElement): void {
         active.kind === "home"
           ? "Gabriel Gouvêa"
           : active.node.dataset.title || active.title;
+    syncDock();
     document
       .querySelectorAll<HTMLAnchorElement>("a[data-app-link]")
       .forEach((link) => {
@@ -522,6 +829,7 @@ function initializeShell(host: HTMLElement): void {
     destination: string,
     options: NavigateOptions = {},
   ): Promise<void> {
+    cancelGesture?.();
     const url = new URL(destination, location.href);
     if (url.origin !== location.origin) {
       location.assign(url.href);
@@ -535,6 +843,7 @@ function initializeShell(host: HTMLElement): void {
     host.setAttribute("aria-busy", "true");
     if (!options.keepDialog) closeDialogs(false);
     try {
+      const alreadyOpen = windows.has(path) && !windows.get(path)!.minimized;
       const target = await loadWindow(path, controller.signal);
       if (options.snapshot) {
         const peers = [...new Set(options.snapshot.visible)].filter(
@@ -580,7 +889,7 @@ function initializeShell(host: HTMLElement): void {
         visiblePaths.forEach(markRecent);
         markRecent(path);
       } else if (path !== "/") {
-        visiblePaths = [...visiblePaths.filter((item) => item !== path), path];
+        if (!visiblePaths.includes(path)) visiblePaths.push(path);
       }
       if (options.focus !== undefined) focusMode = options.focus;
       if (path === "/" && !options.snapshot) {
@@ -590,6 +899,26 @@ function initializeShell(host: HTMLElement): void {
         if (!options.remove && !options.minimize) homeHidden = false;
       }
       render();
+      if (options.snapshot) {
+        const validTracks = (
+          value: unknown,
+          length: number,
+        ): value is number[] =>
+          Array.isArray(value) &&
+          value.length === length &&
+          value.every(
+            (item) =>
+              typeof item === "number" && Number.isFinite(item) && item > 0,
+          );
+        if (
+          validTracks(options.snapshot.columns, columns.length) &&
+          validTracks(options.snapshot.rows, rows.length)
+        ) {
+          columns = [...options.snapshot.columns];
+          rows = [...options.snapshot.rows];
+          if (columns.length) applyTracks();
+        }
+      } else if (alreadyOpen) highlight(target.node);
       const mode = options.history || "push";
       if (mode !== "pop") {
         const requestedURL = `${url.pathname}${url.search}${url.hash}`;
@@ -876,7 +1205,12 @@ function initializeShell(host: HTMLElement): void {
   host.addEventListener("pointerdown", (event) => {
     if (event.button !== 0 || !(event.target instanceof Element)) return;
     // Window controls choose their own transition without an extra history entry.
-    if (event.target.closest("[data-action], [data-close-path]")) return;
+    if (
+      event.target.closest(
+        "[data-action], [data-close-path], .window-titlebar, .window-resize",
+      )
+    )
+      return;
     const node = event.target.closest<HTMLElement>(".app-window");
     if (node && !node.hidden && node.dataset.path)
       selectWindow(node.dataset.path);
@@ -931,7 +1265,7 @@ function initializeShell(host: HTMLElement): void {
       dismissWindow(path, action === "close");
       return;
     }
-    if (action === "focus") {
+    if (action === "focus" || action === "read-page") {
       event.preventDefault();
       cancelPendingNavigation();
       saveScroll();
@@ -941,6 +1275,7 @@ function initializeShell(host: HTMLElement): void {
       if (path === "/") homeHidden = false;
       focusMode = wasActive ? !focusMode : true;
       render();
+      if (action === "read-page") focusContent(windows.get(path)!);
       saveHistory(wasActive ? "replace" : "push", path);
       return;
     }
@@ -963,6 +1298,9 @@ function initializeShell(host: HTMLElement): void {
         if (entry) entry.minimized = false;
       });
       focusMode = false;
+      columns = [];
+      rows = [];
+      savedTiling = undefined;
       layoutKey = "";
       render();
       saveHistory(
@@ -1024,6 +1362,17 @@ function initializeShell(host: HTMLElement): void {
     void navigate(url.href);
   });
 
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && cancelGesture) {
+      event.preventDefault();
+      cancelGesture();
+    }
+  });
+  window.addEventListener("resize", () => cancelGesture?.());
+  window.addEventListener("blur", () => cancelGesture?.());
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) cancelGesture?.();
+  });
   window.addEventListener("popstate", (event: PopStateEvent) => {
     // Some browsers also emit popstate for a newly followed native fragment link.
     if (nativeHashNavigation && location.hash) {
@@ -1045,7 +1394,19 @@ function initializeShell(host: HTMLElement): void {
 
   // Keep title-bar controls reachable when a previously resized track shrinks.
   new ResizeObserver(() => {
-    if (!desktop.matches || tilePaths.length < 2) return;
+    if (!desktop.matches) return;
+    if (tilePaths.length < 2) {
+      windows.forEach(({ node }) => {
+        for (const property of [
+          "margin-left",
+          "margin-top",
+          "max-width",
+          "max-height",
+        ])
+          node.style.removeProperty(property);
+      });
+      return;
+    }
     const bounds = host.getBoundingClientRect();
     const gap = parseFloat(getComputedStyle(host).gap) || 0;
     function fit(tracks: number[], extent: number, minimum: number): number[] {

@@ -1,6 +1,8 @@
 import { test, expect, ready, app, dock, settledScreenshot } from "./helpers";
 
-for (const wallpaper of ["porsche", "theatro", "ferrari", "spa"]) {
+import wallpapers from "../src/data/wallpapers.json" with { type: "json" };
+
+for (const { id: wallpaper } of wallpapers) {
   test(`${wallpaper} floating copy stays transparent while app surfaces stay black`, async ({
     page,
   }, testInfo) => {
@@ -34,12 +36,16 @@ for (const wallpaper of ["porsche", "theatro", "ferrari", "spa"]) {
         await expect(icon).toHaveCSS("background-color", "rgb(3, 3, 3)");
       }
     }
-    if (wallpaper === "ferrari" || wallpaper === "spa") {
+    if (["ferrari", "spa", "hamilton-victory"].includes(wallpaper)) {
       await expect(page.locator("#wallpaper-picture img")).toHaveCSS(
         "filter",
         "grayscale(1)",
       );
     }
+    if (mobile)
+      await page
+        .locator(".app-window.is-active .window-scroll")
+        .evaluate((element) => (element.scrollTop = 0));
     await settledScreenshot(
       page,
       testInfo.outputPath(

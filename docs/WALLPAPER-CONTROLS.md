@@ -14,4 +14,4 @@ Floating wallpaper labels and the desktop note have transparent backgrounds, wit
 
 `tests/transparency.spec.ts` checks transparent floating surfaces across all wallpapers and the desktop note's lifecycle.
 
-Run the normal type check, production build, static verification, and browser suite described in the [README](../README.md). Visually inspect the controller on all four wallpapers at desktop and phone widths.
+Run the normal type check, production build, static verification, and browser suite described in the [README](../README.md). Visually inspect the controller on all five wallpapers at desktop and phone widths.

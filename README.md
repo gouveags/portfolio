@@ -52,7 +52,7 @@ Career uses the existing `/about/` URL and is a primary dock/mobile entry. Open 
 
 ## The shell
 
-`src/layouts/Layout.astro` renders the full page. `src/scripts/shell.ts` progressively enhances same-origin links with cached windows, adaptive tiling and pointer/keyboard resizing, focus/minimize/close, search, and mobile Recents. Browser Back/Forward stays connected to real routes. Recents and reading positions last for the current visit; a full reload starts at the requested page. Wallpaper and opt-in shortcuts are stored locally when browser storage is available.
+`src/layouts/Layout.astro` renders the full page. `src/scripts/shell.ts` progressively enhances same-origin links with cached windows, adaptive tiling, title-bar movement, and edge/keyboard resizing, focus/minimize/close, search, and mobile Recents. Browser Back/Forward stays connected to real routes. Recents and reading positions last for the current visit; a full reload starts at the requested page. Wallpaper and opt-in shortcuts are stored locally when browser storage is available.
 
 All enhanced controls have visible labels or accessible names. Keyboard shortcuts are off by default and ignore text inputs. Reduced-motion preferences stop wallpaper movement and transitions. Pause is available independently.
 

@@ -2,11 +2,11 @@
 
 ## Current selection — 2026-10-05
 
-Order: Porsche, Theatro, Lewis Hamilton’s 2026 Ferrari SF-26, Eau Rouge / Raidillon uphill. Desktop and mobile defaults remain Porsche and Theatro.
+Order: Porsche, Theatro, Lewis Hamilton’s 2026 Ferrari SF-26, Eau Rouge / Raidillon uphill, Hamilton’s 2014 Chinese Grand Prix victory. Desktop and mobile defaults remain Porsche and Theatro.
 
-The two new selections retain the downloaded JPEG bytes. CSS applies grayscale and viewport-filling responsive cropping only, without additional darkening, zoom, or motion; there is no generated imagery or raster editing. Mobile and desktop share the source JPEG for these selections. They are larger than the previous WebP budgets; the original bytes are retained to preserve the photographs. Existing WebPs retain their embedded attribution. New JPEG attribution is recorded here, in the public notice, and on `/credits/` rather than claiming embedded metadata.
+The three F1 selections retain the downloaded JPEG bytes. CSS applies grayscale and viewport-filling responsive cropping only, without additional darkening, zoom, or motion; there is no generated imagery or raster editing. Mobile and desktop share the source JPEG for these selections. They are larger than the previous WebP budgets; the original bytes are retained to preserve the photographs. Existing WebPs retain their embedded attribution. New JPEG attribution is recorded here, in the public notice, and on `/credits/` rather than claiming embedded metadata.
 
-Trophy references without verified publication rights are excluded from the public assets and wallpaper selection. The licensed SF-26 photograph is the current Hamilton selection.
+Unverified trophy references remain excluded. The licensed 2014 Chinese Grand Prix trophy photograph is a separate historical victory selection alongside the current SF-26 photograph.
 
 ### Lewis Hamilton · Ferrari SF-26, 2026
 
@@ -35,6 +35,21 @@ Trophy references without verified publication rights are excluded from the publ
 - Mobile object position: `48% 36%`
 
 “Raidillon” by Paul Hermans, via Wikimedia Commons, CC BY-SA 3.0. A historical view looking uphill from Eau Rouge toward the Raidillon crest, uploaded in 2006. The original JPEG is retained; the site applies CSS grayscale and viewport-filling responsive cropping, with no additional darkening, zoom, or motion. This presentation is offered under CC BY-SA 3.0. No generative editing was used. No endorsement is implied.
+
+### Lewis Hamilton · Chinese GP victory, 2014
+
+- Photographer: Drew Bates
+- Source: https://commons.wikimedia.org/wiki/File:2014_Chinese_Grand_Prix_-_Lewis_Hamilton_holding_winners%27_trophy_with_Nico_Rosberg_and_Fernando_Alonso.jpg
+- Original publication: https://www.flickr.com/photos/41134793@N05/14155003132/
+- Rights: [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/), verified on the Commons source page
+- Local asset: `/wallpapers/hamilton-victory-2014.jpg`
+- Original dimensions: 2488 × 1661
+- Bytes: 365368 (about 357 KiB; shared by desktop and mobile)
+- SHA-256: `9a95edc478d167c34f580b83ca0a814dc233f8433a8aa4de3e2fb133ef2e4ded`
+- Desktop object position: `50% 0%`
+- Mobile object position: `50% 50%`
+
+“2014 Chinese Grand Prix - Lewis Hamilton holding winners’ trophy with Nico Rosberg and Fernando Alonso” by Drew Bates, via Wikimedia Commons, CC BY 2.0. Photographed on 20 April 2014. This historical victory is separate from the 2026 Ferrari photograph. The original JPEG bytes are retained; CSS applies grayscale and viewport-filling cropping only, with no additional darkening, zoom, or motion. No generative editing was used. No endorsement is implied.
 
 ## Retained historical assets
 

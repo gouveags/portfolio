@@ -11,14 +11,25 @@ test("Career is primary navigation and Open source is its linked child", async (
   await expect(
     primary.getByRole("link", { name: "Career", exact: true }),
   ).toHaveAttribute("href", "/about/");
-  await expect(primary.locator('a[href="/open-source/"]')).toHaveCount(0);
+  await expect(primary.locator('a[href="/open-source/"]')).toHaveCount(
+    testInfo.project.name === "mobile" ? 0 : 1,
+  );
   const destinations = await primary
     .locator("a")
     .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
   expect(destinations).toEqual(
     testInfo.project.name === "mobile"
       ? ["/about/", "/projects/", "/blog/", "/contact/", "/guide/"]
-      : ["/", "/about/", "/projects/", "/blog/", "/contact/"],
+      : [
+          "/",
+          "/about/",
+          "/open-source/",
+          "/projects/",
+          "/blog/",
+          "/contact/",
+          "/guide/",
+          "/credits/",
+        ],
   );
   await primary.getByRole("link", { name: "Career", exact: true }).click();
   await active(page, "/about/");

@@ -1,11 +1,8 @@
 import { test, expect, ready, noHorizontalOverflow } from "./helpers";
 
-const names = [
-  "Classic Porsche 911 Carrera",
-  "Theatro Municipal · São Paulo",
-  "Lewis Hamilton · Ferrari SF-26, 2026",
-  "Eau Rouge / Raidillon · The climb",
-];
+import wallpapers from "../src/data/wallpapers.json" with { type: "json" };
+
+const names = wallpapers.map((photo) => photo.title);
 
 test("wallpaper dots select, wrap, support keyboard activation, and persist", async ({
   page,
@@ -26,7 +23,7 @@ test("wallpaper dots select, wrap, support keyboard activation, and persist", as
   await dots.last().click();
   await expect(
     group.getByRole("button", { pressed: true }),
-  ).toHaveAccessibleName(`Show wallpaper: ${names[3]}`);
+  ).toHaveAccessibleName(`Show wallpaper: ${names.at(-1)}`);
   await page.locator('[data-action="wallpaper-next"]:visible').click();
   await expect(
     group.getByRole("button", { pressed: true }),
@@ -67,7 +64,10 @@ test("wallpaper dots follow automatic rotation and newly mounted Home controls",
     .getByRole("group", { name: "Choose wallpaper" })
     .filter({ visible: true });
   await group
-    .getByRole("button", { name: `Show wallpaper: ${names[3]}`, exact: true })
+    .getByRole("button", {
+      name: `Show wallpaper: ${names.at(-1)}`,
+      exact: true,
+    })
     .click();
   await page.clock.fastForward(32_000);
   await expect(page.locator("#wallpaper-picture")).toHaveAttribute(

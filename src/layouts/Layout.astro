@@ -108,7 +108,7 @@ const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title:
     <footer class="desktop-footer">
       <div class="wallpaper-credit"><span id="wallpaper-title">Classic Porsche 911 Carrera</span><small>Photo: <a id="wallpaper-photographer" href="https://commons.wikimedia.org/wiki/File:Classic_Porsche_911_Carrera_(49594785528).jpg" target="_blank" rel="noopener noreferrer">Jilles Dissel</a> · <a href="/credits/">Credits</a></small></div>
       <nav class="dock" aria-label="Main navigation">
-        {apps.filter(a => !['/open-source/', '/guide/'].includes(a.path)).map(app => <a href={app.path} data-app-link aria-current={path === app.path ? 'page' : kind === 'article' && app.path === '/blog/' ? 'true' : undefined}><Icon name={app.icon} /><span>{app.title}</span><i aria-hidden="true"></i></a>)}
+        {[...apps, {path: '/credits/', title: 'Credits', icon: 'camera'}].map(app => <a href={app.path} data-app-link aria-current={path === app.path ? 'page' : kind === 'article' && app.path === '/blog/' ? 'true' : undefined}><Icon name={app.icon} /><span>{app.title}</span><i aria-hidden="true"></i></a>)}
       </nav>
       <div class="wallpaper-controls js-only"><WallpaperDots /><div class="wallpaper-actions"><button class="icon-button" data-action="wallpaper-previous" aria-label="Previous wallpaper"><Icon name="caret-left" /></button><button class="icon-button" data-action="wallpaper-next" aria-label="Next wallpaper"><Icon name="caret-right" /></button><button class="pause-button" data-action="wallpaper-pause" aria-label="Pause wallpaper motion" aria-pressed="false"><Icon name="pause" /><span>Pause</span></button></div></div>
     </footer>

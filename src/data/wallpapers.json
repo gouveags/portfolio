@@ -50,5 +50,18 @@
     "desktopPosition": "50% 36%",
     "mobilePosition": "48% 36%",
     "credit": "“Raidillon” by Paul Hermans, via Wikimedia Commons, CC BY-SA 3.0. A historical view looking uphill from Eau Rouge toward the Raidillon crest, uploaded in 2006. The original JPEG is retained; the site applies CSS grayscale and viewport-filling responsive cropping, with no additional darkening, zoom, or motion. This presentation is offered under CC BY-SA 3.0. No generative editing was used. No endorsement is implied."
+  },
+  {
+    "id": "hamilton-victory",
+    "title": "Lewis Hamilton · Chinese GP victory, 2014",
+    "photographer": "Drew Bates",
+    "src": "/wallpapers/hamilton-victory-2014.jpg",
+    "mobileSrc": "/wallpapers/hamilton-victory-2014.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:2014_Chinese_Grand_Prix_-_Lewis_Hamilton_holding_winners%27_trophy_with_Nico_Rosberg_and_Fernando_Alonso.jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "desktopPosition": "50% 0%",
+    "mobilePosition": "50% 50%",
+    "credit": "“2014 Chinese Grand Prix - Lewis Hamilton holding winners’ trophy with Nico Rosberg and Fernando Alonso” by Drew Bates, via Wikimedia Commons, CC BY 2.0. Photographed on 20 April 2014. This historical victory is separate from the 2026 Ferrari photograph. The original JPEG bytes are retained; CSS applies grayscale and viewport-filling cropping only, with no additional darkening, zoom, or motion. No generative editing was used. No endorsement is implied."
   }
 ]
