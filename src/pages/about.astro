@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+const experience = [
+  { date: 'May 2025 – Present', role: 'Software Engineer', company: 'MOVEdot AI (YC F25)', points: ['Build multi-agent workflows at a YC-backed company creating AI agents for hardware engineering.', 'Integrated assistant interfaces and custom canvases for real-time team insights.', 'Built video synchronization workflows with AWS Lambda, MediaConvert, and S3.'] },
+  { date: 'Jan 2023 – Apr 2025', role: 'Software Engineer', company: 'Realms IP.TV', points: ['Led development of EduxGen.AI for a Brazilian EdTech product ecosystem serving educators and institutions.', 'Designed a scalable content generation backend with custom agent orchestration.', 'Optimized RAG infrastructure with Neo4j and PGVector, reducing build time by 70%.'] },
+  { date: 'May 2020 – Sep 2022', role: 'Data Acquisition Engineer', company: 'Icarus Formula SAE', points: ['Developed real-time data tooling across microcontroller and desktop applications.', 'Managed technical projects and delivery pipelines in team leadership roles.'] },
+];
+---
+<Layout title="About" pageTitle="About" kind="page" description="Gabriel Silva Gouvêa is a software engineer building AI products, backend systems, and developer tools. Read his professional timeline and download his résumé.">
+  <div class="page-content about-page">
+    <header class="page-header">
+      <p class="eyebrow">About me</p>
+      <h1>Engineer first.<br />Product thinker always.</h1>
+    </header>
+    <div class="about-intro">
+      <img class="about-portrait" src="/assets/me.png" alt="Gabriel Silva Gouvêa" width="240" height="240" loading="lazy" />
+      <div class="about-copy">
+        <p class="lead">I’m Gabriel Silva Gouvêa. I build AI-powered products, backend systems, and developer tools.</p>
+        <p>I care about shipping software that solves concrete problems. Today I work at MOVEdot AI, a Y Combinator Fall 2025 company building AI agents for hardware engineering teams.</p>
+        <p>Previously at Realms IP.TV, an EdTech company using technology to transform Brazilian education, I helped build EduxGen.AI, an award-winning AI educational content platform.</p>
+        <p>I also keep a broad personal portfolio across Rust systems projects, AI media tooling, terminal apps, and web products. Outside work, I am motivated by faith, family, and long-term technical excellence.</p>
+        <a class="button" href="/assets/CV_Gabriel_Silva_Gouvea_en-US.pdf" download>Download résumé <Icon name="arrow-down" /></a>
+      </div>
+    </div>
+    <section class="about-stack" aria-labelledby="stack-title">
+      <p class="eyebrow" id="stack-title">Tools I work with</p>
+      <div class="tag-list">{['TypeScript', 'JavaScript', 'Python', 'Rust', 'AWS', 'WebSockets', 'Neo4j', 'PGVector'].map((item) => <span class="tag">{item}</span>)}</div>
+    </section>
+    <section class="timeline" aria-labelledby="experience-title" id="experience">
+      <header class="section-header"><p class="eyebrow">Experience</p><h2 id="experience-title">Professional timeline</h2></header>
+      {experience.map((item) => (
+        <article class="timeline-entry">
+          <p class="timeline-date">{item.date}</p>
+          <div><h3>{item.role}</h3><p class="timeline-company">{item.company}</p><ul>{item.points.map((point) => <li>{point}</li>)}</ul></div>
+        </article>
+      ))}
+    </section>
+    <footer class="page-footer"><a class="text-link" href="/contact/">Get in touch <Icon name="arrow-right" /></a></footer>
+  </div>
+</Layout>

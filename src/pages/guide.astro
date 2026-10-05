@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+const shortcuts = [
+  { label: 'Open search', keys: '/' },
+  { label: 'Show this guide', keys: '?' },
+  { label: 'Choose a search result', keys: '↑ ↓ Enter' },
+  { label: 'Close search or a menu', keys: 'Esc' },
+  { label: 'Move between controls', keys: 'Tab' },
+  { label: 'Open the focused control', keys: 'Enter' },
+];
+---
+<Layout title="Navigation guide" pageTitle="Navigation guide" kind="page" description="Learn how to navigate Gabriel Gouvêa’s portfolio with a mouse, keyboard, or touch.">
+  <div class="page-content guide-page">
+    <header class="page-header">
+      <p class="eyebrow">Navigation</p>
+      <h1>A few ways around.</h1>
+      <p class="lead">Everything works with a click. Turn on site shortcuts<br class="desktop-only" /> if you want to move around a little faster.</p>
+    </header>
+    <label class="shortcut-toggle js-only"><input type="checkbox" data-shortcuts aria-describedby="shortcut-help" /><span>Enable site shortcuts</span><span class="tag">Optional</span></label>
+    <dl class="shortcut-list">{shortcuts.map((shortcut) => <div class="shortcut-row"><dt>{shortcut.label}</dt><dd><kbd>{shortcut.keys}</kbd></dd></div>)}</dl>
+    <p class="guide-note" id="shortcut-help">The / and ? shortcuts are off until you enable them. Shortcuts stay out of text fields. Browser and system keys keep working.</p>
+    <section class="guide-section" aria-labelledby="window-guide-title">
+      <h2 id="window-guide-title">Make yourself at home.</h2>
+      <p>Open a page from the dock or search. On a wider screen, keep two windows side by side, focus one, or close it with the controls in its title bar.</p>
+      <p>On your phone, each page has room to read. Back, Home, and Recents are always one tap away.</p>
+      <p>Tile, Focus, and Close all have visible controls. No commands required.</p>
+    </section>
+    <nav class="guide-app-links" aria-label="All pages">
+      <a class="text-link" href="/">Home</a>
+      <a class="text-link" href="/open-source/">Open source</a>
+      <a class="text-link" href="/projects/">Projects</a>
+      <a class="text-link" href="/blog/">Blog</a>
+      <a class="text-link" href="/about/">About</a>
+      <a class="text-link" href="/contact/">Contact</a>
+    </nav>
+    <footer class="page-footer"><a class="text-link" href="/blog/why-this-desktop/">Why this looks like a desktop <Icon name="arrow-right" /></a></footer>
+  </div>
+</Layout>

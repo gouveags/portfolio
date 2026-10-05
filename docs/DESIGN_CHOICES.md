@@ -1,3 +1,5 @@
+> Historical note: this document describes the previous framework-free portfolio. The current static Astro implementation is documented in [README.md](../README.md).
+
 # Design Choices & Technical Philosophy
 
 This document explains the main design and engineering decisions behind this portfolio.

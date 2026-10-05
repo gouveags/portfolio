@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+const posts = (await getCollection('blog')).sort((a, b) => b.data.order - a.data.order);
+const categoryLabel = { site: 'This site', engineering: 'Engineering' };
+---
+<Layout title="Blog" pageTitle="Blog" kind="page" description="Notes on craft, architecture, and product decisions by Gabriel Gouvêa.">
+  <div class="page-content blog-page">
+    <header class="page-header">
+      <p class="eyebrow">Notes and things I am learning</p>
+      <h1>The blog.</h1>
+      <p class="lead">Ideas, experiments, and the occasional detour.</p>
+    </header>
+    <div class="tabs js-only" role="group" aria-label="Filter blog notes">
+      <button type="button" data-filter-target="blog-list" data-filter-value="all" aria-pressed="true">All notes</button>
+      <button type="button" data-filter-target="blog-list" data-filter-value="engineering" aria-pressed="false">Engineering</button>
+      <button type="button" data-filter-target="blog-list" data-filter-value="site" aria-pressed="false">This site</button>
+    </div>
+    <div class="entry-list blog-list" id="blog-list">
+      {posts.map((post) => (
+        <article class="entry blog-entry" data-category={post.data.category}>
+          <div class="entry-main">
+            <p class="eyebrow">{categoryLabel[post.data.category]}{post.data.dateLabel && ` · ${post.data.dateLabel}`}</p>
+            <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
+            <p>{post.data.summary}</p>
+            <div class="entry-links"><a class="text-link" href={`/blog/${post.id}/`}>Open note <Icon name="arrow-right" /></a>{post.data.readTime && <span class="read-time">{post.data.readTime}</span>}</div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</Layout>

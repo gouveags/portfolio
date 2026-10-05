@@ -1,0 +1,48 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+interface Props { post: CollectionEntry<'blog'> }
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const categoryLabel = post.data.category === 'site' ? 'About this site' : 'Engineering';
+const articleHeadingId = `article-${post.id}`;
+const articleUrl = `/blog/${post.id}/`;
+---
+<Layout title={post.data.title} pageTitle="Blog" kind="article" filename={`${post.id}.md`} description={post.data.summary}>
+  <div class="reader-layout">
+    <aside class="reader-sidebar" aria-label="Article navigation">
+      <p class="eyebrow">On this page</p>
+      <nav aria-label="Table of contents">
+        {toc.length ? toc.map((heading) => <a href={`${articleUrl}#${heading.slug}`} class:list={['toc-link', { 'toc-subheading': heading.depth === 3 }]}>{heading.text}</a>) : <a class="toc-link" href={`${articleUrl}#${articleHeadingId}`}>The original vision</a>}
+      </nav>
+      <a class="text-link reader-back" href="/blog/"><Icon name="arrow-left" /> Back to the blog</a>
+    </aside>
+    <article class="article-body" aria-labelledby={articleHeadingId}>
+      <header class="article-header">
+        <p class="eyebrow">{categoryLabel}{post.data.dateLabel && ` · ${post.data.dateLabel}`}</p>
+        <h1 id={articleHeadingId}>{post.data.title}</h1>
+        <p class="article-meta">Gabriel Gouvêa · {post.data.dateLabel || 'Site notes'}{post.data.readTime && ` · ${post.data.readTime}`}</p>
+        <details class="mobile-contents">
+          <summary>Contents <Icon name="caret-down" /></summary>
+          <nav aria-label="Article contents">
+            {toc.length ? toc.map((heading) => <a href={`${articleUrl}#${heading.slug}`}>{heading.text}</a>) : <a href={`${articleUrl}#${articleHeadingId}`}>The original vision</a>}
+          </nav>
+        </details>
+      </header>
+      {post.data.legacy && <aside class="article-note">An unchanged note from the previous version of this portfolio. The site now uses Astro to publish static pages; this article preserves the original design and technology decisions.</aside>}
+      <div class="article-content"><Content /></div>
+      {post.data.sourceNote && <p class="article-source">{post.data.sourceNote}</p>}
+      <footer class="article-footer">
+        <a class="text-link" href="/blog/"><Icon name="arrow-left" /> Blog</a>
+        <button class="text-link js-only" type="button" data-action="copy-link" data-url={articleUrl}>Copy link <Icon name="copy" /></button>
+        <button class="text-link focus-reading js-only" type="button" data-action="focus" aria-pressed="false">Focus reading <Icon name="corners-out" /></button>
+      </footer>
+    </article>
+  </div>
+</Layout>

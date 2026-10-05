@@ -1,0 +1,107 @@
+---
+import Icon from '../components/Icon.astro';
+import { apps } from '../data/navigation';
+import { getCollection } from 'astro:content';
+import '@fontsource-variable/inter';
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '../styles/global.css';
+interface Props {
+  title: string; pageTitle?: string; kind?: 'home' | 'page' | 'article';
+  description?: string; filename?: string; noindex?: boolean;
+}
+const { title, pageTitle = title, kind = 'page', description = 'Gabriel Gouvêa: software engineer building AI products, backend systems, and developer tools. Explore projects, open source, and notes.', filename = pageTitle, noindex = false } = Astro.props;
+const path = Astro.url.pathname === '/404/' ? '/404.html' : Astro.url.pathname;
+const documentTitle = kind === 'home' ? 'Gabriel Gouvêa | Software Engineer' : `${title} | Gabriel Gouvêa`;
+const canonical = new URL(path, Astro.site);
+const posts = await getCollection('blog');
+const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title: p.data.title, icon: 'file-text', excerpt: p.data.summary})), {path:'/credits/',title:'Photo credits',icon:'camera',excerpt:'Real photographs and their licenses.'}];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>{documentTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content={kind === 'article' ? 'article' : 'website'} />
+    <meta property="og:title" content={documentTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/assets/favicon.png" type="image/png" />
+    <link rel="sitemap" href="/sitemap.xml" />
+  </head>
+  <body data-page-kind={kind} data-active-path={path}>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="wallpaper" aria-hidden="true">
+      <picture id="wallpaper-picture">
+        <source media="(max-width: 799px)" srcset="/wallpapers/theatro-mobile.webp" />
+        <img src="/wallpapers/porsche-desktop.webp" alt="" fetchpriority="high" decoding="async" width="1920" height="1280" />
+      </picture>
+    </div>
+    <header class="desktop-bar">
+      <a class="brand" href="/" aria-label="Gabriel Gouvêa home"><span class="monogram">G</span><span>gouveags</span></a>
+      <span class="route-label">/ <span id="route-label">{pageTitle}</span></span>
+      <div class="workspace-indicator" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div class="bar-actions">
+        <button class="search-trigger js-only" data-action="search"><Icon name="magnifying-glass" /><span>Search</span><kbd>/</kbd></button>
+        <button class="icon-button js-only" data-action="recents" aria-label="Recent windows" title="Recent windows"><Icon name="squares-four" /></button>
+        <button class="icon-button js-only" data-action="tile" aria-label="Tile open windows" title="Tile open windows"><Icon name="columns" /></button>
+        <a class="icon-button" href="/guide/" aria-label="Navigation guide" title="Navigation guide"><Icon name="question" /></a>
+      </div>
+    </header>
+    <header class="mobile-header">
+      <a class="brand mobile-brand" href="/" aria-label="Gabriel Gouvêa home"><span class="monogram">G</span><span>gouveags</span></a>
+      <button class="icon-button mobile-back js-only" data-action="back" aria-label="Go back"><Icon name="arrow-left" /></button>
+      <span id="mobile-title">{pageTitle}</span>
+      <button class="icon-button js-only" data-action="search" aria-label="Search pages"><Icon name="magnifying-glass" /></button>
+    </header>
+    <main id="main-content" tabindex="-1">
+      <div id="workspace" data-layout={kind === 'home' ? 'home' : 'single'}>
+        <section class="app-window is-active is-visible" data-path={path} data-title={pageTitle} data-document-title={documentTitle} data-description={description} data-excerpt={description} data-kind={kind} aria-label={`${pageTitle} window`}>
+          <header class="window-titlebar">
+            <span class="window-title"><Icon name="file-text" />{filename}</span>
+            <span class="window-path">{kind === 'home' ? '~/home' : kind === 'article' ? 'Read only · Markdown' : path}</span>
+            <div class="window-actions js-only">
+              <button data-action="minimize" aria-label={`Minimize ${pageTitle}`} title="Minimize"><Icon name="minus" /></button>
+              <button data-action="focus" aria-label={`Focus ${pageTitle}`} title="Focus window" aria-pressed="false"><Icon name="square" /></button>
+              <button data-action="close" aria-label={`Close ${pageTitle}`} title="Close window"><Icon name="x" /></button>
+            </div>
+          </header>
+          <div class="window-scroll"><slot /></div>
+        </section>
+      </div>
+    </main>
+    <aside class="home-whisper" aria-hidden="true"><span class="eyebrow">Make yourself at home</span><p>A few things I like,<br />on a quiet desktop.</p></aside>
+    <footer class="desktop-footer">
+      <div class="wallpaper-credit"><span id="wallpaper-title">Classic Porsche 911 Carrera</span><small>Photo: <a id="wallpaper-photographer" href="https://commons.wikimedia.org/wiki/File:Classic_Porsche_911_Carrera_(49594785528).jpg" target="_blank" rel="noopener noreferrer">Jilles Dissel</a> · <a href="/credits/">Credits</a></small></div>
+      <nav class="dock" aria-label="Main navigation">
+        {apps.filter(a => !['/about/', '/guide/'].includes(a.path)).map(app => <a href={app.path} data-app-link aria-current={path === app.path ? 'page' : undefined}><Icon name={app.icon} /><span>{app.title}</span><i aria-hidden="true"></i></a>)}
+      </nav>
+      <div class="wallpaper-controls js-only"><span>Wallpaper</span><button class="icon-button" data-action="wallpaper-previous" aria-label="Previous wallpaper"><Icon name="caret-left" /></button><button class="icon-button" data-action="wallpaper-next" aria-label="Next wallpaper"><Icon name="caret-right" /></button><button class="pause-button" data-action="wallpaper-pause" aria-label="Pause wallpaper motion" aria-pressed="false"><Icon name="pause" /><span>Pause</span></button></div>
+    </footer>
+    <nav class="mobile-nav" aria-label="Phone navigation">
+      <button data-action="back" class="js-only"><Icon name="arrow-left" /><span>Back</span></button>
+      <a href="/"><Icon name="house" /><span>Home</span></a>
+      <button data-action="recents" class="js-only"><Icon name="squares-four" /><span>Recents</span></button>
+      <noscript><a href="/guide/">All pages</a></noscript>
+    </nav>
+    <dialog id="launcher" aria-labelledby="launcher-title">
+      <div class="dialog-header"><h2 id="launcher-title">Find your way</h2><button data-action="close-dialog" class="icon-button" aria-label="Close search"><Icon name="x" /></button></div>
+      <div class="launcher-input"><Icon name="magnifying-glass" /><input id="search-input" type="search" placeholder="Find a page, project or note" aria-label="Search pages, projects and notes" autocomplete="off" /></div>
+      <div id="search-results">{searchItems.map(item => <a href={item.path} data-search={`${item.title} ${item.excerpt}`}><Icon name={item.icon} /><span><strong>{item.title}</strong><small>{item.excerpt}</small></span><Icon name="arrow-up-right" /></a>)}</div>
+      <p id="search-empty" hidden>No matches. Try “blog”, “projects”, or “contact”.</p>
+      <p class="dialog-hint"><span>↑ ↓ to explore · Enter to open</span><span>Esc to close</span></p>
+    </dialog>
+    <dialog id="recents" aria-labelledby="recents-title">
+      <div class="dialog-header"><h2 id="recents-title">Pick up where<br />you left off.</h2><button data-action="close-dialog" class="icon-button" aria-label="Close recents"><Icon name="x" /></button></div>
+      <div id="recent-list"></div>
+      <p class="recents-hint">Tap a card to return. Close only what you choose.</p>
+    </dialog>
+    <div id="announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+    <script>import '../scripts/shell';</script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+[
+  {
+    "id": "porsche",
+    "title": "Classic Porsche 911 Carrera",
+    "photographer": "Jilles Dissel",
+    "src": "/wallpapers/porsche-desktop.webp",
+    "mobileSrc": "/wallpapers/porsche-mobile.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Classic_Porsche_911_Carrera_(49594785528).jpg",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "desktopPosition": "50% 50%",
+    "mobilePosition": "50% 50%",
+    "credit": "“Classic Porsche 911 Carrera (49594785528)” by Jilles Dissel, via Wikimedia Commons, CC BY-SA 2.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 2.0. No endorsement is implied."
+  },
+  {
+    "id": "theatro",
+    "title": "Theatro Municipal · São Paulo",
+    "photographer": "Hiltonfotografo",
+    "src": "/wallpapers/theatro-desktop.webp",
+    "mobileSrc": "/wallpapers/theatro-mobile.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Teatro_municipal_de_s%C3%A3o_paulo.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "desktopPosition": "50% 50%",
+    "mobilePosition": "50% 50%",
+    "credit": "“Teatro municipal de são paulo” by Hiltonfotografo, via Wikimedia Commons, CC BY-SA 4.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 4.0. No endorsement is implied."
+  },
+  {
+    "id": "ferrari",
+    "title": "Ferrari F1 · Azerbaijan, 2019",
+    "photographer": "Jens Van Hecke",
+    "src": "/wallpapers/ferrari-desktop.webp",
+    "mobileSrc": "/wallpapers/ferrari-mobile.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Ferrari_F1_(51029943032).jpg",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "desktopPosition": "55% 68%",
+    "mobilePosition": "50% 50%",
+    "credit": "“Ferrari F1 (51029943032)” by Jens Van Hecke, via Wikimedia Commons, CC BY-SA 2.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 2.0. No endorsement is implied."
+  },
+  {
+    "id": "spa",
+    "title": "Eau Rouge · Belgian GP, 2013",
+    "photographer": "Kevin A. McGill (kevinmcgill)",
+    "src": "/wallpapers/spa-desktop.webp",
+    "mobileSrc": "/wallpapers/spa-mobile.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Circuit_de_Spa-Francorchamps_(2).jpg",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "desktopPosition": "55% 55%",
+    "mobilePosition": "50% 50%",
+    "credit": "“Circuit de Spa-Francorchamps (2)” by Kevin A. McGill (kevinmcgill), via Wikimedia Commons, CC BY-SA 2.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 2.0. No endorsement is implied."
+  }
+]
