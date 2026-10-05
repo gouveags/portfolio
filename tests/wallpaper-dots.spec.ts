@@ -87,3 +87,48 @@ test("wallpaper dots follow automatic rotation and newly mounted Home controls",
   ).toHaveAccessibleName(`Show wallpaper: ${names[0]}`);
   await noHorizontalOverflow(page);
 });
+
+test("wallpaper controls stay aligned and usable at narrow widths", async ({
+  page,
+}, testInfo) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await ready(page, "/");
+
+  if (testInfo.project.name === "desktop") {
+    for (const width of [1440, 800]) {
+      await page.setViewportSize({ width, height: 900 });
+      const controls = page.locator(".wallpaper-controls");
+      const dots = await controls.locator(".wallpaper-dots").boundingBox();
+      const actions = await controls
+        .locator(".wallpaper-actions")
+        .boundingBox();
+      expect(dots).not.toBeNull();
+      expect(actions).not.toBeNull();
+      expect(
+        Math.abs(dots!.x + dots!.width / 2 - actions!.x - actions!.width / 2),
+        `Wallpaper picker and playback rows share a center at ${width}px`,
+      ).toBeLessThanOrEqual(1);
+      await expect(
+        controls.locator('[data-action="wallpaper-pause"] .icon'),
+      ).toBeVisible();
+      const dock = await page.locator(".dock").boundingBox();
+      const bounds = await controls.boundingBox();
+      expect(bounds!.x, "Wallpaper controls clear the dock").toBeGreaterThan(
+        dock!.x + dock!.width,
+      );
+      await noHorizontalOverflow(page);
+    }
+  } else {
+    await page.setViewportSize({ width: 320, height: 900 });
+    await expect(
+      page
+        .getByRole("group", { name: "Choose wallpaper" })
+        .filter({ visible: true }),
+    ).toBeVisible();
+    await expect(
+      page.locator('[data-action="wallpaper-pause"]:visible'),
+    ).toBeVisible();
+    await noHorizontalOverflow(page);
+  }
+});

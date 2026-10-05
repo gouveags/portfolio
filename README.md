@@ -50,7 +50,7 @@ See [the documentation index](./docs/README.md) for design and photo sources, an
 
 ## The shell
 
-`src/layouts/Layout.astro` renders the full page. `src/scripts/shell.ts` progressively enhances same-origin links with cached windows, two-column tiling, focus/minimize/close, search, and mobile Recents. Browser Back/Forward stays connected to real routes. Recents and reading positions last for the current visit; a full reload starts at the requested page. Wallpaper and opt-in shortcuts are stored locally when browser storage is available.
+`src/layouts/Layout.astro` renders the full page. `src/scripts/shell.ts` progressively enhances same-origin links with cached windows, adaptive tiling and pointer/keyboard resizing, focus/minimize/close, search, and mobile Recents. Browser Back/Forward stays connected to real routes. Recents and reading positions last for the current visit; a full reload starts at the requested page. Wallpaper and opt-in shortcuts are stored locally when browser storage is available.
 
 All enhanced controls have visible labels or accessible names. Keyboard shortcuts are off by default and ignore text inputs. Reduced-motion preferences stop wallpaper movement and transitions. Pause is available independently.
 
@@ -64,3 +64,5 @@ Wallpapers are real photographs, not generated images or video. Each photograph 
 - [LinkedIn](https://linkedin.com/in/gouveags)
 - [Email](mailto:gabrielgouvea@poli.ufrj.br)
 - [Portfolio](https://gouveagsportfolio.vercel.app/)
+
+Desktop layout behavior and resize controls: [Window management](docs/WINDOW-MANAGEMENT.md).

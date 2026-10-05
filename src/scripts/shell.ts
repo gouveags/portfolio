@@ -1,3 +1,4 @@
+import { initializeCalendar } from "./calendar";
 import wallpaperData from "../data/wallpapers.json";
 
 /** The HTML remains the app: every route works before this enhancement runs. */
@@ -118,6 +119,81 @@ function initializeShell(host: HTMLElement): void {
   let pendingNavigation: AbortController | undefined;
   let nativeHashNavigation = false;
 
+  let layoutKey = "";
+  let tilePaths: string[] = [];
+  let columns: number[] = [];
+  let rows: number[] = [];
+
+  function applyTracks(): void {
+    host.style.gridTemplateColumns = columns
+      .map((value) => `minmax(0, ${value}fr)`)
+      .join(" ");
+    host.style.gridTemplateRows = rows
+      .map((value) => `minmax(0, ${value}fr)`)
+      .join(" ");
+  }
+
+  function layoutWindows(visible: string[]): void {
+    const key = `${desktop.matches}:${host.dataset.layout}:${visible.join(",")}`;
+    if (key === layoutKey) return;
+    layoutKey = key;
+    tilePaths = visible;
+    host.style.removeProperty("grid-template-columns");
+    host.style.removeProperty("grid-template-rows");
+    windows.forEach(({ node }) => {
+      node.style.removeProperty("width");
+      node.style.removeProperty("height");
+    });
+    columns = [];
+    rows = [];
+    if (!desktop.matches || visible.length < 2) return;
+    const count = Math.ceil(Math.sqrt(visible.length));
+    columns = Array(count).fill(1);
+    rows = Array(Math.ceil(visible.length / count)).fill(1);
+    applyTracks();
+  }
+
+  function resizeWindow(node: HTMLElement, dx: number, dy: number): void {
+    if (!desktop.matches || node.hidden) return;
+    if (tilePaths.length < 2) {
+      const bounds = node.getBoundingClientRect();
+      const area = host.getBoundingClientRect();
+      node.style.width = `${Math.max(Math.min(240, area.width), Math.min(area.width, bounds.width + dx))}px`;
+      node.style.height = `${Math.max(Math.min(120, area.height), Math.min(area.height, bounds.height + dy))}px`;
+      return;
+    }
+    const index = tilePaths.indexOf(node.dataset.path || "");
+    if (index < 0) return;
+    const area = host.getBoundingClientRect();
+    const gap = parseFloat(getComputedStyle(host).gap) || 0;
+    function adjust(
+      tracks: number[],
+      current: number,
+      delta: number,
+      extent: number,
+      minimumPixels: number,
+    ): void {
+      if (tracks.length < 2 || !delta) return;
+      const neighbor =
+        current === tracks.length - 1 ? current - 1 : current + 1;
+      const total = tracks.reduce((sum, value) => sum + value, 0);
+      const pixels = Math.max(1, extent - gap * (tracks.length - 1));
+      const minimum = Math.min(
+        (minimumPixels / pixels) * total,
+        total / tracks.length,
+      );
+      const change = Math.max(
+        minimum - tracks[current]!,
+        Math.min(tracks[neighbor]! - minimum, (delta / pixels) * total),
+      );
+      tracks[current]! += change;
+      tracks[neighbor]! -= change;
+    }
+    adjust(columns, index % columns.length, dx, area.width, 160);
+    adjust(rows, Math.floor(index / columns.length), dy, area.height, 100);
+    applyTracks();
+  }
+
   function register(
     node: HTMLElement,
     path: string,
@@ -175,6 +251,49 @@ function initializeShell(host: HTMLElement): void {
         '[data-filter-target][aria-pressed="true"]',
       )
       .forEach((button) => applyFilter(button, false));
+    const resize = document.createElement("button");
+    resize.type = "button";
+    resize.className = "window-resize";
+    resize.setAttribute("aria-label", `Resize ${title}`);
+    resize.title = "Drag to resize, or use arrow keys (Shift for larger steps)";
+    resize.addEventListener("keydown", (event) => {
+      const step = event.shiftKey ? 64 : 24;
+      const directions: Record<string, [number, number]> = {
+        ArrowLeft: [-step, 0],
+        ArrowRight: [step, 0],
+        ArrowUp: [0, -step],
+        ArrowDown: [0, step],
+      };
+      const delta = directions[event.key];
+      if (!delta) return;
+      event.preventDefault();
+      resizeWindow(node, ...delta);
+    });
+    let drag: { x: number; y: number } | undefined;
+    resize.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      drag = { x: event.clientX, y: event.clientY };
+      resize.setPointerCapture(event.pointerId);
+      resize.focus({ preventScroll: true });
+    });
+    resize.addEventListener("pointermove", (event) => {
+      if (!drag) return;
+      resizeWindow(node, event.clientX - drag.x, event.clientY - drag.y);
+      drag = { x: event.clientX, y: event.clientY };
+    });
+    resize.addEventListener("lostpointercapture", () => {
+      drag = undefined;
+    });
+    resize.addEventListener("pointerup", (event) => {
+      drag = undefined;
+      if (resize.hasPointerCapture(event.pointerId))
+        resize.releasePointerCapture(event.pointerId);
+    });
+    resize.addEventListener("pointercancel", () => {
+      drag = undefined;
+    });
+    node.append(resize);
     windows.set(path, entry);
     document.dispatchEvent(new Event("portfolio:window-mounted"));
     return entry;
@@ -235,7 +354,7 @@ function initializeShell(host: HTMLElement): void {
           ? []
           : ["/"]
         : desktop.matches && !focusMode
-          ? visiblePaths.slice(-2)
+          ? [...visiblePaths]
           : [activePath];
     if (!hideHome && !visible.includes(activePath)) visible.push(activePath);
     for (const entry of windows.values()) {
@@ -285,6 +404,7 @@ function initializeShell(host: HTMLElement): void {
         : visible.length > 1
           ? "tiled"
           : "single";
+    layoutWindows(visible);
     host.dataset.homeHidden = String(hideHome);
     document.body.dataset.pageKind = active.kind;
     document.body.dataset.activePath = activePath;
@@ -417,9 +537,9 @@ function initializeShell(host: HTMLElement): void {
     try {
       const target = await loadWindow(path, controller.signal);
       if (options.snapshot) {
-        const peers = [...new Set(options.snapshot.visible)]
-          .filter((peer) => peer !== path && peer !== "/")
-          .slice(-2);
+        const peers = [...new Set(options.snapshot.visible)].filter(
+          (peer) => peer !== path && peer !== "/",
+        );
         await Promise.all(
           peers.map((peer) => loadWindow(peer, controller.signal)),
         );
@@ -448,28 +568,19 @@ function initializeShell(host: HTMLElement): void {
         historyIndex = options.snapshot.index;
         focusMode = options.snapshot.focused;
         homeHidden = options.snapshot.homeHidden ?? false;
-        visiblePaths = options.snapshot.visible
-          .filter((item) => windows.has(item) && item !== "/")
-          .slice(-2);
+        visiblePaths = options.snapshot.visible.filter(
+          (item) => windows.has(item) && item !== "/",
+        );
         for (const visible of visiblePaths) {
           const entry = windows.get(visible);
           if (entry) entry.minimized = false;
         }
         if (path !== "/" && !visiblePaths.includes(path))
           visiblePaths.push(path);
-        visiblePaths = visiblePaths.slice(-2);
         visiblePaths.forEach(markRecent);
         markRecent(path);
       } else if (path !== "/") {
-        if (desktop.matches && previousPath !== "/") {
-          const previous = windows.get(previousPath);
-          visiblePaths =
-            previousPath !== path && previous && !previous.minimized
-              ? [previousPath, path]
-              : [...visiblePaths.filter((item) => item !== path), path].slice(
-                  -2,
-                );
-        } else visiblePaths = [path];
+        visiblePaths = [...visiblePaths.filter((item) => item !== path), path];
       }
       if (options.focus !== undefined) focusMode = options.focus;
       if (path === "/" && !options.snapshot) {
@@ -837,7 +948,7 @@ function initializeShell(host: HTMLElement): void {
       event.preventDefault();
       cancelPendingNavigation();
       saveScroll();
-      visiblePaths = recentPaths.filter((item) => windows.has(item)).slice(-2);
+      visiblePaths = recentPaths.filter((item) => windows.has(item));
       if (!visiblePaths.length) {
         announce("Open an app to start a workspace.");
         return;
@@ -846,12 +957,13 @@ function initializeShell(host: HTMLElement): void {
       if (activePath === "/")
         activePath = visiblePaths[visiblePaths.length - 1]!;
       if (!visiblePaths.includes(activePath))
-        visiblePaths = [...visiblePaths, activePath].slice(-2);
+        visiblePaths = [...visiblePaths, activePath];
       visiblePaths.forEach((item) => {
         const entry = windows.get(item);
         if (entry) entry.minimized = false;
       });
       focusMode = false;
+      layoutKey = "";
       render();
       saveHistory(
         previousPath === activePath ? "replace" : "push",
@@ -930,6 +1042,24 @@ function initializeShell(host: HTMLElement): void {
     saveScroll();
     render();
   });
+
+  // Keep title-bar controls reachable when a previously resized track shrinks.
+  new ResizeObserver(() => {
+    if (!desktop.matches || tilePaths.length < 2) return;
+    const bounds = host.getBoundingClientRect();
+    const gap = parseFloat(getComputedStyle(host).gap) || 0;
+    function fit(tracks: number[], extent: number, minimum: number): number[] {
+      const pixels = Math.max(1, extent - gap * (tracks.length - 1));
+      const total = tracks.reduce((sum, value) => sum + value, 0);
+      const limit = Math.min(minimum, pixels / tracks.length);
+      return tracks.some((value) => (value / total) * pixels < limit - 1)
+        ? tracks.map(() => 1)
+        : tracks;
+    }
+    columns = fit(columns, bounds.width, 160);
+    rows = fit(rows, bounds.height, 100);
+    applyTracks();
+  }).observe(host);
 
   // Old inbound section links continue to work after the move to real pages.
   function legacyRoute(): string | undefined {
@@ -1411,6 +1541,7 @@ function initializeWallpapers(): void {
 }
 
 initializeDialogs();
+initializeCalendar((opener) => openDialog("calendar", opener));
 if (workspace) initializeShell(workspace);
 initializeWallpapers();
 

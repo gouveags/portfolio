@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+---
+<dialog id="calendar" aria-label="Calendar">
+  <div class="calendar-topline">
+    <div><p class="eyebrow">Your local time</p><p data-calendar-date></p></div>
+    <button type="button" class="icon-button" data-action="close-dialog" aria-label="Close calendar" autofocus><Icon name="x" /></button>
+  </div>
+  <div class="calendar-navigation">
+    <h2 id="calendar-month" aria-live="polite" aria-atomic="true"></h2>
+    <button type="button" class="icon-button" data-calendar-step="-1" aria-label="Previous month"><Icon name="caret-left" /></button>
+    <button type="button" class="icon-button" data-calendar-step="1" aria-label="Next month"><Icon name="caret-right" /></button>
+  </div>
+  <table aria-labelledby="calendar-month"><thead><tr data-calendar-weekdays></tr></thead><tbody data-calendar-days></tbody></table>
+  <footer class="calendar-footer"><span>On your device</span><button type="button" data-calendar-today>Today</button></footer>
+</dialog>

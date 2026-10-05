@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }, testInfo) => {
   await ready(page, '/');
 });
 
-test('real navigation tiles at most two windows, selects, focuses, and restores', async ({ page }, testInfo) => {
+test('real navigation tiles open windows, selects, focuses, and restores', async ({ page }, testInfo) => {
   await expect(page.locator('.desktop-welcome h1')).toBeVisible();
   await dock(page, '/open-source/');
   await dock(page, '/blog/');
@@ -30,8 +30,8 @@ test('real navigation tiles at most two windows, selects, focuses, and restores'
   await expect(page.locator('body')).not.toHaveClass(/focus-mode/);
 
   await dock(page, '/projects/');
-  await expect(visibleApps(page)).toHaveCount(2);
-  await expect(app(page, '/blog/')).toBeHidden();
+  await expect(visibleApps(page)).toHaveCount(3);
+  await expect(app(page, '/blog/')).toBeVisible();
   await expect(app(page, '/open-source/')).toBeVisible();
   await expect(app(page, '/projects/').locator('h1')).toBeFocused();
 });
@@ -165,7 +165,7 @@ test('opening both real articles preserves unique IDs and accessible article nam
   await page.getByRole('button', { name: 'Recent windows' }).click();
   await page.locator(`.recent-card[data-recent-path="${first}"] [data-resume-path]`).click();
   await active(page, first);
-  await expect(visibleApps(page)).toHaveCount(2);
+  await expect(visibleApps(page)).toHaveCount(3);
   for (const path of [first, second]) {
     const article = app(page, path).locator('.article-body');
     await expect(article).toBeVisible();

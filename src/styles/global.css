@@ -385,7 +385,8 @@ kbd {
   right: 34px;
   bottom: 130px;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   gap: 12px;
   align-items: stretch;
 }
@@ -431,6 +432,7 @@ kbd {
   display: none;
 }
 .app-window {
+  position: relative;
   min-width: 0;
   min-height: 0;
   display: flex;
@@ -440,6 +442,56 @@ kbd {
   background: #000;
   overflow: hidden;
   box-shadow: 0 10px 35px #0003;
+}
+.window-resize {
+  display: none;
+}
+@media (min-width: 800px) {
+  .enhanced .window-resize {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 24px;
+    height: 24px;
+    z-index: 2;
+    cursor: nwse-resize;
+    touch-action: none;
+    border-radius: 5px 0 0 0;
+    background: repeating-linear-gradient(
+        135deg,
+        transparent 0 3px,
+        #999 3px 4px
+      )
+      bottom 5px right 5px / 10px 10px no-repeat;
+  }
+  .window-resize:focus-visible {
+    outline: 2px solid white;
+    outline-offset: -3px;
+    background-color: #333;
+  }
+  .enhanced #workspace .app-window {
+    max-width: 100%;
+    max-height: 100%;
+    justify-self: start;
+    align-self: start;
+    width: 100%;
+    height: 100%;
+  }
+  .enhanced #workspace[data-layout="home"] .app-window {
+    width: min(660px, 55vw);
+    height: auto;
+  }
+  #workspace[data-layout="tiled"] .window-titlebar {
+    padding-inline: 8px;
+    gap: 4px;
+  }
+  #workspace[data-layout="tiled"] .window-path {
+    display: none;
+  }
+  #workspace[data-layout="tiled"] .window-actions {
+    flex-shrink: 0;
+  }
 }
 .app-window.is-active {
   border-color: #616161;
@@ -522,6 +574,7 @@ kbd {
   border-radius: 4px;
 }
 .home-whisper {
+  /* Desktop decoration belongs to the shell, behind any open app windows. */
   position: fixed;
   top: 160px;
   right: 12.5%;
@@ -536,9 +589,6 @@ kbd {
   line-height: 1.6;
   margin-top: 10px;
   color: #aaa;
-}
-body:not([data-page-kind="home"]) .home-whisper {
-  display: none;
 }
 .desktop-footer {
   position: fixed;
@@ -622,20 +672,27 @@ body:not([data-page-kind="home"]) .home-whisper {
 }
 .wallpaper-controls {
   align-items: center;
+  flex-direction: column;
   gap: 2px;
+  width: 140px;
+  flex: 0 0 140px;
   color: #aaa;
   font-size: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 6px;
 }
 .enhanced .wallpaper-controls.js-only {
   display: flex !important;
 }
-.wallpaper-controls > span {
-  margin-right: 13px;
+.wallpaper-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
 }
 .wallpaper-controls .icon-button {
-  width: 18px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
 }
 .wallpaper-controls .icon {
   width: 15px;
@@ -646,8 +703,10 @@ body:not([data-page-kind="home"]) .home-whisper {
   align-items: center;
   gap: 7px;
   font-size: 10px;
-  margin-left: 18px;
-  min-height: 28px;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0 4px;
 }
 .welcome-copy {
   padding: 34px 42px 32px;
@@ -1294,8 +1353,7 @@ dialog[open] {
     font-size: 12px;
     gap: 20px;
   }
-  .wallpaper-controls > span,
-  .wallpaper-controls .pause-button span {
+  .wallpaper-controls .pause-button span:not(.icon):not([data-motion-icon]) {
     display: none;
   }
   .dock a {
@@ -1411,7 +1469,7 @@ dialog[open] {
     width: 24px;
     height: 24px;
   }
-  .mobile-header > .icon-button:last-child {
+  .mobile-header > .icon-button[data-action="search"] {
     margin-left: auto;
   }
   .mobile-header .mobile-back {
@@ -2298,10 +2356,6 @@ dialog[open] {
   .app-window[data-kind="home"].is-focused .welcome-footer {
     border: 0;
   }
-  body[data-home-hidden="true"] .home-whisper,
-  body.focus-mode .home-whisper {
-    display: none;
-  }
 }
 
 .enhanced .app-window {
@@ -2534,30 +2588,18 @@ h3 {
   }
 }
 
-/* Keep labels readable without darkening the selected F1 photograph. */
-body:has(
-    #wallpaper-picture:is([data-wallpaper="ferrari"], [data-wallpaper="spa"])
-  )
-  :is(.home-whisper, .wallpaper-credit, .mobile-welcome) {
-  background: #000;
-  border-radius: 8px;
-  box-shadow: 0 0 0 10px #000;
+/* Floating copy stays over the photograph without a readability panel. */
+.home-whisper,
+.wallpaper-credit,
+.mobile-welcome,
+body[data-page-kind="home"] .mobile-header .brand,
+.app-grid a > span:last-child {
+  text-shadow:
+    0 1px 3px #000,
+    0 0 4px #000;
 }
-body:has(
-    #wallpaper-picture:is([data-wallpaper="ferrari"], [data-wallpaper="spa"])
-  )
-  .mobile-header {
-  background: #000;
-}
-body:has(
-    #wallpaper-picture:is([data-wallpaper="ferrari"], [data-wallpaper="spa"])
-  )
-  .app-grid
-  a
-  > span:last-child {
-  background: #000;
-  border-radius: 4px;
-  box-shadow: 0 0 0 4px #000;
+body[data-page-kind="home"] .mobile-header > .icon-button .icon {
+  filter: drop-shadow(0 1px 2px #000);
 }
 
 /* Selection indicators float over the photograph without a surrounding panel. */
@@ -2571,8 +2613,8 @@ body:has(
 .wallpaper-dot {
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   background: transparent;
   border: 0;
@@ -2600,14 +2642,9 @@ body:has(
   outline-offset: 0;
   box-shadow: 0 0 0 2px #222;
 }
-.wallpaper-controls {
-  flex-wrap: wrap;
-  max-width: 220px;
-  justify-content: flex-end;
-}
 .wallpaper-controls .wallpaper-dots {
-  flex-basis: 100%;
-  justify-content: flex-end;
+  justify-content: center;
+  width: 100%;
 }
 .wallpaper-controls,
 .mobile-home-credit {
@@ -2617,11 +2654,188 @@ body:has(
     0 0 3px #000;
 }
 @media (max-width: 799px) {
+  .mobile-home .wallpaper-dot {
+    width: 44px;
+    height: 44px;
+  }
+  .enhanced .mobile-home-credit > button.js-only {
+    display: inline-flex !important;
+  }
+  .mobile-home-credit > a,
+  .mobile-home-credit > button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+  }
   .mobile-home > .wallpaper-dots {
     justify-content: center;
     margin-top: 8px;
   }
   .enhanced .wallpaper-dots + .mobile-home-credit {
     margin-top: 4px;
+  }
+}
+
+/* The clock anchors the right edge of the desktop and phone bars. */
+.enhanced .local-clock.js-only {
+  display: grid !important;
+}
+.local-clock {
+  flex: 0 0 auto;
+  gap: 1px;
+  min-height: 40px;
+  padding: 5px 0 5px 16px;
+  margin-left: 4px;
+  border-left: 1px solid #333;
+  background: transparent;
+  text-align: right;
+  color: #eee;
+  text-shadow:
+    0 1px 3px #000,
+    0 0 4px #000;
+}
+.local-clock time {
+  font: 12px var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+.local-clock [data-clock-date] {
+  font: 9px var(--sans);
+  color: #bbb;
+}
+.local-clock:hover time {
+  color: #fff;
+}
+.desktop-bar {
+  gap: 24px;
+}
+#calendar {
+  position: fixed;
+  inset: 72px 20px auto auto;
+  margin: 0;
+  width: 336px;
+  max-width: calc(100vw - 28px);
+  max-height: calc(100dvh - 90px);
+  overflow: auto;
+  padding: 20px;
+  background: #000;
+  border: 1px solid #444;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px #0008;
+}
+#calendar::backdrop {
+  background: transparent;
+  backdrop-filter: none;
+}
+.calendar-topline,
+.calendar-navigation,
+.calendar-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.calendar-topline {
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #292929;
+}
+.calendar-topline .eyebrow {
+  font-size: 9px;
+  margin-bottom: 8px;
+}
+.calendar-topline [data-calendar-date] {
+  font-size: 12px;
+  color: #ddd;
+}
+#calendar .icon-button {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+}
+#calendar .icon {
+  width: 16px;
+  height: 16px;
+}
+.calendar-navigation {
+  margin: 16px 0 12px;
+}
+#calendar-month {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 auto 0 0;
+}
+#calendar table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: center;
+  font: 12px var(--mono);
+}
+#calendar th {
+  color: #999;
+  font-size: 10px;
+  font-weight: 400;
+  padding-bottom: 10px;
+}
+#calendar td {
+  height: 36px;
+  padding: 0;
+}
+#calendar td time {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+#calendar [aria-current="date"] {
+  color: #000;
+  background: #eee;
+  font-weight: 700;
+}
+.calendar-footer {
+  justify-content: space-between;
+  border-top: 1px solid #292929;
+  margin-top: 16px;
+  padding-top: 12px;
+  color: #999;
+  font-size: 10px;
+}
+.calendar-footer button {
+  padding: 7px 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #eee;
+}
+@media (min-width: 800px) and (max-width: 1190px) {
+  .desktop-bar .route-label {
+    min-width: 0;
+  }
+  .workspace-indicator {
+    display: none;
+  }
+}
+@media (max-width: 799px) {
+  .mobile-header {
+    gap: 12px;
+  }
+  .mobile-header .brand {
+    gap: 12px;
+  }
+  .mobile-header .local-clock {
+    margin-left: 0;
+    padding-left: 10px;
+  }
+  #mobile-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  #calendar {
+    top: 74px;
+    right: 14px;
+    padding: 16px;
   }
 }
