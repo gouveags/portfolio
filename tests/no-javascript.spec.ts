@@ -13,6 +13,7 @@ for (const route of routes) {
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://gouveagsportfolio.vercel.app${route}`);
     await noHorizontalOverflow(page);
     expect(await page.locator('#wallpaper-picture img').evaluate((image) => getComputedStyle(image).animationName)).toBe('none');
+    expect(await page.locator('.app-window').evaluate((window) => getComputedStyle(window).animationName)).toBe('none');
   });
 }
 

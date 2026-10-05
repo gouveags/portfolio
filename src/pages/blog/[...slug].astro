@@ -10,6 +10,7 @@ interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
 const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+if (post.id === 'why-this-desktop') toc.unshift({ depth: 2, slug: 'a-desktop-i-enjoy', text: 'A desktop I enjoy' });
 const categoryLabel = post.data.category === 'site' ? 'About this site' : 'Engineering';
 const articleHeadingId = `article-${post.id}`;
 const articleUrl = `/blog/${post.id}/`;

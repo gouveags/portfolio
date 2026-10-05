@@ -59,6 +59,7 @@ const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title:
       <span id="mobile-title">{pageTitle}</span>
       <button class="icon-button js-only" data-action="search" aria-label="Search pages"><Icon name="magnifying-glass" /></button>
     </header>
+    <nav class="reader-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a><span>/</span><span id="article-label">{title}</span></nav>
     <main id="main-content" tabindex="-1">
       <div id="workspace" data-layout={kind === 'home' ? 'home' : 'single'}>
         <section class="app-window is-active is-visible" data-path={path} data-title={pageTitle} data-document-title={documentTitle} data-description={description} data-excerpt={description} data-kind={kind} aria-label={`${pageTitle} window`}>
@@ -100,6 +101,11 @@ const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title:
       <div class="dialog-header"><h2 id="recents-title">Pick up where<br />you left off.</h2><button data-action="close-dialog" class="icon-button" aria-label="Close recents"><Icon name="x" /></button></div>
       <div id="recent-list"></div>
       <p class="recents-hint">Tap a card to return. Close only what you choose.</p>
+      <nav class="recents-nav" aria-label="Recent apps navigation">
+        <button data-action="close-dialog"><Icon name="arrow-left" /><span>Back</span></button>
+        <a href="/"><Icon name="house" /><span>Home</span></a>
+        <button data-action="close-dialog" aria-label="Return to current app"><Icon name="squares-four" /><span>Recents</span></button>
+      </nav>
     </dialog>
     <div id="announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
     <script>import '../scripts/shell';</script>

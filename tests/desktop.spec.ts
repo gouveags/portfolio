@@ -160,9 +160,45 @@ test('opening both real articles preserves unique IDs and accessible article nam
   await active(page, second);
   const ids = await page.locator('[id]').evaluateAll((elements) => elements.map((element) => element.id));
   expect(ids.length).toBe(new Set(ids).size);
+  // Cached hidden windows are intentionally absent from the accessibility tree.
+  // Resume the first article so both articles are exposed before checking names.
+  await page.getByRole('button', { name: 'Recent windows' }).click();
+  await page.locator(`.recent-card[data-recent-path="${first}"] [data-resume-path]`).click();
+  await active(page, first);
+  await expect(visibleApps(page)).toHaveCount(2);
   for (const path of [first, second]) {
     const article = app(page, path).locator('.article-body');
+    await expect(article).toBeVisible();
     const heading = (await article.locator('h1').textContent())?.trim();
     await expect(article).toHaveAccessibleName(heading!);
+  }
+});
+
+test('welcome controls focus, restore, minimize, close, and reopen Home', async ({ page }) => {
+  const home = app(page, '/');
+  const originalBounds = await home.boundingBox();
+  expect(originalBounds).not.toBeNull();
+  await home.getByRole('button', { name: 'Focus Home', exact: true }).click();
+  await expect(page.locator('#workspace')).toHaveAttribute('data-layout', 'single');
+  await expect(page.locator('body')).toHaveClass(/focus-mode/);
+  const focusedBounds = await home.boundingBox();
+  expect(focusedBounds!.width).toBeGreaterThan(originalBounds!.width);
+  await home.getByRole('button', { name: 'Restore welcome window', exact: true }).click();
+  await expect(page.locator('#workspace')).toHaveAttribute('data-layout', 'home');
+  await expect(page.locator('body')).not.toHaveClass(/focus-mode/);
+
+  for (const action of ['Minimize Home', 'Close Home']) {
+    await home.getByRole('button', { name: action, exact: true }).click();
+    await expect(home).toBeHidden();
+    await expect(visibleApps(page)).toHaveCount(0);
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.locator('#workspace')).toHaveAttribute('data-home-hidden', 'true');
+    const restore = page.locator('.desktop-bar a[href="/"]');
+    await expect(restore).toBeFocused();
+    await restore.click();
+    await active(page, '/');
+    await expect(home).toHaveCount(1);
+    await expect(page.locator('#workspace')).toHaveAttribute('data-home-hidden', 'false');
+    await expect(home.locator('h1:visible')).toBeFocused();
   }
 });

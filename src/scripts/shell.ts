@@ -18,6 +18,7 @@ type ShellState = {
   path: string;
   visible: string[];
   focused: boolean;
+  homeHidden?: boolean;
   index: number;
 };
 type NavigateOptions = {
@@ -96,6 +97,7 @@ function isShellState(value: unknown): value is ShellState {
     Array.isArray(state.visible) &&
     state.visible.every((path) => typeof path === "string") &&
     typeof state.focused === "boolean" &&
+    (state.homeHidden === undefined || typeof state.homeHidden === "boolean") &&
     typeof state.index === "number"
   );
 }
@@ -107,9 +109,11 @@ function initializeShell(host: HTMLElement): void {
   const windows = new Map<string, AppWindow>();
   const recentPaths: string[] = [];
   let activePath = routePath(initialNode.dataset.path || location.pathname);
+  const initialState = isShellState(history.state) ? history.state : undefined;
   let visiblePaths = activePath === "/" ? [] : [activePath];
-  let focusMode = false;
-  let historyIndex = isShellState(history.state) ? history.state.index : 0;
+  let focusMode = activePath === "/" && Boolean(initialState?.focused);
+  let homeHidden = initialState?.homeHidden ?? false;
+  let historyIndex = initialState?.index ?? 0;
   let navigationSequence = 0;
   let pendingNavigation: AbortController | undefined;
   let nativeHashNavigation = false;
@@ -189,6 +193,7 @@ function initializeShell(host: HTMLElement): void {
       path: activePath,
       visible: [...visiblePaths],
       focused: focusMode,
+      homeHidden,
       index: historyIndex,
     };
   }
@@ -215,13 +220,18 @@ function initializeShell(host: HTMLElement): void {
   function render(): void {
     const active = windows.get(activePath);
     if (!active) return;
+    const hideHome = active.kind === "home" && desktop.matches && homeHidden;
+    const focused =
+      focusMode && !hideHome && (active.kind !== "home" || desktop.matches);
     const visible =
       activePath === "/"
-        ? ["/"]
+        ? hideHome
+          ? []
+          : ["/"]
         : desktop.matches && !focusMode
           ? visiblePaths.slice(-2)
           : [activePath];
-    if (!visible.includes(activePath)) visible.push(activePath);
+    if (!hideHome && !visible.includes(activePath)) visible.push(activePath);
     for (const entry of windows.values()) {
       const shown = visible.includes(entry.path);
       entry.node.hidden = !shown;
@@ -229,7 +239,7 @@ function initializeShell(host: HTMLElement): void {
       entry.node.classList.toggle("is-active", entry.path === activePath);
       entry.node.classList.toggle(
         "is-focused",
-        focusMode && entry.path === activePath,
+        focused && entry.path === activePath,
       );
       entry.node.setAttribute("aria-label", entry.title);
       entry.node
@@ -237,17 +247,21 @@ function initializeShell(host: HTMLElement): void {
         .forEach((button) => {
           button.setAttribute(
             "aria-pressed",
-            String(focusMode && entry.path === activePath),
+            String(focused && entry.path === activePath),
           );
           button.setAttribute(
             "aria-label",
-            focusMode && entry.path === activePath
-              ? "Restore tiled view"
+            focused && entry.path === activePath
+              ? entry.kind === "home"
+                ? "Restore welcome window"
+                : "Restore tiled view"
               : `Focus ${entry.title}`,
           );
           button.title =
-            focusMode && entry.path === activePath
-              ? "Restore tiled view"
+            focused && entry.path === activePath
+              ? entry.kind === "home"
+                ? "Restore welcome window"
+                : "Restore tiled view"
               : "Focus window";
         });
       if (shown) {
@@ -258,14 +272,21 @@ function initializeShell(host: HTMLElement): void {
       }
     }
     host.dataset.layout =
-      active.kind === "home" ? "home" : visible.length > 1 ? "tiled" : "single";
+      active.kind === "home"
+        ? focused
+          ? "single"
+          : "home"
+        : visible.length > 1
+          ? "tiled"
+          : "single";
+    host.dataset.homeHidden = String(hideHome);
     document.body.dataset.pageKind = active.kind;
     document.body.dataset.activePath = activePath;
-    document.body.classList.toggle(
-      "focus-mode",
-      focusMode && active.kind !== "home",
-    );
+    document.body.dataset.homeHidden = String(hideHome);
+    document.body.classList.toggle("focus-mode", focused);
     document.title = active.documentTitle;
+    const articleLabel = document.getElementById("article-label");
+    if (articleLabel) articleLabel.textContent = active.title;
     const description = active.node.dataset.description || active.excerpt;
     document
       .querySelector<HTMLMetaElement>('meta[name="description"]')
@@ -417,6 +438,7 @@ function initializeShell(host: HTMLElement): void {
       if (options.snapshot) {
         historyIndex = options.snapshot.index;
         focusMode = options.snapshot.focused;
+        homeHidden = options.snapshot.homeHidden ?? false;
         visiblePaths = options.snapshot.visible
           .filter((item) => windows.has(item) && item !== "/")
           .slice(-2);
@@ -441,7 +463,12 @@ function initializeShell(host: HTMLElement): void {
         } else visiblePaths = [path];
       }
       if (options.focus !== undefined) focusMode = options.focus;
-      if (path === "/") focusMode = false;
+      if (path === "/" && !options.snapshot) {
+        focusMode = false;
+        // A Home link restores the welcome window; dismissing another app
+        // keeps the desktop's previous welcome-window visibility.
+        if (!options.remove && !options.minimize) homeHidden = false;
+      }
       render();
       const mode = options.history || "push";
       if (mode !== "pop") {
@@ -454,7 +481,10 @@ function initializeShell(host: HTMLElement): void {
           requestedURL,
         );
       }
-      if (!options.keepDialog) focusContent(target);
+      if (!options.keepDialog) {
+        if (target.node.hidden) focusHomeLink();
+        else focusContent(target);
+      }
       if (url.hash) revealFragment(target, url.hash, true);
       if (previousPath !== path) announce(`${target.title} opened`);
     } catch (error) {
@@ -491,12 +521,34 @@ function initializeShell(host: HTMLElement): void {
     saveHistory("push", path);
   }
 
+  function focusHomeLink(): void {
+    document
+      .querySelector<HTMLAnchorElement>('.desktop-bar a[href="/"]')
+      ?.focus({ preventScroll: true });
+  }
+
   function dismissWindow(
     path: string,
     remove: boolean,
     keepDialog = false,
   ): void {
-    if (path === "/" || !windows.has(path)) return;
+    if (!windows.has(path)) return;
+    if (path === "/") {
+      if (!desktop.matches) return;
+      cancelPendingNavigation();
+      saveScroll();
+      homeHidden = true;
+      focusMode = false;
+      render();
+      saveHistory("replace", location.href);
+      focusHomeLink();
+      announce(
+        remove
+          ? "Welcome window closed. Choose Home to reopen it."
+          : "Welcome window minimized. Choose Home to restore it.",
+      );
+      return;
+    }
     cancelPendingNavigation();
     if (path === activePath) {
       const nextPath =
@@ -750,6 +802,7 @@ function initializeShell(host: HTMLElement): void {
       const wasActive = activePath === path;
       activePath = path;
       markRecent(path);
+      if (path === "/") homeHidden = false;
       focusMode = wasActive ? !focusMode : true;
       render();
       saveHistory(wasActive ? "replace" : "push", path);
@@ -929,6 +982,68 @@ function closeDialogs(restoreFocus = true): void {
 
 function initializeDialogs(): void {
   document.querySelectorAll<HTMLDialogElement>("dialog").forEach((dialog) => {
+    dialog.addEventListener(
+      "keydown",
+      (event) => {
+        if (
+          !dialog.open ||
+          event.isComposing ||
+          event.altKey ||
+          event.ctrlKey ||
+          event.metaKey
+        )
+          return;
+        if (event.key === "Escape") {
+          // A search input otherwise consumes the first Escape to clear itself.
+          event.preventDefault();
+          event.stopPropagation();
+          dialog.close();
+          return;
+        }
+        if (event.key !== "Tab") return;
+        const tabbables = Array.from(
+          dialog.querySelectorAll<HTMLElement>(
+            'a[href], area[href], button, input:not([type="hidden"]), select, textarea, summary, iframe, [tabindex], [contenteditable]:not([contenteditable="false"])',
+          ),
+        )
+          .filter((element) => {
+            const visibility = getComputedStyle(element).visibility;
+            return (
+              element.tabIndex >= 0 &&
+              !element.matches(':disabled, [aria-disabled="true"]') &&
+              !element.closest('[hidden], [inert], [aria-hidden="true"]') &&
+              element.getClientRects().length > 0 &&
+              visibility !== "hidden" &&
+              visibility !== "collapse"
+            );
+          })
+          .sort((a, b) => {
+            // Match native ordering if a future dialog uses positive tabindex.
+            const first = a.tabIndex || Number.MAX_SAFE_INTEGER;
+            const second = b.tabIndex || Number.MAX_SAFE_INTEGER;
+            return first - second;
+          });
+        // Keep every Tab inside the modal instead of briefly visiting browser UI.
+        event.preventDefault();
+        event.stopPropagation();
+        if (!tabbables.length) {
+          dialog.focus({ preventScroll: true });
+          return;
+        }
+        const current = tabbables.indexOf(
+          document.activeElement as HTMLElement,
+        );
+        const next =
+          current < 0
+            ? event.shiftKey
+              ? tabbables.length - 1
+              : 0
+            : (current + (event.shiftKey ? -1 : 1) + tabbables.length) %
+              tabbables.length;
+        tabbables[next]!.focus();
+      },
+      true,
+    );
     dialog.addEventListener("close", () => {
       dialog
         .querySelector("#search-input")

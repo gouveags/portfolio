@@ -19,6 +19,16 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Confirm the exact revision under test
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          actual_sha=$(git rev-parse HEAD)
+          echo "Testing exact revision: $actual_sha"
+          test "$actual_sha" = "$EXPECTED_SHA"
       - uses: actions/setup-node@v4
         with:
           node-version: 24

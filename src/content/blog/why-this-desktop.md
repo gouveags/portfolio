@@ -6,7 +6,7 @@ readTime: '2 min read'
 order: 2
 ---
 
-## A desktop I enjoy
+<div id="a-desktop-i-enjoy"></div>
 
 Omarchy caught my attention, and my own Fedora, Hyprland and Noctalia setup made me enjoy using Linux in a different way.
 
