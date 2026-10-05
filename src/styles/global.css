@@ -2701,7 +2701,6 @@ h3 {
     0 0 4px #000;
 }
 .home-whisper,
-.mobile-welcome,
 body[data-page-kind="home"] .mobile-header .brand,
 body[data-page-kind="home"] .mobile-header .local-clock {
   text-shadow:
@@ -3060,19 +3059,6 @@ body[data-page-kind="home"] .mobile-header > .icon-button .icon {
   text-shadow: none;
 }
 
-/* Keep the mobile introduction legible over bright photos without a backing panel. */
-@media (max-width: 799px) {
-  .mobile-welcome.personal-welcome p,
-  .mobile-welcome.personal-welcome h1,
-  .mobile-welcome.personal-welcome .text-link,
-  .mobile-welcome.personal-welcome .welcome-socials a {
-    color: #fff;
-    font-weight: 500;
-  }
-  .mobile-welcome .button {
-    text-shadow: none;
-  }
-}
 body:has(
     #wallpaper-picture:is(
       [data-wallpaper="ferrari"],
@@ -3093,29 +3079,6 @@ body:has(
   .home-whisper
   :is(.eyebrow, p) {
   color: #171717;
-}
-@media (max-width: 799px) {
-  body:has(
-      #wallpaper-picture:is(
-        [data-wallpaper="ferrari"],
-        [data-wallpaper="hamilton-victory"]
-      )
-    )
-    .mobile-welcome {
-    text-shadow:
-      0 1px 1px #fff,
-      0 0 1px #fff;
-  }
-  body:has(
-      #wallpaper-picture:is(
-        [data-wallpaper="ferrari"],
-        [data-wallpaper="hamilton-victory"]
-      )
-    )
-    .mobile-welcome.personal-welcome
-    :is(p, h1, .text-link, .welcome-socials a) {
-    color: #171717;
-  }
 }
 @media (max-width: 799px) {
   body[data-page-kind="home"]:has(
@@ -3142,16 +3105,6 @@ body:has(
     .icon {
     color: #171717;
     filter: drop-shadow(0 1px 1px #fff);
-  }
-}
-
-@media (max-width: 799px) {
-  body:has(#wallpaper-picture[data-wallpaper="ferrari"])
-    .mobile-welcome.personal-welcome
-    .welcome-socials
-    a {
-    color: #fff;
-    text-shadow: 0 1px 2px #000;
   }
 }
 
@@ -3336,4 +3289,63 @@ body:has(
   gap: 34px;
   padding: 2px 34px 0;
   margin-bottom: 34px;
+}
+
+/* Home's introduction is a reading window; wallpaper decorations remain transparent. */
+@media (max-width: 799px) {
+  .mobile-home .mobile-welcome {
+    background: #000;
+    border: 1px solid var(--line-bright);
+    border-radius: 14px;
+    overflow: hidden;
+    text-shadow: none;
+    flex-shrink: 0;
+  }
+  .mobile-welcome-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 38px;
+    padding: 0 18px;
+    border-bottom: 1px solid var(--line);
+    background: #090909;
+    color: #aaa;
+    font: 10px var(--mono);
+  }
+  .mobile-welcome-titlebar .icon {
+    width: 13px;
+    height: 13px;
+  }
+  .mobile-welcome-content {
+    padding: 24px 20px;
+  }
+  .mobile-welcome.personal-welcome h1 {
+    color: #eee;
+  }
+  .mobile-welcome.personal-welcome p:not(.eyebrow) {
+    color: #c5c5c5;
+  }
+  .mobile-welcome.personal-welcome .eyebrow {
+    color: #aaa;
+  }
+  .mobile-welcome.personal-welcome .text-link,
+  .mobile-welcome.personal-welcome .welcome-socials a {
+    color: #eee;
+    min-height: 44px;
+  }
+  .mobile-welcome .welcome-actions .button {
+    min-height: 44px;
+  }
+  .mobile-welcome .welcome-socials {
+    gap: 0 18px;
+  }
+}
+@media (max-width: 359px) {
+  .mobile-home .mobile-welcome .welcome-profile {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .mobile-home .mobile-welcome .welcome-profile h1 {
+    font-size: 27px;
+  }
 }

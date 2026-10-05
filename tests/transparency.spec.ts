@@ -18,7 +18,7 @@ for (const { id: wallpaper } of wallpapers) {
     const mobile = testInfo.project.name === "mobile";
     const floating = page.locator(
       mobile
-        ? ".mobile-welcome, .mobile-header, .app-grid a > span:last-child, .mobile-home-credit"
+        ? ".mobile-header, .app-grid a > span:last-child, .mobile-home-credit"
         : ".home-whisper, .wallpaper-credit, .wallpaper-controls",
     );
     expect(await floating.count()).toBeGreaterThan(0);
@@ -32,6 +32,14 @@ for (const { id: wallpaper } of wallpapers) {
     const blackSurface = page.locator(mobile ? ".home-search" : ".desktop-bar");
     await expect(blackSurface).toHaveCSS("background-color", "rgb(0, 0, 0)");
     if (mobile) {
+      await expect(page.locator(".mobile-welcome")).toHaveCSS(
+        "background-color",
+        "rgb(0, 0, 0)",
+      );
+      await expect(page.locator(".mobile-welcome")).toHaveCSS(
+        "text-shadow",
+        "none",
+      );
       for (const icon of await page.locator(".app-icon").all()) {
         await expect(icon).toHaveCSS("background-color", "rgb(3, 3, 3)");
       }

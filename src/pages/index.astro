@@ -27,16 +27,19 @@ const socials = [
     <footer class="welcome-footer"><span>Click around. Every window is a real page.</span><a href="/guide/">? Guide</a></footer>
   </div>
   <div class="mobile-home">
-    <div class="mobile-welcome personal-welcome">
+    <section class="mobile-welcome personal-welcome" aria-labelledby="mobile-welcome-heading">
+      <div class="mobile-welcome-titlebar"><Icon name="file-text" /><span>welcome.md</span></div>
+      <div class="mobile-welcome-content">
       <header class="welcome-profile">
         <img class="welcome-portrait" src="/assets/me.png" alt="Gabriel Gouvêa" width="72" height="72" />
-        <div><p class="eyebrow">Software engineer</p><h1>Gabriel Gouvêa</h1></div>
+        <div><p class="eyebrow">Software engineer</p><h1 id="mobile-welcome-heading">Gabriel Gouvêa</h1></div>
       </header>
       <p>{introduction}</p>
       <p class="welcome-story">{desktopStory}</p>
       <div class="welcome-actions"><a href="/blog/" class="button">Read my writing <Icon name="arrow-right" /></a><a href="/about/" class="text-link">More about me <Icon name="arrow-right" /></a></div>
       <nav class="welcome-socials" aria-label="Find me online">{socials.map(social => <a href={social.href}>{social.name}<Icon name="arrow-up-right" /></a>)}</nav>
-    </div>
+      </div>
+    </section>
     <nav class="app-grid" aria-label="Apps">{primaryApps.slice(1).map(app => <a href={app.path}><span class="app-icon"><Icon name={app.icon} /></span><span>{app.title}</span></a>)}</nav>
     <button class="home-search js-only" data-action="search"><Icon name="magnifying-glass" /><span>Find a page, project or note</span></button>
     <WallpaperDots />
