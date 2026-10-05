@@ -52,15 +52,35 @@ test('closing a recent app keeps the picker open and does not accidentally resum
   await active(page, '/blog/');
   await page.locator('.mobile-nav').getByRole('button', { name: 'Recents', exact: true }).click();
   await page.locator('[data-close-path="/projects/"]').click();
-  await active(page, '/blog/');
+  await expect(page).toHaveURL(/\/blog\/$/);
+  await expect(page.locator('body')).toHaveAttribute('data-active-path', '/blog/');
+  await expect(app(page, '/blog/')).toHaveClass(/\bis-active\b/);
+  await expect(page.locator('#main-content')).toBeHidden();
   await expect(page.locator('#recents')).toBeVisible();
   await expect(app(page, '/projects/')).toHaveCount(0);
   await expect(page.locator('[data-recent-path="/projects/"]')).toHaveCount(0);
   await page.locator('[data-close-path="/blog/"]').click();
-  await active(page, '/');
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator('body')).toHaveAttribute('data-active-path', '/');
+  await expect(app(page, '/')).toHaveClass(/\bis-active\b/);
   await expect(page.locator('#recents')).toBeVisible();
   await expect(page.locator('.recent-empty')).toBeVisible();
   await page.getByRole('button', { name: 'Close recents' }).click();
   await expect(page.locator('#recents')).toBeHidden();
+  await active(page, '/');
   await expect(page.locator('.mobile-nav').getByRole('button', { name: 'Recents', exact: true })).toBeFocused();
+});
+
+test('Recents provides working Home and Back controls inside the modal', async ({ page }) => {
+  await page.locator('.app-grid a[href="/blog/"]').click();
+  await active(page, '/blog/');
+  await page.locator('.mobile-nav [data-action="recents"]').click();
+  await expect(page.locator('#main-content')).toBeHidden();
+  await page.locator('.recents-nav').getByRole('button', { name: 'Back', exact: true }).click();
+  await expect(page.locator('#recents')).toBeHidden();
+  await active(page, '/blog/');
+  await page.locator('.mobile-nav [data-action="recents"]').click();
+  await page.locator('.recents-nav').getByRole('link', { name: 'Home', exact: true }).click();
+  await expect(page.locator('#recents')).toBeHidden();
+  await active(page, '/');
 });

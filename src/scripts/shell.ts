@@ -150,6 +150,12 @@ function initializeShell(host: HTMLElement): void {
         sourceTitle ||
         `${title} | Gabriel Gouvêa`,
       excerpt:
+        (kind === "article"
+          ? node
+              .querySelector(".article-content p")
+              ?.textContent?.trim()
+              .slice(0, 320)
+          : undefined) ||
         node.dataset.excerpt ||
         node
           .querySelector(
@@ -607,14 +613,11 @@ function initializeShell(host: HTMLElement): void {
       card.dataset.recentPath = entry.path;
       const meta = document.createElement("p");
       meta.className = "recent-meta";
-      meta.textContent =
-        entry.path === activePath
-          ? "Active"
-          : entry.minimized
-            ? "Minimized"
-            : entry.kind === "article"
-              ? "Article"
-              : "Open app";
+      const appName = document.createElement("span");
+      appName.textContent = entry.node.dataset.title || entry.title;
+      const appIcon = entry.node.querySelector(".window-title .icon");
+      if (appIcon) meta.append(appIcon.cloneNode(true));
+      meta.append(appName);
       const title = document.createElement("h3");
       title.className = "recent-title";
       title.textContent = entry.title;
@@ -637,10 +640,23 @@ function initializeShell(host: HTMLElement): void {
       close.type = "button";
       close.className = "recent-close";
       close.dataset.closePath = entry.path;
-      close.textContent = "Close";
+      const closeIcon = entry.node.querySelector('[data-action="close"] .icon');
+      if (closeIcon) close.append(closeIcon.cloneNode(true));
+      else close.textContent = "Close";
+      close.title = `Close ${entry.title}`;
       close.setAttribute("aria-label", `Close ${entry.title}`);
-      actions.append(resume, close);
-      card.append(meta, title, excerpt, actions);
+      const cardHeader = document.createElement("div");
+      cardHeader.className = "recent-header";
+      cardHeader.append(meta, close);
+      actions.append(resume);
+      card.append(cardHeader, title, excerpt);
+      if (entry.kind === "article") {
+        const position = document.createElement("p");
+        position.className = "recent-position";
+        position.textContent = "Your place in this article is kept.";
+        card.append(position);
+      }
+      card.append(actions);
       fragment.append(card);
     }
     list.replaceChildren(fragment);

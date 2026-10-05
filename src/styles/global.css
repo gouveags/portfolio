@@ -2367,3 +2367,86 @@ dialog[open] {
     height: 23px;
   }
 }
+.recent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+.recent-header .recent-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 16px var(--sans);
+  margin: 0;
+  color: #ddd;
+}
+.recent-meta .icon {
+  width: 22px;
+  height: 22px;
+}
+.recent-header .recent-close {
+  border: 0;
+  padding: 6px;
+  min-width: 32px;
+  min-height: 32px;
+}
+.recent-close .icon {
+  width: 20px;
+  height: 20px;
+}
+.recent-position {
+  font-size: 12px;
+  border-top: 1px solid #333;
+  padding-top: 20px;
+  margin-top: 24px;
+  color: #aaa;
+}
+@media (max-width: 799px) {
+  #recent-list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 16px 7px 22px;
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+  }
+  #recent-list .recent-card {
+    flex: 0 0 calc(100% - 12px);
+    min-width: 0;
+    min-height: 420px;
+    scroll-snap-align: center;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .recent-header {
+    margin: -5px 0 28px;
+    padding-bottom: 18px;
+  }
+  .recent-title {
+    font-size: 29px;
+    line-height: 1.2;
+  }
+  .recent-excerpt {
+    min-height: 0;
+    margin-bottom: 0;
+  }
+  .recent-position {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .recent-actions {
+    margin-top: auto;
+    padding-top: 28px;
+    border: 0;
+  }
+}
+/* A comfortable editorial measure, independent of the window width. */
+.article-content {
+  max-width: 600px;
+}
