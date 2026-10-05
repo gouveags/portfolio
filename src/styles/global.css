@@ -1106,6 +1106,23 @@ kbd {
 .mobile-contents {
   display: none;
 }
+/* Keep long articles navigable when tiling/focus hides the full sidebar. */
+#workspace[data-layout="tiled"] .mobile-contents,
+.app-window.is-focused .mobile-contents {
+  display: block;
+  margin: 0 0 30px;
+  font-size: 13px;
+  color: #aaa;
+}
+#workspace[data-layout="tiled"] .mobile-contents summary,
+.app-window.is-focused .mobile-contents summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .blog-list .entry,
 .entry[data-category="this-site"],
 .entry[data-category="engineering"] {
@@ -2741,8 +2758,20 @@ body[data-page-kind="home"] .mobile-header > .icon-button .icon {
 .mobile-home-credit {
   color: #eee;
   text-shadow:
-    0 1px 3px #000,
+    0 1px 1px #000,
+    1px 0 1px #000,
+    -1px 0 1px #000,
+    0 -1px 1px #000,
     0 0 3px #000;
+}
+/* Native button styles otherwise reset the parent’s contrast-preserving halo. */
+.wallpaper-controls button,
+.mobile-home-credit button {
+  text-shadow: inherit;
+}
+.wallpaper-controls .icon,
+.mobile-home-credit .icon {
+  filter: drop-shadow(0 0 1px #000) drop-shadow(0 1px 1px #000);
 }
 @media (max-width: 799px) {
   .mobile-home .wallpaper-dot {

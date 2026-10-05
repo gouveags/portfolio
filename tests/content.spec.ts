@@ -1,4 +1,4 @@
-import { test, expect, app, active, ready, articlePath, openSearch } from './helpers';
+import { test, expect, app, active, ready, articlePath, openSearch, settledScreenshot } from './helpers';
 
 test('filter controls and a direct #bend route reveal the matching content', async ({ page }, testInfo) => {
   await page.goto('/open-source/');
@@ -64,11 +64,23 @@ test('four published notes filter into three engineering articles and one site e
   const article = app(page, path);
   await expect(article.locator('h1')).toHaveText('Let the agent see what broke');
   await expect(article.locator('.article-source')).toHaveText('AI-assisted writing approved for publication by Gabriel Gouvêa.');
-  if (testInfo.project.name === 'mobile') await article.locator('.mobile-contents summary').click();
-  const toc = article.locator(testInfo.project.name === 'mobile' ? '.mobile-contents nav' : '.reader-sidebar nav');
-  await toc.getByRole('link', { name: 'Test the path people actually use', exact: true }).click();
+  // Opening from the archive tiles the desktop reader: its sidebar is replaced
+  // by the same compact contents control used on a phone.
+  const contents = article.locator('.mobile-contents');
+  await expect(contents).toBeVisible();
+  await contents.locator('summary').click();
+  await settledScreenshot(page, testInfo.outputPath(`${testInfo.project.name}-article-compact-contents.png`));
+  await contents.getByRole('link', { name: 'Test the path people actually use', exact: true }).click();
   await expect(page).toHaveURL(/#test-the-path-people-actually-use$/);
   await expect(article.locator('#test-the-path-people-actually-use')).toBeInViewport();
+  if (testInfo.project.name === 'desktop') {
+    await article.locator('.window-actions [data-action="focus"]').click();
+    await expect(article).toHaveClass(/is-focused/);
+    await expect(contents).toBeVisible();
+    await expect(contents.getByRole('link', { name: 'Test the path people actually use', exact: true })).toBeVisible();
+    await contents.scrollIntoViewIfNeeded();
+    await settledScreenshot(page, testInfo.outputPath('desktop-article-focused-contents.png'));
+  }
   await article.locator('.article-footer').getByRole('link', { name: 'Blog', exact: true }).click();
   await active(page, '/blog/');
   await expect(blog.getByRole('button', { name: 'Engineering', exact: true })).toHaveAttribute('aria-pressed', 'true');

@@ -23,7 +23,7 @@ test("editorial links stay usable at narrow widths and project names remain acce
     oss.getByRole("heading", { level: 2, name: "LangChain and LangGraph" }),
   ).toBeAttached();
   await expect(oss.locator("#posthog")).toContainText("still under review");
-  await expect(oss.locator("#langchain")).toContainText("not merged");
+  await expect(oss.locator("#langchain")).toContainText("closed without merging");
   const sizes = await oss
     .locator(".contribution-links a, .contribution-receipts a, .tabs button")
     .evaluateAll((elements) =>

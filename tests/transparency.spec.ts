@@ -40,6 +40,13 @@ for (const { id: wallpaper } of wallpapers) {
         "text-shadow",
         "none",
       );
+      const credit = page.locator(".mobile-home-credit");
+      const halo = await credit.evaluate((element) => getComputedStyle(element).textShadow);
+      expect(halo).not.toBe("none");
+      for (const control of await credit.locator("a, button").all()) {
+        await expect(control).toHaveCSS("text-shadow", halo);
+        await expect(control).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+      }
       for (const icon of await page.locator(".app-icon").all()) {
         await expect(icon).toHaveCSS("background-color", "rgb(3, 3, 3)");
       }

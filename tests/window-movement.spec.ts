@@ -13,6 +13,40 @@ const boxes = async (page: import("@playwright/test").Page) =>
     ["/projects/", "/blog/"].map((path) => app(page, path).boundingBox()),
   );
 
+async function homeWithGestureRoom(page: import("@playwright/test").Page) {
+  await dock(page, "/");
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+  });
+  const home = app(page, "/");
+  const area = (await page.locator("#workspace").boundingBox())!;
+  const resize = home.getByRole("button", { name: "Resize Home", exact: true });
+  await resize.focus();
+  // Home's natural height follows its copy. Reserve real movement/resize room
+  // through the public control so these tests exercise unconstrained gestures.
+  const room = 160;
+  for (const [size, position, key, minimum] of [
+    ["width", "x", "Shift+ArrowLeft", 240],
+    ["height", "y", "Shift+ArrowUp", 120],
+  ] as const) {
+    const before = (await home.boundingBox())!;
+    const available =
+      area[position] + area[size] - before[position] - before[size];
+    const steps = Math.max(0, Math.ceil((room - available) / 64));
+    for (let step = 0; step < steps; step++) await page.keyboard.press(key);
+    const fitted = (await home.boundingBox())!;
+    expect(
+      area[position] + area[size] - fitted[position] - fitted[size],
+      `Home fixture must leave ${room}px of ${size} for the gesture`,
+    ).toBeGreaterThanOrEqual(room);
+    expect(
+      fitted[size],
+      `Home fixture must also have room to shrink its ${size}`,
+    ).toBeGreaterThan(minimum + 20);
+  }
+  return home;
+}
+
 test("open apps focus without changing geometry through dock and search", async ({
   page,
 }) => {
@@ -257,8 +291,7 @@ test("keyboard Read full page transfers focus into content and restore keeps a v
 test("titlebar follows the pointer into empty space and retains floating geometry", async ({
   page,
 }) => {
-  await dock(page, "/");
-  const home = app(page, "/");
+  const home = await homeWithGestureRoom(page);
   const title = home.locator(".window-titlebar");
   const before = (await home.boundingBox())!;
   await page.mouse.move(before.x + 100, before.y + 22);
@@ -330,8 +363,7 @@ for (const zone of [
 test("floating window retains all eight anchored resize directions and Escape restores geometry", async ({
   page,
 }) => {
-  await dock(page, "/");
-  const window = app(page, "/");
+  const window = await homeWithGestureRoom(page);
   const title = window.locator(".window-titlebar");
   await title.focus();
   await page.keyboard.press("Alt+Shift+ArrowRight");
@@ -351,6 +383,20 @@ test("floating window retains all eight anchored resize directions and Escape re
       Math.abs(changed.width - before.width) +
         Math.abs(changed.height - before.height),
     ).toBeGreaterThan(15);
+    const expected = {
+      x: before.x + (edge.includes("w") ? 20 : 0),
+      y: before.y + (edge.includes("n") ? 20 : 0),
+      width:
+        before.width + (edge.includes("e") ? 20 : edge.includes("w") ? -20 : 0),
+      height:
+        before.height +
+        (edge.includes("s") ? 20 : edge.includes("n") ? -20 : 0),
+    };
+    for (const key of ["x", "y", "width", "height"] as const)
+      expect(
+        changed[key],
+        `${edge} resize must preserve its anchored ${key}`,
+      ).toBeCloseTo(expected[key], 0);
     await page.keyboard.press("Escape");
     await page.mouse.up();
     expect(await window.boundingBox()).toEqual(before);

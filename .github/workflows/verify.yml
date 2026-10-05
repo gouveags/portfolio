@@ -51,7 +51,7 @@ jobs:
         with:
           name: portfolio-desktop-screenshots
           path: |
-            test-results/*-desktop/**
+            test-results/*-desktop/**/*.png
             !test-results/personal-photos-*/**
           if-no-files-found: ignore
           retention-days: 14
@@ -61,7 +61,7 @@ jobs:
         with:
           name: portfolio-mobile-screenshots
           path: |
-            test-results/*-mobile/**
+            test-results/*-mobile/**/*.png
             !test-results/personal-photos-*/**
           if-no-files-found: ignore
           retention-days: 14
@@ -70,6 +70,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: portfolio-personal-photo-screenshots
-          path: test-results/personal-photos-*/**
+          path: test-results/personal-photos-*/**/*.png
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Upload failure context
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-failure-context
+          path: test-results/**/error-context.md
           if-no-files-found: ignore
           retention-days: 14

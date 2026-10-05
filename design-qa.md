@@ -1,12 +1,28 @@
 # Portfolio implementation QA history
 
-## Current increment: free-moving desktop windows
+## Latest verification
+
+Use [PR #6 checks](https://github.com/gouveags/portfolio/pull/6/checks) and its description for the exact current head, full-suite result and remaining limitations. Reports below name the revision they inspected; an earlier pass does not certify later changes.
+
+Current CI publishes separate `portfolio-desktop-screenshots`, `portfolio-mobile-screenshots` and `portfolio-personal-photo-screenshots` artifacts containing rendered PNGs. The browser report retains traces, while failure-context text is also published separately when needed. Live cloud-browser inspection remains blocked by an access denial; this evidence comes from CI Chromium, not a hosted-browser or screen-reader certification.
+
+## Personal photographs and writing: `97fe050`
+
+The five approved photographs are published at `/about/#personal`, with three metadata-stripped WebP sizes per image. All twelve gallery/chapter/viewer screenshots from [run 37385759332](https://github.com/gouveags/portfolio/actions/runs/37385759332) were visually inspected at desktop and mobile sizes. No P0–P2 photo-layout issue was found: compositions stay uncropped, captions remain readable, and the full portrait viewer keeps its title, Close control, caption and native image link on screen. All fourteen personal-photo interaction/no-JavaScript cases passed, including repeated opening, focus restoration, failed-image recovery and browser history.
+
+The three approved essays are source-linked and disclose AI-assisted writing. The expanded Linux essay retains its existing URL and section anchors; the original historical article remains byte-for-byte unchanged. Current reading times are computed, not editorial estimates. The supplied résumé and all fifteen published personal-photo variants are hash-checked.
+
+Mobile route review also found the Spa footer’s native Wallpaper/Pause buttons losing their inherited text shadow over bright seats. The follow-on repair explicitly inherits and strengthens the text halo, retaining transparent controls rather than adding a panel. A regression checks each footer action’s computed shadow.
+
+This writing run passed 211 tests with 54 intentional viewport skips and five failures. Two assertions expected superseded LangGraph wording. Two gesture fixtures assumed room below Home that the longer introduction now occupied; the actual drag/resize results matched workspace clamping. The article-flow test also exposed that tiled desktop readers had no visible contents control. Follow-on verification keeps exact geometry assertions with explicit gesture room and checks a compact Contents menu in tiled/focused readers. The exact current result remains in the linked PR checks, rather than being inferred from this earlier run.
+
+## Window and editorial pass: `e0867fe`
 
 The latest work adds floating windows, half/quadrant snapping, eight resize directions, and the site-wide typography and header cleanup. Cloud type checking, static build, internal links, asset references, and the exact supplied résumé pass. Independent source review found and fixed Home focus restoration, hidden-window geometry clamping, and the single remaining tile's grid width.
 
 The exact-head [verification at `e0867fe`](https://github.com/gouveags/portfolio/actions/runs/37372437747) passed 180 browser tests with 54 intentional opposite-viewport skips, after GitHub's runner incident delayed execution. Independent review of 21 desktop renders found no P0–P2 issue. Mobile route, calendar, Recents, and wallpaper review found one P2: Spa's search icon was too faint over its white sky at 320/390/500px. The follow-up uses the same dark mobile control treatment as the other bright photographs and adds an explicit regression assertion.
 
-The current exact-head result and fresh captures are tracked in [PR #6 checks](https://github.com/gouveags/portfolio/pull/6/checks), with screenshots in its `portfolio-verification` artifact. Live cloud-browser inspection remains blocked by an access denial. Rendered review uses CI screenshots and automated interaction evidence; it is not a live hosted-browser or screen-reader certification. The older acceptance report below applies only to its named revision; it is not current-scope approval.
+The exact-head result and captures for that pass are retained in its linked run; newer screenshots are in the separate artifacts listed above. Live cloud-browser inspection remains blocked by an access denial. Rendered review uses CI screenshots and automated interaction evidence; it is not a live hosted-browser or screen-reader certification. The older acceptance report below applies only to its named revision; it is not current-scope approval.
 
 ## Historical v4 implementation report
 
