@@ -9,7 +9,6 @@ const blog = defineCollection({
     summary: z.string(),
     category: z.enum(["site", "engineering"]),
     dateLabel: z.string().optional(),
-    readTime: z.string().optional(),
     order: z.number().default(0),
     legacy: z.boolean().default(false),
     sourceNote: z.string().optional(),

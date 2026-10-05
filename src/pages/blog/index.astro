@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Icon from '../../components/Icon.astro';
+import { readingTime } from '../../utils/reading-time';
 const posts = (await getCollection('blog')).sort((a, b) => b.data.order - a.data.order);
 const categoryLabel = { site: 'This site', engineering: 'Engineering' };
 ---
@@ -24,7 +25,7 @@ const categoryLabel = { site: 'This site', engineering: 'Engineering' };
             <p class="eyebrow">{categoryLabel[post.data.category]}{post.data.dateLabel && ` · ${post.data.dateLabel}`}</p>
             <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
             <p>{post.data.summary}</p>
-            <div class="entry-links"><a class="text-link" href={`/blog/${post.id}/`}>Open note <Icon name="arrow-right" /></a>{post.data.readTime && <span class="read-time">{post.data.readTime}</span>}</div>
+            <div class="entry-links"><a class="text-link" href={`/blog/${post.id}/`}>Open note <Icon name="arrow-right" /></a><span class="read-time">{readingTime(post.body)}</span></div>
           </div>
         </article>
       ))}

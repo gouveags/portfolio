@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Icon from '../../components/Icon.astro';
+import { readingTime } from '../../utils/reading-time';
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
@@ -28,7 +29,7 @@ const articleUrl = `/blog/${post.id}/`;
       <header class="article-header">
         <p class="eyebrow">{categoryLabel}{post.data.dateLabel && ` · ${post.data.dateLabel}`}</p>
         <h1 id={articleHeadingId}>{post.data.title}</h1>
-        <p class="article-meta">Gabriel Gouvêa · {post.data.dateLabel || 'Site notes'}{post.data.readTime && ` · ${post.data.readTime}`}</p>
+        <p class="article-meta">Gabriel Gouvêa · {post.data.dateLabel || 'Site notes'} · {readingTime(post.body)}</p>
         <details class="mobile-contents">
           <summary>Contents <Icon name="caret-down" /></summary>
           <nav aria-label="Article contents">
@@ -36,7 +37,7 @@ const articleUrl = `/blog/${post.id}/`;
           </nav>
         </details>
       </header>
-      {post.data.legacy && <aside class="article-note">An unchanged note from the previous version of this portfolio. The site now uses Astro to publish static pages; this article preserves the original design and technology decisions.</aside>}
+      {post.data.legacy && <aside class="article-note"><strong>Archive note:</strong> This unchanged article describes the previous portfolio, built with plain HTML, CSS, and JavaScript. The current site now uses Astro to publish static pages. The architecture and design choices below belong to that earlier version.</aside>}
       <div class="article-content"><Content /></div>
       {post.data.sourceNote && <p class="article-source">{post.data.sourceNote}</p>}
       <footer class="article-footer">

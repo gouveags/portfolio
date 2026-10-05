@@ -3,7 +3,6 @@ title: 'My Vision for This Portfolio: Design, HTML, and JavaScript'
 summary: 'Why this portfolio was designed like a technical editorial, why it is intentionally built with plain HTML/CSS/JavaScript, and how this keeps the site fast, accessible, and maintainable.'
 category: engineering
 dateLabel: 'May 2026'
-readTime: '6 min read'
 order: 1
 legacy: true
 sourceNote: 'Based on notes from docs/DESIGN_CHOICES.md'

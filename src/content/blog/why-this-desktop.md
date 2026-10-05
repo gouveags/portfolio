@@ -2,7 +2,6 @@
 title: 'Why this looks like a desktop'
 summary: 'A little of my Linux setup, brought to the web.'
 category: site
-readTime: '2 min read'
 order: 2
 ---
 
