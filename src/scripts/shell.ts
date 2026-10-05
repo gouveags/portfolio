@@ -332,9 +332,12 @@ function initializeShell(host: HTMLElement): void {
       .querySelectorAll<HTMLAnchorElement>("a[data-app-link]")
       .forEach((link) => {
         const path = routePath(new URL(link.href, location.href).pathname);
-        const selected = path === activePath;
+        const exact = path === activePath;
+        const selected =
+          exact || (path === "/blog/" && active.kind === "article");
         link.classList.toggle("is-active", selected);
-        if (selected) link.setAttribute("aria-current", "page");
+        if (selected)
+          link.setAttribute("aria-current", exact ? "page" : "true");
         else link.removeAttribute("aria-current");
       });
     document
@@ -618,6 +621,12 @@ function initializeShell(host: HTMLElement): void {
       const appIcon = entry.node.querySelector(".window-title .icon");
       if (appIcon) meta.append(appIcon.cloneNode(true));
       meta.append(appName);
+      if (entry.minimized) {
+        const status = document.createElement("span");
+        status.className = "tag recent-status";
+        status.textContent = "Minimized";
+        meta.append(status);
+      }
       const title = document.createElement("h3");
       title.className = "recent-title";
       title.textContent = entry.title;

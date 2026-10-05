@@ -1,4 +1,4 @@
-import { test, expect, app, active, ready, dock, visibleApps, noHorizontalOverflow } from './helpers';
+import { test, expect, app, active, ready, dock, visibleApps, noHorizontalOverflow, settledScreenshot } from './helpers';
 
 test.beforeEach(async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop', 'Desktop window behavior');
@@ -17,7 +17,7 @@ test('real navigation tiles at most two windows, selects, focuses, and restores'
   expect(left).not.toBeNull(); expect(right).not.toBeNull();
   expect(left!.x + left!.width).toBeLessThanOrEqual(right!.x);
   await noHorizontalOverflow(page);
-  await page.screenshot({ path: testInfo.outputPath('desktop-tiled.png') });
+  await settledScreenshot(page, testInfo.outputPath('desktop-tiled.png'));
 
   await app(page, '/open-source/').locator('h1').click();
   await active(page, '/open-source/');

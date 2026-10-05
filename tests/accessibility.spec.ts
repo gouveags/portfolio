@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect, app, ready, routes, noHorizontalOverflow, openSearch } from './helpers';
+import { test, expect, app, ready, routes, noHorizontalOverflow, openSearch, settledScreenshot } from './helpers';
 
 for (const route of routes) {
   test(`accessible server route and screenshot: ${route}`, async ({ page }, testInfo) => {
@@ -8,9 +8,9 @@ for (const route of routes) {
     await ready(page, route);
     await expect(app(page, route).locator('h1:visible')).toHaveCount(1);
     await noHorizontalOverflow(page);
+    await settledScreenshot(page, testInfo.outputPath(`${route.replace(/\//g, '-') || 'home'}.png`));
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
     expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([]);
-    await page.screenshot({ path: testInfo.outputPath(`${route.replace(/\//g, '-') || 'home'}.png`) });
   });
 }
 

@@ -62,3 +62,29 @@ export async function scrollPosition(scroller: Locator, desired = 180) {
   expect(top, 'Fixture content must really scroll, otherwise preservation is untested').toBeGreaterThan(20);
   return top;
 }
+
+/** Capture painted application evidence, rather than an intermediate load frame. */
+export async function settledScreenshot(page: Page, path: string) {
+  await expect(page.locator('html')).toHaveClass(/\benhanced\b/);
+  await expect(page.locator('#workspace')).not.toHaveAttribute('aria-busy', 'true');
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    const images = Array.from(document.images).filter((image) => {
+      if (image.loading !== 'lazy') return true;
+      const box = image.getBoundingClientRect();
+      const style = getComputedStyle(image);
+      return box.width > 0 && box.height > 0 && style.visibility !== 'hidden'
+        && box.bottom > 0 && box.right > 0 && box.top < innerHeight && box.left < innerWidth;
+    });
+    await Promise.all(images.map(async (image) => {
+      // decode() also waits for the selected responsive picture source to load.
+      // A broken relevant image must fail evidence capture, not be silently ignored.
+      await image.decode();
+      if (!image.complete || image.naturalWidth === 0) {
+        throw new Error(`Image did not finish loading: ${image.currentSrc || image.src}`);
+      }
+    }));
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+  });
+  await page.screenshot({ path, animations: 'disabled' });
+}

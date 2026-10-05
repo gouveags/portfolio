@@ -1,4 +1,4 @@
-import { test, expect, app, active, ready, visibleApps, scrollPosition, noHorizontalOverflow } from './helpers';
+import { test, expect, app, active, ready, visibleApps, scrollPosition, noHorizontalOverflow, settledScreenshot } from './helpers';
 
 test.beforeEach(async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile', 'Phone navigation behavior');
@@ -25,7 +25,7 @@ test('Home app grid, Back, and Recents preserve a filtered blog and article scro
   await page.locator('.mobile-nav').getByRole('button', { name: 'Recents', exact: true }).click();
   await expect(page.locator('#recents')).toBeVisible();
   await expect(page.locator('.recent-card')).toHaveCount(2);
-  await page.screenshot({ path: testInfo.outputPath('mobile-recents.png') });
+  await settledScreenshot(page, testInfo.outputPath('mobile-recents.png'));
   await page.locator(`.recent-card[data-recent-path="${articlePath}"] [data-resume-path]`).click();
   await active(page, articlePath);
   await expect.poll(() => scroller.evaluate((element) => element.scrollTop)).toBeCloseTo(before, 0);
@@ -76,6 +76,10 @@ test('Recents provides working Home and Back controls inside the modal', async (
   await active(page, '/blog/');
   await page.locator('.mobile-nav [data-action="recents"]').click();
   await expect(page.locator('#main-content')).toBeHidden();
+  for (const control of await page.locator('.recents-nav a, .recents-nav button').all()) {
+    await expect(control).toBeVisible();
+    await expect(control).toBeInViewport();
+  }
   await page.locator('.recents-nav').getByRole('button', { name: 'Back', exact: true }).click();
   await expect(page.locator('#recents')).toBeHidden();
   await active(page, '/blog/');
