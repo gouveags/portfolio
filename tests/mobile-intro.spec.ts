@@ -26,6 +26,18 @@ for (const width of [320, 390, 500]) {
     );
     for (const photo of wallpapers) {
       await page.locator(`[data-wallpaper-id="${photo.id}"]:visible`).click();
+      if (["ferrari", "spa", "hamilton-victory"].includes(photo.id)) {
+        // These photographs have bright sky behind the transparent header.
+        // Axe cannot infer the contrast of an SVG over a photograph.
+        for (const selector of [
+          ".mobile-header .local-clock",
+          '.mobile-header [data-action="search"] .icon',
+        ])
+          await expect(page.locator(selector)).toHaveCSS(
+            "color",
+            "rgb(23, 23, 23)",
+          );
+      }
       await expect(welcome).toHaveCSS("background-color", "rgb(0, 0, 0)");
       await expect(welcome).toHaveCSS("text-shadow", "none");
       for (const link of await welcome.getByRole("link").all()) {

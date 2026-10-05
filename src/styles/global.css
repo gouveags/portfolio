@@ -3051,6 +3051,7 @@ body:has(
   body[data-page-kind="home"]:has(
       #wallpaper-picture:is(
         [data-wallpaper="ferrari"],
+        [data-wallpaper="spa"],
         [data-wallpaper="hamilton-victory"]
       )
     )
@@ -3064,6 +3065,7 @@ body:has(
   body[data-page-kind="home"]:has(
       #wallpaper-picture:is(
         [data-wallpaper="ferrari"],
+        [data-wallpaper="spa"],
         [data-wallpaper="hamilton-victory"]
       )
     )

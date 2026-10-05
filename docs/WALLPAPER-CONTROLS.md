@@ -12,7 +12,7 @@ Floating wallpaper labels and the desktop note have transparent backgrounds, wit
 
 `tests/wallpaper-dots.spec.ts` covers direct selection, current state, next/previous wraparound, keyboard activation, reload persistence, automatic rotation, responsive synchronization, and Home controls mounted after navigating from another page. `tests/wallpapers.spec.ts` checks the selected photographs and viewport coverage. Existing accessibility and navigation suites provide regression coverage.
 
-`tests/mobile-intro.spec.ts` checks the reading window, contrast, tap targets, and all five wallpapers at 320, 390, and 500 pixels.
+`tests/mobile-intro.spec.ts` checks the reading window, contrast, tap targets, and all five wallpapers at 320, 390, and 500 pixels. The three bright-sky photographs (Ferrari, Spa, and Hamilton's victory) use dark mobile clock/search controls without adding a background panel. That foreground choice has an explicit regression assertion because automated accessibility scanners cannot infer SVG contrast over photography.
 
 `tests/transparency.spec.ts` checks transparent floating surfaces across all wallpapers and the desktop note's lifecycle.
 

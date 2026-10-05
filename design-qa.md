@@ -4,7 +4,9 @@
 
 The latest work adds floating windows, half/quadrant snapping, eight resize directions, and the site-wide typography and header cleanup. Cloud type checking, static build, internal links, asset references, and the exact supplied résumé pass. Independent source review found and fixed Home focus restoration, hidden-window geometry clamping, and the single remaining tile's grid width.
 
-Browser results for this increment are tracked against the exact revision in [PR #6 checks](https://github.com/gouveags/portfolio/pull/6/checks), with rendered screenshots in its `portfolio-verification` artifact. Live cloud-browser inspection is currently blocked by an access denial. No live preview acceptance or complete visual pass is claimed for this increment until that evidence is reviewed. The older acceptance report below applies only to its named revision; it is not current-scope approval.
+The exact-head [verification at `e0867fe`](https://github.com/gouveags/portfolio/actions/runs/37372437747) passed 180 browser tests with 54 intentional opposite-viewport skips, after GitHub's runner incident delayed execution. Independent review of 21 desktop renders found no P0–P2 issue. Mobile route, calendar, Recents, and wallpaper review found one P2: Spa's search icon was too faint over its white sky at 320/390/500px. The follow-up uses the same dark mobile control treatment as the other bright photographs and adds an explicit regression assertion.
+
+The current exact-head result and fresh captures are tracked in [PR #6 checks](https://github.com/gouveags/portfolio/pull/6/checks), with screenshots in its `portfolio-verification` artifact. Live cloud-browser inspection remains blocked by an access denial. Rendered review uses CI screenshots and automated interaction evidence; it is not a live hosted-browser or screen-reader certification. The older acceptance report below applies only to its named revision; it is not current-scope approval.
 
 ## Historical v4 implementation report
 
