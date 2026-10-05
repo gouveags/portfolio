@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import wallpapers from '../data/wallpapers.json';
+---
+
+<Layout title="Photo credits" pageTitle="Photo credits" kind="page">
+  <article class="page-content credits-page">
+    <p class="eyebrow">Behind the desktop</p>
+    <h1>Photo credits</h1>
+    <p class="lead">Real places. Real photographs. A few things I like, brought together on a quiet desktop.</p>
+    <p>Sources and photographers are credited below. The Porsche and Theatro images use resized WebP variants; the other photographs retain their source JPEGs. The F1 photographs use grayscale and viewport-filling cropping only. Porsche and Theatro also use darkening and optional gentle pan and zoom.</p>
+    <p>Creative Commons photographs retain their individually listed licenses. No generative editing or compositing was used. Motion comes from still photographs, not video footage.</p>
+
+    <div class="entry-list credits-list">
+      {wallpapers.map((wallpaper) => (
+        <section class="entry" id={wallpaper.id} aria-labelledby={`credit-${wallpaper.id}`}>
+          <img src={wallpaper.src} alt={wallpaper.title} width="320" height="213" loading="lazy" />
+          <div class="credit-details"><p class="eyebrow">Photography · {wallpaper.license}</p>
+          <h2 id={`credit-${wallpaper.id}`}>{wallpaper.title}</h2>
+          <p>{wallpaper.credit}</p>
+          <p>
+            <a class="text-link" href={wallpaper.source} target="_blank" rel="noopener noreferrer">Original photograph and source</a>
+            {wallpaper.licenseUrl && <>{' · '}<a class="text-link" href={wallpaper.licenseUrl} target="_blank" rel="noopener noreferrer">{wallpaper.license} license</a></>}
+          </p>
+          {wallpaper.licenseUrl && <p>
+            <a class="text-link" href={wallpaper.src} download>Download desktop adaptation</a>
+            {' · '}
+            <a class="text-link" href={wallpaper.mobileSrc} download>Download mobile adaptation</a>
+          </p>}
+        </div></section>
+      ))}
+    </div>
+
+    <p>Photographers, licensors, brands, teams, venues, and other rights holders do not sponsor or endorse this site. The photo licenses do not grant trademark, privacy, or publicity rights. The Eau Rouge photograph is historical; the Hamilton Ferrari photograph depicts the 2026 SF-26. The separate Hamilton victory photograph shows the 2014 Chinese Grand Prix podium.</p>
+    <p>Typography uses Inter and JetBrains Mono. Read the <a class="text-link" href="/assets/fonts/INTER-LICENSE.txt">Inter license</a>, <a class="text-link" href="/assets/fonts/JETBRAINS-MONO-LICENSE.txt">JetBrains Mono license</a>, and <a class="text-link" href="/assets/brands/PHOSPHOR-LICENSE.txt">Phosphor icon license</a>.</p>
+    <p>The <a class="text-link" href="/about/#personal">personal photographs in About</a> were supplied for this portfolio and are used with permission. They are separate from the Creative Commons wallpaper collection.</p>
+    <p><a class="text-link" href="/">Back home</a></p>
+  </article>
+</Layout>

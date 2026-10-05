@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import PersonalChapter from '../components/PersonalChapter.astro';
+const experience = [
+  { stage: 'Where it started', company: 'Icarus Formula SAE', role: 'Telemetry and data acquisition', detail: 'At Icarus, I worked on telemetry and data acquisition, connecting microcontrollers with desktop tools. It was a hands-on introduction to building software around a physical system and the people who needed to understand it.' },
+  { stage: 'Building a product from zero', company: 'Realms / IP.TV · EduxGen.AI', role: 'Software engineer · Jan 2023 – Apr 2025', detail: 'I joined Realms as an intern and became a software engineer. I pitched EduxGen.AI and helped build it from zero with a small team, working across React, Node.js, and the generation backend. The product helps teachers turn a prompt into lessons, slides, handouts, assessments, images and videos. I owned the content-generation backend rework and the retrieval and knowledge layer, connecting agent orchestration, WebSockets, PostgreSQL/pgvector, and Neo4j.' },
+  { stage: 'What I’m working on now', company: 'MOVEdot', role: 'Software engineer · May 2025 – Present', detail: 'At MOVEdot, I built the first version of our production agent platform and later proposed and led Agent Core, our in-house runtime for customer-cloud and hybrid deployments. My work crosses product features, React, APIs, and infrastructure, with reliability and observability throughout.' },
+];
+---
+<Layout title="Career" pageTitle="Career" kind="page" description="Gabriel Gouvêa’s path from race-car telemetry at Icarus to EduxGen.AI at Realms and AI products and agent infrastructure at MOVEdot.">
+  <div class="page-content about-page career-editorial">
+    <header class="page-header">
+      <p class="eyebrow">Career</p>
+      <h1>Building products.<br />Understanding the systems behind them.</h1>
+    </header>
+    <div class="about-intro">
+      <img class="about-portrait" src="/assets/me.png" alt="Gabriel Silva Gouvêa" width="240" height="240" loading="lazy" />
+      <div class="about-copy">
+        <p class="lead">I’m Gabriel, a software engineer currently at MOVEdot.</p>
+        <p>My work has moved from race-car telemetry to building an AI product from zero, and now to agent infrastructure and product development. Across those settings, I like understanding the whole system and making it useful to the people working with it.</p>
+        <p>Open source runs alongside that work. I contribute to tools I use, follow problems across project boundaries, and build a few experiments of my own.</p>
+        <div class="about-intro-links">
+          <a class="text-link" href="/assets/CV_Gabriel_Silva_Gouvea_en-US.pdf" download>Download résumé <Icon name="arrow-down" /></a>
+          <a class="text-link" href="#personal">A little about me <Icon name="arrow-down" /></a>
+        </div>
+      </div>
+    </div>
+    <section class="timeline" aria-labelledby="experience-title" id="experience">
+      <header class="section-header"><p class="eyebrow">Experience</p><h2 id="experience-title">The path so far</h2></header>
+      {experience.map((item) => (
+        <article class="timeline-entry">
+          <p class="timeline-date">{item.stage}</p>
+          <div>
+            <h3>{item.company}</h3><p class="timeline-company">{item.role}</p><p>{item.detail}</p>
+            {item.company === 'Realms / IP.TV · EduxGen.AI' && <p>EduxGen.AI won <a class="text-link" href="https://www.techlearning.com/news/tech-and-learning-announces-winners-of-best-of-2024">Tech &amp; Learning’s Best of 2024</a> in Higher and Secondary Education, and was a <a class="text-link" href="https://bettawards.com/winners-2025/">2025 Bett Awards finalist</a> for AI for Teaching and Assessment.</p>}
+            {item.company === 'MOVEdot' && <p><a class="text-link" href="https://www.ycombinator.com/companies/movedot">MOVEdot is part of Y Combinator’s Fall 2025 batch</a>, building AI agents for hardware engineering.</p>}
+          </div>
+        </article>
+      ))}
+    </section>
+    <section aria-labelledby="open-source-title">
+      <header class="section-header"><p class="eyebrow">Alongside my work</p><h2 id="open-source-title">Open source</h2></header>
+      <p>I contribute regularly to open-source projects, mostly around AI infrastructure, observability and developer tooling. I tend to return to the same problems across several changes: how an integration behaves, what its telemetry tells us, and whether the tests actually exercise that behaviour.</p>
+      <p>PostHog has been a recurring focus since July 2026. I’ve also contributed to the LangChain ecosystem, Linux desktop tooling, and Bend’s developer experience.</p>
+      <a class="text-link" href="/open-source/">Explore my open-source work <Icon name="arrow-right" /></a>
+    </section>
+    <section aria-labelledby="education-title">
+      <header class="section-header"><p class="eyebrow">Education</p><h2 id="education-title">What I’m studying</h2></header>
+      <p>B.Sc. Computer Science at Estácio, expected September 2027.</p>
+      <p>Electronic &amp; Computer Engineering coursework at UFRJ, 2018–2024.</p>
+    </section>
+    <PersonalChapter />
+    <footer class="page-footer"><a class="text-link" href="/contact/">Get in touch <Icon name="arrow-right" /></a></footer>
+    <style is:inline>
+      .about-intro-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 28px;
+      }
+    </style>
+  </div>
+</Layout>

@@ -1,0 +1,205 @@
+import { openSource, test, expect, app, active, ready, dock, visibleApps, noHorizontalOverflow, settledScreenshot } from './helpers';
+
+test.beforeEach(async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'Desktop window behavior');
+  await page.goto('/');
+  await ready(page, '/');
+});
+
+test('real navigation tiles open windows, selects, focuses, and restores', async ({ page }, testInfo) => {
+  await expect(page.locator('.desktop-welcome h1')).toBeVisible();
+  await openSource(page);
+  await dock(page, '/blog/');
+  await expect(visibleApps(page)).toHaveCount(2);
+  await expect(page.locator('#workspace')).toHaveAttribute('data-layout', 'tiled');
+  const left = await app(page, '/open-source/').boundingBox();
+  const right = await app(page, '/blog/').boundingBox();
+  expect(left).not.toBeNull(); expect(right).not.toBeNull();
+  expect(left!.x + left!.width).toBeLessThanOrEqual(right!.x);
+  await noHorizontalOverflow(page);
+  await settledScreenshot(page, testInfo.outputPath('desktop-tiled.png'));
+
+  await app(page, '/open-source/').locator('h1').click();
+  await active(page, '/open-source/');
+  await app(page, '/open-source/').locator('[data-action="focus"]').click();
+  await expect(visibleApps(page)).toHaveCount(1);
+  await expect(page.locator('body')).toHaveClass(/focus-mode/);
+  await expect(app(page, '/open-source/').locator('[data-action="focus"]')).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Restore tiled view', exact: true }).click();
+  await expect(visibleApps(page)).toHaveCount(2);
+  await expect(page.locator('body')).not.toHaveClass(/focus-mode/);
+
+  await dock(page, '/projects/');
+  await expect(visibleApps(page)).toHaveCount(3);
+  await expect(app(page, '/blog/')).toBeVisible();
+  await expect(app(page, '/open-source/')).toBeVisible();
+  await expect(app(page, '/projects/').locator('h1')).toBeFocused();
+});
+
+test('minimize preserves an app, recents resumes it, close removes it', async ({ page }) => {
+  await openSource(page);
+  await dock(page, '/blog/');
+  await app(page, '/blog/').getByRole('button', { name: 'Minimize Blog', exact: true }).click();
+  await active(page, '/open-source/');
+  await expect(app(page, '/blog/')).toBeHidden();
+  await page.getByRole('button', { name: 'Recent windows' }).click();
+  const recent = page.locator('.recent-card[data-recent-path="/blog/"]');
+  await expect(recent).toContainText('Minimized');
+  await recent.locator('[data-resume-path]').click();
+  await active(page, '/blog/');
+  await expect(page.locator('#recents')).not.toBeVisible();
+
+  await app(page, '/blog/').getByRole('button', { name: 'Close Blog', exact: true }).click();
+  await active(page, '/open-source/');
+  await expect(app(page, '/blog/')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Recent windows' }).click();
+  await expect(page.locator('[data-recent-path="/blog/"]')).toHaveCount(0);
+  await page.locator('#recents').getByRole('button', { name: 'Close Open source', exact: true }).click();
+  await active(page, '/');
+  await expect(page.locator('#recents')).toBeVisible();
+  await expect(page.locator('.recent-empty')).toHaveText(/No recent apps yet/);
+  await expect(page.getByRole('button', { name: 'Close recents' })).toBeFocused();
+});
+
+test('Back and Forward restore routes, filters, focus, and a closed page', async ({ page }) => {
+  await openSource(page);
+  await app(page, '/open-source/').getByRole('button', { name: 'Original projects' }).click();
+  await dock(page, '/blog/');
+  await app(page, '/blog/').getByRole('button', { name: 'Focus Blog', exact: true }).click();
+  await page.goBack();
+  await active(page, '/open-source/');
+  await expect(app(page, '/open-source/').getByRole('button', { name: 'Original projects' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(app(page, '/open-source/').locator('#bend')).toBeVisible();
+  await expect(page.locator('body')).not.toHaveClass(/focus-mode/);
+  await page.goForward();
+  await active(page, '/blog/');
+  await expect(page.locator('body')).toHaveClass(/focus-mode/);
+  await expect(visibleApps(page)).toHaveCount(1);
+  await app(page, '/blog/').getByRole('button', { name: 'Close Blog', exact: true }).click();
+  await active(page, '/open-source/');
+  await page.goBack();
+  await active(page, '/blog/');
+  await expect(app(page, '/blog/')).toHaveCount(1);
+  await expect(app(page, '/blog/').locator('h1')).toBeFocused();
+});
+
+test('repeated navigation does not duplicate windows or history entries', async ({ page }) => {
+  await openSource(page);
+  const length = await page.evaluate(() => history.length);
+  for (let i = 0; i < 4; i++) await openSource(page);
+  await expect(app(page, '/open-source/')).toHaveCount(1);
+  expect(await page.evaluate(() => history.length)).toBe(length);
+  await dock(page, '/blog/');
+  for (let i = 0; i < 3; i++) await dock(page, '/blog/');
+  await expect(app(page, '/blog/')).toHaveCount(1);
+  await expect(visibleApps(page)).toHaveCount(2);
+  await page.goBack();
+  await active(page, '/open-source/');
+  await page.goBack();
+  await active(page, '/');
+});
+
+test('a newer navigation wins over a delayed earlier real route response', async ({ page }) => {
+  let release!: () => void;
+  let requestStarted!: () => void;
+  const gate = new Promise<void>((resolve) => { release = resolve; });
+  const started = new Promise<void>((resolve) => { requestStarted = resolve; });
+  let routeFinished!: () => void;
+  const finished = new Promise<void>((resolve) => { routeFinished = resolve; });
+  await page.route('**/about/', async (route) => {
+    const response = await route.fetch(); // The actual production HTML, not a fixture.
+    requestStarted();
+    await gate;
+    try { await route.fulfill({ response }); } finally { routeFinished(); }
+  });
+  await page.locator('.dock a[href="/about/"]').click();
+  await started;
+  await dock(page, '/blog/');
+  release();
+  await finished;
+  await active(page, '/blog/');
+  await expect(app(page, '/blog/')).toHaveCount(1);
+  await expect(page.locator('#workspace')).not.toHaveAttribute('aria-busy', 'true');
+  await page.goBack();
+  await active(page, '/');
+});
+
+test('a current-page fragment cancels an older in-flight app navigation', async ({ page }) => {
+  await openSource(page);
+  let release!: () => void;
+  let requestStarted!: () => void;
+  let routeFinished!: () => void;
+  const gate = new Promise<void>((resolve) => { release = resolve; });
+  const started = new Promise<void>((resolve) => { requestStarted = resolve; });
+  const finished = new Promise<void>((resolve) => { routeFinished = resolve; });
+  await page.route('**/blog/', async (route) => {
+    const response = await route.fetch();
+    requestStarted();
+    await gate;
+    try { await route.fulfill({ response }); } finally { routeFinished(); }
+  });
+  await page.locator('.dock a[href="/blog/"]').click();
+  await started;
+  await app(page, '/open-source/').getByRole('link', { name: 'Bend', exact: true }).click();
+  release();
+  await finished;
+  await active(page, '/open-source/');
+  await expect(page).toHaveURL(/\/open-source\/#bend$/);
+  await expect(app(page, '/open-source/').locator('#bend')).toBeVisible();
+  await expect(app(page, '/blog/')).toHaveCount(0);
+});
+
+test('opening both real articles preserves unique IDs and accessible article names', async ({ page }) => {
+  const first = '/blog/why-this-desktop/';
+  const second = '/blog/vision-design-and-tech-choices/';
+  await dock(page, '/blog/');
+  await app(page, '/blog/').locator(`h2 a[href="${first}"]`).click();
+  await active(page, first);
+  await dock(page, '/blog/');
+  await app(page, '/blog/').locator(`h2 a[href="${second}"]`).click();
+  await active(page, second);
+  const ids = await page.locator('[id]').evaluateAll((elements) => elements.map((element) => element.id));
+  expect(ids.length).toBe(new Set(ids).size);
+  // Cached hidden windows are intentionally absent from the accessibility tree.
+  // Resume the first article so both articles are exposed before checking names.
+  await page.getByRole('button', { name: 'Recent windows' }).click();
+  await page.locator(`.recent-card[data-recent-path="${first}"] [data-resume-path]`).click();
+  await active(page, first);
+  await expect(visibleApps(page)).toHaveCount(3);
+  for (const path of [first, second]) {
+    const article = app(page, path).locator('.article-body');
+    await expect(article).toBeVisible();
+    const heading = (await article.locator('h1').textContent())?.trim();
+    await expect(article).toHaveAccessibleName(heading!);
+  }
+});
+
+test('welcome controls focus, restore, minimize, close, and reopen Home', async ({ page }) => {
+  const home = app(page, '/');
+  const originalBounds = await home.boundingBox();
+  expect(originalBounds).not.toBeNull();
+  await home.getByRole('button', { name: 'Focus Home', exact: true }).click();
+  await expect(page.locator('#workspace')).toHaveAttribute('data-layout', 'single');
+  await expect(page.locator('body')).toHaveClass(/focus-mode/);
+  const focusedBounds = await home.boundingBox();
+  expect(focusedBounds!.width).toBeGreaterThan(originalBounds!.width);
+  await home.getByRole('button', { name: 'Restore welcome window', exact: true }).click();
+  await expect(page.locator('#workspace')).toHaveAttribute('data-layout', 'home');
+  await expect(page.locator('body')).not.toHaveClass(/focus-mode/);
+
+  for (const action of ['Minimize Home', 'Close Home']) {
+    await home.getByRole('button', { name: action, exact: true }).click();
+    await expect(home).toBeHidden();
+    await expect(visibleApps(page)).toHaveCount(0);
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.locator('#workspace')).toHaveAttribute('data-home-hidden', 'true');
+    const restore = page.locator('.dock a[href="/"]');
+    await expect(restore).toBeFocused();
+    await expect(restore).toBeInViewport();
+    await restore.click();
+    await active(page, '/');
+    await expect(home).toHaveCount(1);
+    await expect(page.locator('#workspace')).toHaveAttribute('data-home-hidden', 'false');
+    await expect(home.locator('h1:visible')).toBeFocused();
+  }
+});

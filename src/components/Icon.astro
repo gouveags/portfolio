@@ -1,0 +1,9 @@
+---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+interface Props { name: string; class?: string; }
+const { name, class: className = '' } = Astro.props;
+if (!/^[a-z0-9-]+$/.test(name)) throw new Error('Invalid icon name');
+const icon = readFileSync(join(process.cwd(), 'node_modules/@phosphor-icons/core/assets/thin', `${name}-thin.svg`), 'utf8');
+---
+<span class:list={['icon', className]} aria-hidden="true" set:html={icon} />

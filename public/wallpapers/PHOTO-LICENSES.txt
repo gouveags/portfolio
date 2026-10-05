@@ -1,0 +1,48 @@
+CURRENT WALLPAPERS
+
+“Classic Porsche 911 Carrera (49594785528)” by Jilles Dissel, via Wikimedia Commons, CC BY-SA 2.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 2.0. No endorsement is implied.
+Source: https://commons.wikimedia.org/wiki/File:Classic_Porsche_911_Carrera_(49594785528).jpg
+License: https://creativecommons.org/licenses/by-sa/2.0/
+Files: /wallpapers/porsche-desktop.webp and /wallpapers/porsche-mobile.webp
+
+“Teatro municipal de são paulo” by Hiltonfotografo, via Wikimedia Commons, CC BY-SA 4.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 4.0. No endorsement is implied.
+Source: https://commons.wikimedia.org/wiki/File:Teatro_municipal_de_s%C3%A3o_paulo.jpg
+License: https://creativecommons.org/licenses/by-sa/4.0/
+Files: /wallpapers/theatro-desktop.webp and /wallpapers/theatro-mobile.webp
+
+“2026 Chinese GP - Ferrari - Lewis Hamilton - FP1” by Liauzh, via Wikimedia Commons, CC BY 4.0. Photographed on 13 March 2026. The original JPEG is retained; the site applies CSS grayscale and viewport-filling responsive cropping, with no additional darkening, zoom, or motion. No generative editing was used. No endorsement is implied.
+Source: https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Ferrari_-_Lewis_Hamilton_-_FP1.jpg
+License: https://creativecommons.org/licenses/by/4.0/
+Files: /wallpapers/hamilton-sf26.jpg and /wallpapers/hamilton-sf26.jpg
+
+“Raidillon” by Paul Hermans, via Wikimedia Commons, CC BY-SA 3.0. A historical view looking uphill from Eau Rouge toward the Raidillon crest, uploaded in 2006. The original JPEG is retained; the site applies CSS grayscale and viewport-filling responsive cropping, with no additional darkening, zoom, or motion. This presentation is offered under CC BY-SA 3.0. No generative editing was used. No endorsement is implied.
+Source: https://commons.wikimedia.org/wiki/File:Raidillon.jpg
+License: https://creativecommons.org/licenses/by-sa/3.0/
+Files: /wallpapers/eau-rouge-uphill.jpg and /wallpapers/eau-rouge-uphill.jpg
+
+“2014 Chinese Grand Prix - Lewis Hamilton holding winners’ trophy with Nico Rosberg and Fernando Alonso” by Drew Bates, via Wikimedia Commons, CC BY 2.0. Photographed on 20 April 2014. This historical victory is separate from the 2026 Ferrari photograph. The original JPEG bytes are retained; CSS applies grayscale and viewport-filling cropping only, with no additional darkening, zoom, or motion. No generative editing was used. No endorsement is implied.
+Source: https://commons.wikimedia.org/wiki/File:2014_Chinese_Grand_Prix_-_Lewis_Hamilton_holding_winners%27_trophy_with_Nico_Rosberg_and_Fernando_Alonso.jpg
+License: https://creativecommons.org/licenses/by/2.0/
+File: /wallpapers/hamilton-victory-2014.jpg
+
+RETAINED PREVIOUS ASSETS (not selected)
+
+“Classic Porsche 911 Carrera (49594785528)” by Jilles Dissel, via Wikimedia Commons, CC BY-SA 2.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 2.0. No endorsement is implied.
+Source: https://commons.wikimedia.org/wiki/File:Classic_Porsche_911_Carrera_(49594785528).jpg
+License: https://creativecommons.org/licenses/by-sa/2.0/
+Files: /wallpapers/porsche-desktop.webp and /wallpapers/porsche-mobile.webp
+
+“Teatro municipal de são paulo” by Hiltonfotografo, via Wikimedia Commons, CC BY-SA 4.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 4.0. No endorsement is implied.
+Source: https://commons.wikimedia.org/wiki/File:Teatro_municipal_de_s%C3%A3o_paulo.jpg
+License: https://creativecommons.org/licenses/by-sa/4.0/
+Files: /wallpapers/theatro-desktop.webp and /wallpapers/theatro-mobile.webp
+
+“Ferrari F1 (51029943032)” by Jens Van Hecke, via Wikimedia Commons, CC BY-SA 2.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 2.0. No endorsement is implied.
+Source: https://commons.wikimedia.org/wiki/File:Ferrari_F1_(51029943032).jpg
+License: https://creativecommons.org/licenses/by-sa/2.0/
+Files: /wallpapers/ferrari-desktop.webp and /wallpapers/ferrari-mobile.webp
+
+“Circuit de Spa-Francorchamps (2)” by Kevin A. McGill (kevinmcgill), via Wikimedia Commons, CC BY-SA 2.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 2.0. No endorsement is implied.
+Source: https://commons.wikimedia.org/wiki/File:Circuit_de_Spa-Francorchamps_(2).jpg
+License: https://creativecommons.org/licenses/by-sa/2.0/
+Files: /wallpapers/spa-desktop.webp and /wallpapers/spa-mobile.webp

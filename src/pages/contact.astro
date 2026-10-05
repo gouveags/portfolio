@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+---
+<Layout title="Contact" pageTitle="Contact" kind="page" description="Get in touch with Gabriel Gouvêa by email, GitHub, LinkedIn, or X.">
+  <div class="page-content contact-page contact-editorial">
+    <header class="page-header">
+      <p class="eyebrow">Contact</p>
+      <h1>Say hello</h1>
+      <p class="lead">You can reach me by email, find my work on GitHub, or connect on LinkedIn.</p>
+    </header>
+    <div class="contact-email">
+      <p class="eyebrow">Email</p>
+      <a href="mailto:gabrielsgouvea@hotmail.com">gabrielsgouvea@hotmail.com <Icon name="arrow-up-right" /></a>
+    </div>
+    <ul class="contact-profiles" aria-label="Elsewhere online">
+      <li><a href="https://github.com/gouveags" target="_blank" rel="noopener noreferrer"><span>GitHub</span><Icon name="arrow-up-right" /></a></li>
+      <li><a href="https://linkedin.com/in/gouveags" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><Icon name="arrow-up-right" /></a></li>
+      <li><a href="https://x.com/gouveags" target="_blank" rel="noopener noreferrer"><span>X</span><Icon name="arrow-up-right" /></a></li>
+    </ul>
+    <p class="contact-note">Have a question about a project?<br />The repository is a good place to start.</p>
+    <footer class="page-footer"><span class="eyebrow">gouveags / contact</span></footer>
+  </div>
+</Layout>

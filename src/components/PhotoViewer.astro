@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+---
+<dialog id="photo-viewer" aria-labelledby="photo-viewer-title" aria-describedby="photo-viewer-caption">
+  <header class="photo-viewer-topline">
+    <h2 id="photo-viewer-title">A closer look</h2>
+    <button type="button" class="icon-button" data-action="close-dialog" aria-label="Close photo" autofocus><Icon name="x" /></button>
+  </header>
+  <div class="photo-viewer-frame" aria-busy="false">
+    <img id="photo-viewer-image" alt="" decoding="async" hidden />
+    <p id="photo-viewer-status" role="status" aria-live="polite"></p>
+  </div>
+  <footer>
+    <p id="photo-viewer-caption"></p>
+    <a id="photo-viewer-file" class="text-link" href="/about/#personal" target="_blank" rel="noopener noreferrer">Open image file <Icon name="arrow-up-right" /><span class="sr-only"> (new tab)</span></a>
+  </footer>
+</dialog>
+
+<style>
+  #photo-viewer { width: min(1100px, calc(100vw - 32px)); height: min(900px, 88svh); max-height: calc(100svh - 32px); padding: 20px; margin: auto; overflow: auto; }
+  #photo-viewer[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 16px; }
+  .photo-viewer-topline { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .photo-viewer-topline h2 { font-size: 20px; margin: 0; line-height: 1.35; }
+  .photo-viewer-topline button { flex: 0 0 44px; width: 44px; height: 44px; }
+  .photo-viewer-frame { min-height: 0; display: grid; place-items: center; overflow: hidden; }
+  #photo-viewer-image { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+  #photo-viewer-status { text-align: center; margin: 0; }
+  footer p { margin: 0 0 6px; font-size: 14px; }
+  footer a { min-height: 44px; font-size: 12px; }
+  @media (max-width: 799px) { #photo-viewer { padding: 14px; gap: 12px; } .photo-viewer-topline h2 { font-size: 17px; } }
+</style>

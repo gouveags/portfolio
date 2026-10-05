@@ -1,0 +1,16 @@
+---
+import wallpapers from '../data/wallpapers.json';
+---
+<div class="wallpaper-dots js-only" role="group" aria-label="Choose wallpaper">
+  {wallpapers.map(photo => (
+    <button
+      type="button"
+      class="wallpaper-dot"
+      data-action="wallpaper-select"
+      data-wallpaper-id={photo.id}
+      aria-label={`Show wallpaper: ${photo.title}`}
+      title={photo.title}
+      aria-pressed="false"
+    ><span aria-hidden="true"></span></button>
+  ))}
+</div>

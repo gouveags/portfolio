@@ -1,0 +1,9 @@
+# Personal photographs
+
+The personal chapter at `/about/#personal` uses five photographs supplied by Gabriel and approved for publication with their captions: the WEC at Interlagos, Theatro Municipal, Porsche Cup, a PostHog × Tractian event selfie, and Museu do Ipiranga. Captions follow the supplied context; the friend in the event selfie is not named. These personal photographs are separate from the licensed wallpaper collection, and this site does not grant an additional reuse license for them.
+
+The public files contain no EXIF, IPTC, XMP, GPS, device identifiers, original filenames, or Library metadata. The originals stay outside the repository. Sharp performs orientation-aware resizing and WebP encoding only: no generative editing, retouching, cropping, or upscaling. Each photograph has 480px and 800px gallery variants, plus an uncropped larger image. The larger image is linked rather than included in the gallery's responsive source set. Gallery images are lazy-loaded and have explicit dimensions and descriptive alt text.
+
+The image link opens a keyboard-accessible native dialog when JavaScript is available, with a caption, close control, Escape dismissal, focus containment and focus restoration. Without JavaScript, the same link opens the larger image in a separate tab. Browser navigation dismisses the dialog with the rest of the shell's overlays. The wallpaper-source link remains available and retains its separate credits and licenses.
+
+`src/data/personal-photo-assets.json` records the published variants' dimensions, sizes and SHA-256 hashes. Static verification checks both public and built bytes and rejects metadata-bearing WebP chunks. Regenerate deliberately and update that manifest if a photograph changes. Never copy an original into `public/` as a shortcut. The browser suite covers personal deep links, all five larger views, keyboard/focus handling, failed-image fallback, responsive layout, and no-JavaScript links.

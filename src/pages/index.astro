@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import WallpaperDots from '../components/WallpaperDots.astro';
+import { primaryApps } from '../data/navigation';
+const introduction = 'Hi, I’m Gabriel. I build AI products and the systems behind them, currently at MOVEdot. My work has taken me through educational software, race-car telemetry, and the tools other developers build on. This is where I keep that story, my open-source work, and a few things I’ve been thinking about.';
+const desktopStory = 'Omarchy and my Fedora + Hyprland + Noctalia setup made me enjoy using Linux. I wanted this little corner of the web to feel just as personal. Make yourself at home.';
+const socials = [
+  { name: 'GitHub', href: 'https://github.com/gouveags' },
+  { name: 'LinkedIn', href: 'https://linkedin.com/in/gouveags' },
+  { name: 'X', href: 'https://x.com/gouveags' },
+  { name: 'Email', href: 'mailto:gabrielsgouvea@hotmail.com' },
+];
+---
+<Layout title="Home" pageTitle="Home" filename="welcome.md" kind="home" description="Gabriel Gouvêa (Gabriel Gouvea). Software engineer building AI products, backend systems, and developer tools. Make yourself at home.">
+  <div class="desktop-welcome">
+    <div class="welcome-copy personal-welcome">
+      <header class="welcome-profile">
+        <img class="welcome-portrait" src="/assets/me.png" alt="Gabriel Gouvêa" width="72" height="72" />
+        <div><p class="eyebrow">Software engineer</p><h1>Gabriel Gouvêa</h1></div>
+      </header>
+      <p>{introduction}</p>
+      <p class="welcome-story">{desktopStory}</p>
+      <div class="welcome-actions"><a href="/blog/" class="button">Read my writing <Icon name="arrow-right" /></a><a href="/about/#personal" class="text-link">More about me <Icon name="arrow-right" /></a></div>
+      <nav class="welcome-socials" aria-label="Find me online">{socials.map(social => <a href={social.href}>{social.name}<Icon name="arrow-up-right" /></a>)}</nav>
+    </div>
+    <footer class="welcome-footer"><span>Click around. Every window is a real page.</span><a href="/guide/">? Guide</a></footer>
+  </div>
+  <div class="mobile-home">
+    <section class="mobile-welcome personal-welcome" aria-labelledby="mobile-welcome-heading">
+      <div class="mobile-welcome-titlebar"><Icon name="file-text" /><span>welcome.md</span></div>
+      <div class="mobile-welcome-content">
+      <header class="welcome-profile">
+        <img class="welcome-portrait" src="/assets/me.png" alt="Gabriel Gouvêa" width="72" height="72" />
+        <div><p class="eyebrow">Software engineer</p><h1 id="mobile-welcome-heading">Gabriel Gouvêa</h1></div>
+      </header>
+      <p>{introduction}</p>
+      <p class="welcome-story">{desktopStory}</p>
+      <div class="welcome-actions"><a href="/blog/" class="button">Read my writing <Icon name="arrow-right" /></a><a href="/about/#personal" class="text-link">More about me <Icon name="arrow-right" /></a></div>
+      <nav class="welcome-socials" aria-label="Find me online">{socials.map(social => <a href={social.href}>{social.name}<Icon name="arrow-up-right" /></a>)}</nav>
+      </div>
+    </section>
+    <nav class="app-grid" aria-label="Apps">{primaryApps.slice(1).map(app => <a href={app.path}><span class="app-icon"><Icon name={app.icon} /></span><span>{app.title}</span></a>)}</nav>
+    <button class="home-search js-only" data-action="search"><Icon name="magnifying-glass" /><span>Find a page, project or note</span></button>
+    <WallpaperDots />
+    <div class="mobile-home-credit"><a href="/credits/">Photo credits</a><span>·</span><button class="js-only" data-action="wallpaper-next">Wallpaper <Icon name="arrow-right" /></button><button class="js-only" data-action="wallpaper-pause" aria-label="Pause wallpaper motion" aria-pressed="false">Pause</button></div>
+  </div>
+</Layout>

@@ -1,53 +1,70 @@
-# Portfolio
+# Gabriel Gouvêa’s portfolio
 
-Hello, my name is Gabriel Silva Gouvêa and this is my portfolio.
+A quiet, black-and-white desktop for projects, open source, and writing. Desktop has movable windows with edge snapping and tiling; mobile has its own Home, apps, and Recents navigation.
 
-Here are my contacts, feel free to reach out:
+Built with **Astro**, static HTML, CSS, and a small TypeScript enhancement. No database, authentication, server functions, or external runtime services. Every page has a real URL and renders usable, indexable content without JavaScript.
 
-- Email: [gabrielsgouvea@hotmail.com](mailto:gabrielsgouvea@hotmail.com)
-- GitHub: [github.com/gouveags/](https://www.github.com/gouveags/)
-- LinkedIn: [linkedin.com/in/gouveags/](https://www.linkedin.com/in/gouveags/)
-- Portfolio: [gouveagsportfolio.vercel.app](https://gouveagsportfolio.vercel.app/)
+## Local development
 
+Node.js 22.12+ (CI uses Node 24):
 
-## Want to know more about this project?
-
-Curious about the design decisions behind this project? Maybe you're wondering:
-
-- **Why choose old tech like HTML + CSS + JavaScript over React?**
-- **Why such a clean, minimal design without fancy animations?**
-- **Where is the youtube video where you coppied this project from?** (spoiler: Nowhere! **it's all original code here!**)
-
-[Here](./docs/DESIGN_CHOICES.md) I'll be docummenting a little about some of the design choices I've made for this project and why they matter (at least to me). Go check out and then let's talk about it!
-
-## Run locally with uv
-
-From the project root:
-
-```bash
-uv run dev
+```sh
+npm ci
+npm run dev
 ```
 
-Then open `http://localhost:8000`.
+Open the URL printed by Astro. For a production build:
 
-Live reload is enabled by default only in local development mode.
-It is automatically disabled when `APP_ENV=production` (or `ENV=production`),
-or when binding to a non-local host.
-
-Optional:
-
-```bash
-PORT=8080 uv run dev
+```sh
+npm run build
+npm run preview
 ```
 
-Disable live reload:
+## Checks
 
-```bash
-uv run dev --no-live-reload
+```sh
+npm run check
+npm run build
+npm run test:static
+npx playwright install chromium
+npm test
 ```
 
-Production-like local check:
+`npm run verify` runs the complete sequence after browser installation. CI installs Chromium and runs the same checks. See [design-qa.md](./design-qa.md) for the latest visual verification status.
 
-```bash
-APP_ENV=production uv run dev
-```
+## Publish on Vercel
+
+The repository includes `vercel.json` with the Astro preset, `npm ci`, `npm run build`, and `dist` output. It produces static assets only, suitable for Vercel’s free Hobby plan subject to Vercel’s current plan terms. No paid services or environment variables are required.
+
+A pull request may create an automatic preview through an existing Vercel integration. Merging the PR or changing production deployment settings is a separate decision.
+
+## Content
+
+- `src/content/blog/*.md`: posts, validated frontmatter, and static article routes
+- `src/data/projects.ts`: selected work
+- `src/pages/open-source.astro`: source-linked contributions and experiments, linked from Career
+- `src/pages/about.astro`: Career, from Icarus telemetry through Realms/EduxGen.AI to MOVEdot
+- `public/assets/`: the original portrait and favicon, plus the latest user-supplied résumé
+
+See [the documentation index](./docs/README.md) for design and photo sources, and [the blog guide](./docs/BLOG_POSTS.md) to add a post. The previous site’s article is preserved unchanged and explicitly labeled as a note about the previous version.
+
+Career uses the existing `/about/` URL and is a primary dock/mobile entry. Open source remains at `/open-source/`, linked from Career and available in search; its breadcrumb returns to Career. Existing URLs and `/#experience` links remain valid.
+
+## The shell
+
+`src/layouts/Layout.astro` renders the full page. `src/scripts/shell.ts` progressively enhances same-origin links with cached windows, adaptive tiling, title-bar movement, and edge/keyboard resizing, focus/minimize/close, search, and mobile Recents. Browser Back/Forward stays connected to real routes. Recents and reading positions last for the current visit; a full reload starts at the requested page. Wallpaper and opt-in shortcuts are stored locally when browser storage is available.
+
+All enhanced controls have visible labels or accessible names. Keyboard shortcuts are off by default and ignore text inputs. Reduced-motion preferences stop wallpaper movement and transitions. Pause is available independently.
+
+## Photographs and licenses
+
+Wallpapers are real photographs, not generated images or video. Each photograph has source attribution and its individual rights recorded on `/credits/` and in [PHOTO-LICENSES.md](./docs/PHOTO-LICENSES.md). The current F1 selections use the original JPEGs with grayscale and responsive viewport cropping only. Trophy references without verified publication rights are excluded from the site. Creative Commons licenses apply only to their respective photographs, not the entire website. No endorsement is implied.
+
+## Contact
+
+- [GitHub](https://github.com/gouveags)
+- [LinkedIn](https://linkedin.com/in/gouveags)
+- [Email](mailto:gabrielsgouvea@hotmail.com)
+- [Portfolio](https://gouveagsportfolio.vercel.app/)
+
+Desktop layout behavior and resize controls: [Window management](docs/WINDOW-MANAGEMENT.md).

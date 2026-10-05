@@ -1,0 +1,200 @@
+---
+import Icon from './Icon.astro';
+import { personalPhotos } from '../data/personal-photos';
+---
+
+<section class="personal-chapter" id="personal" aria-labelledby="personal-title" tabindex="-1">
+  <header class="section-header">
+    <p class="eyebrow">Away from work</p>
+    <h2 id="personal-title">A little about me</h2>
+  </header>
+
+  <div class="personal-copy">
+    <p>I like books, motorcycles, video games, learning new tech, and spending time getting my tools to feel right. Sometimes I’m building something useful; sometimes I’m just curious about how it works.</p>
+    <p>Omakub was where I first fell in love with Linux. My setup these days is Fedora, Hyprland and Noctalia, with Omarchy as another inspiration. This website borrows a little of that feeling.</p>
+    <p>I’m Christian, and I’m married to Giselle. We’ve been to São Paulo’s Theatro Municipal together and spent time at Interlagos for the WEC and Porsche Cup. A few moments with her and with friends belong here, too.</p>
+  </div>
+
+  <div class="personal-gallery" role="group" aria-label="A few personal photographs">
+    {personalPhotos.map((photo, index) => (
+      <figure class:list={['personal-photo', { 'personal-photo-wide': index === 0 }]}>
+        <a
+          class="personal-photo-link"
+          href={photo.fullSrc}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`View larger photo: ${photo.title}`}
+          data-photo-viewer
+          data-photo-title={photo.title}
+          data-photo-caption={photo.caption}
+          data-photo-alt={photo.alt}
+        >
+          <img
+            src={photo.src}
+            srcset={photo.srcSet}
+            sizes={index === 0 ? '(max-width: 799px) calc(100vw - 50px), 680px' : '(max-width: 799px) calc(100vw - 50px), 330px'}
+            width={photo.width}
+            height={photo.height}
+            alt={photo.alt}
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="personal-photo-expand" aria-hidden="true"><Icon name="arrows-out-simple" /></span>
+        </a>
+        <figcaption>
+          <span class="personal-photo-title">{photo.title}</span>
+          <span class="personal-photo-caption">{photo.caption}</span>
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+
+  <p class="personal-wallpaper-note">The desktop wallpapers are photographs of places and cars I admire. <a href="/credits/">Find their originals and photographer credits</a>.</p>
+  <!-- Keep route-specific styles in the window fragment for shell navigation. -->
+  <style is:inline>
+  .personal-chapter {
+    container-type: inline-size;
+    margin-top: 48px;
+    padding-top: 34px;
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 24px;
+  }
+
+  .personal-chapter .eyebrow {
+    margin-bottom: 12px;
+  }
+
+  .personal-copy {
+    max-width: 70ch;
+  }
+
+  .personal-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px 24px;
+    max-width: 680px;
+    margin: 30px 0;
+    align-items: start;
+  }
+
+  .personal-photo {
+    min-width: 0;
+    margin: 0;
+  }
+
+  .personal-photo-wide {
+    grid-column: 1 / -1;
+  }
+
+  .personal-photo-wide .personal-photo-link {
+    width: 100%;
+  }
+
+  .personal-photo-link {
+    position: relative;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    cursor: zoom-in;
+  }
+
+  .personal-photo img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 390px;
+    border-radius: 3px;
+  }
+
+  .personal-photo-wide img {
+    width: 100%;
+    max-height: none;
+  }
+
+  .personal-photo-expand {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ffffff40;
+    border-radius: 50%;
+    background: #000b;
+    color: #fff;
+    pointer-events: none;
+  }
+
+  .personal-photo-expand .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .personal-photo-link:hover .personal-photo-expand,
+  .personal-photo-link:focus-visible .personal-photo-expand {
+    border-color: #fff;
+    background: #000;
+  }
+
+  .personal-photo figcaption {
+    display: grid;
+    gap: 4px;
+    max-width: 44ch;
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .personal-photo-title {
+    color: var(--fg);
+    font-size: 13px;
+  }
+
+  .personal-photo-caption {
+    color: var(--muted);
+  }
+
+  .personal-wallpaper-note {
+    max-width: 70ch;
+    font-size: 13px;
+  }
+
+  .personal-wallpaper-note a {
+    color: var(--fg);
+    text-decoration: underline;
+    text-decoration-color: var(--line-bright);
+    text-underline-offset: 4px;
+  }
+
+  .personal-wallpaper-note a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  @container (max-width: 480px) {
+    .personal-gallery {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .personal-photo-wide {
+      grid-column: auto;
+    }
+
+    .personal-photo img {
+      max-height: 440px;
+    }
+
+    .personal-photo-wide img {
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 799px) {
+    .personal-gallery {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  </style>
+</section>

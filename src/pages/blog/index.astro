@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import { readingTime } from '../../utils/reading-time';
+const posts = (await getCollection('blog')).sort((a, b) => b.data.order - a.data.order);
+const categoryLabel = { site: 'This site', engineering: 'Engineering' };
+---
+<Layout title="Blog" pageTitle="Blog" kind="page" description="Notes from building software, contributing in the open, and making my own tools feel a little better to use.">
+  <div class="page-content blog-page">
+    <header class="page-header">
+      <p class="eyebrow">Notes and things I am learning</p>
+      <h1>Things I’ve been thinking about.</h1>
+      <p class="lead">Notes from building software, contributing in the open, and making my own tools feel a little better to use.</p>
+    </header>
+    <div class="tabs js-only" role="group" aria-label="Filter blog notes">
+      <button type="button" data-filter-target="blog-list" data-filter-value="all" aria-pressed="true">All notes</button>
+      <button type="button" data-filter-target="blog-list" data-filter-value="engineering" aria-pressed="false">Engineering</button>
+      <button type="button" data-filter-target="blog-list" data-filter-value="site" aria-pressed="false">This site</button>
+    </div>
+    <div class="entry-list blog-list" id="blog-list">
+      {posts.map((post) => (
+        <article class="entry blog-entry" data-category={post.data.category}>
+          <div class="entry-main">
+            <p class="eyebrow">{categoryLabel[post.data.category]}{post.data.dateLabel && ` · ${post.data.dateLabel}`}</p>
+            <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
+            <p>{post.data.summary}</p>
+            <div class="entry-links"><a class="text-link" href={`/blog/${post.id}/`}>Open note <Icon name="arrow-right" /></a><span class="read-time">{readingTime(post.body)}</span></div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</Layout>

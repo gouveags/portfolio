@@ -1,0 +1,67 @@
+[
+  {
+    "id": "porsche",
+    "title": "Classic Porsche 911 Carrera",
+    "photographer": "Jilles Dissel",
+    "src": "/wallpapers/porsche-desktop.webp",
+    "mobileSrc": "/wallpapers/porsche-mobile.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Classic_Porsche_911_Carrera_(49594785528).jpg",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "desktopPosition": "50% 50%",
+    "mobilePosition": "50% 50%",
+    "credit": "“Classic Porsche 911 Carrera (49594785528)” by Jilles Dissel, via Wikimedia Commons, CC BY-SA 2.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 2.0. No endorsement is implied."
+  },
+  {
+    "id": "theatro",
+    "title": "Theatro Municipal · São Paulo",
+    "photographer": "Hiltonfotografo",
+    "src": "/wallpapers/theatro-desktop.webp",
+    "mobileSrc": "/wallpapers/theatro-mobile.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Teatro_municipal_de_s%C3%A3o_paulo.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "desktopPosition": "50% 50%",
+    "mobilePosition": "50% 50%",
+    "credit": "“Teatro municipal de são paulo” by Hiltonfotografo, via Wikimedia Commons, CC BY-SA 4.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 4.0. No endorsement is implied."
+  },
+  {
+    "id": "ferrari",
+    "title": "Lewis Hamilton · Ferrari SF-26, 2026",
+    "photographer": "Liauzh",
+    "src": "/wallpapers/hamilton-sf26.jpg",
+    "mobileSrc": "/wallpapers/hamilton-sf26.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Ferrari_-_Lewis_Hamilton_-_FP1.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "desktopPosition": "50% 58%",
+    "mobilePosition": "62% 50%",
+    "credit": "“2026 Chinese GP - Ferrari - Lewis Hamilton - FP1” by Liauzh, via Wikimedia Commons, CC BY 4.0. Photographed on 13 March 2026. The original JPEG is retained; the site applies CSS grayscale and viewport-filling responsive cropping, with no additional darkening, zoom, or motion. No generative editing was used. No endorsement is implied."
+  },
+  {
+    "id": "spa",
+    "title": "Eau Rouge / Raidillon · The climb",
+    "photographer": "Paul Hermans",
+    "src": "/wallpapers/eau-rouge-uphill.jpg",
+    "mobileSrc": "/wallpapers/eau-rouge-uphill.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Raidillon.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "desktopPosition": "50% 36%",
+    "mobilePosition": "48% 36%",
+    "credit": "“Raidillon” by Paul Hermans, via Wikimedia Commons, CC BY-SA 3.0. A historical view looking uphill from Eau Rouge toward the Raidillon crest, uploaded in 2006. The original JPEG is retained; the site applies CSS grayscale and viewport-filling responsive cropping, with no additional darkening, zoom, or motion. This presentation is offered under CC BY-SA 3.0. No generative editing was used. No endorsement is implied."
+  },
+  {
+    "id": "hamilton-victory",
+    "title": "Lewis Hamilton · Chinese GP victory, 2014",
+    "photographer": "Drew Bates",
+    "src": "/wallpapers/hamilton-victory-2014.jpg",
+    "mobileSrc": "/wallpapers/hamilton-victory-2014.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:2014_Chinese_Grand_Prix_-_Lewis_Hamilton_holding_winners%27_trophy_with_Nico_Rosberg_and_Fernando_Alonso.jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "desktopPosition": "50% 0%",
+    "mobilePosition": "50% 50%",
+    "credit": "“2014 Chinese Grand Prix - Lewis Hamilton holding winners’ trophy with Nico Rosberg and Fernando Alonso” by Drew Bates, via Wikimedia Commons, CC BY 2.0. Photographed on 20 April 2014. This historical victory is separate from the 2026 Ferrari photograph. The original JPEG bytes are retained; CSS applies grayscale and viewport-filling cropping only, with no additional darkening, zoom, or motion. No generative editing was used. No endorsement is implied."
+  }
+]

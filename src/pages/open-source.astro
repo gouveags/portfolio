@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+const contributions = [
+  {
+    id: 'posthog', logo: '/assets/brands/posthog-light.svg', name: 'PostHog',
+    description: 'Since July 2026, my PostHog work has grown from AI cost accounting into how agent behaviour is recorded and tested. I’ve contributed LangChain agent middleware in JavaScript and Python, more accurate Anthropic cache and Bedrock cost handling, and richer capture of Gemini tool calls and their history.',
+    details: [
+      'I’ve also worked on record-and-replay tests for Anthropic, OpenAI and Gemini integrations. They run real provider SDKs through the built PostHog wrapper, so the tests can check the data an application receives as well as the analytics it emits.',
+      'Recent follow-ups explore consistent tool-result capture across providers and Gemini Interactions support. Those proposals are still under review.',
+    ],
+    project: 'https://github.com/PostHog',
+    history: 'https://github.com/search?q=is%3Apr+is%3Apublic+author%3Agouveags+org%3APostHog&type=pullrequests',
+    links: [
+      { label: 'Middleware PR', href: 'https://github.com/PostHog/posthog-js/pull/4556', title: 'LangChain v1 agent middleware' },
+      { label: 'Cache pricing PR', href: 'https://github.com/PostHog/posthog/pull/71323', title: 'Anthropic cache writes by TTL' },
+      { label: 'Bedrock pricing PR', href: 'https://github.com/PostHog/posthog/pull/74380', title: 'Bedrock pricing by inference profile' },
+    ],
+  },
+  {
+    id: 'langchain', logo: '/assets/brands/langchain-light.svg', name: 'LangChain and LangGraph',
+    description: 'In LangChain’s AWS integration, I’ve contributed fixes for credential selection and incomplete Bedrock streams. Both deal with behaviour that can be easy to miss: which authentication path a caller actually selected, and whether a response really finished.',
+    details: ['I also proposed graph-wide error handling in LangGraph and raised issues around agent execution and provider integration. The error-handling proposal was closed without merging; the AWS fixes were merged.'],
+    project: 'https://github.com/langchain-ai',
+    history: 'https://github.com/search?q=is%3Apr+is%3Apublic+author%3Agouveags+org%3Alangchain-ai&type=pullrequests',
+    links: [
+      { label: 'Credentials PR', href: 'https://github.com/langchain-ai/langchain-aws/pull/1230', title: 'AWS credential precedence' },
+      { label: 'Stream completion PR', href: 'https://github.com/langchain-ai/langchain-aws/pull/1287', title: 'Reject incomplete Bedrock Converse streams' },
+      { label: 'Error-handling proposal', href: 'https://github.com/langchain-ai/langgraph/pull/7757', title: 'Graph-wide error handling, closed without merging' },
+    ],
+  },
+  {
+    id: 'linux', logo: null, name: 'Linux desktop',
+    description: 'My Fedora, Hyprland and Noctalia setup made me really enjoy using Linux. It also gave me some fairly practical reasons to look under the hood. One investigation started with a Bluetooth mouse disconnecting: I traced it to discovery staying active in Noctalia v4 and contributed the downstream fix to Terra’s legacy package.',
+    details: ['I also reported a separate discovery-lifetime issue in Noctalia v5 and proposed improvements to Omarchy’s development checks and boot behaviour. The Terra fix was merged; the Omarchy changes are still open proposals.'],
+    project: 'https://github.com/noctalia-dev/noctalia',
+    history: 'https://github.com/search?q=is%3Apr+is%3Apublic+author%3Agouveags+repo%3Aterrapkg%2Fpackages+repo%3Aomacom%2Fomarchy&type=pullrequests',
+    links: [
+      { label: 'Terra Bluetooth fix', href: 'https://github.com/terrapkg/packages/pull/16215', title: 'Noctalia legacy Bluetooth discovery fix' },
+      { label: 'Noctalia v5 report', href: 'https://github.com/noctalia-dev/noctalia/issues/4120', title: 'Bluetooth Rescan leaves discovery active until the tab is closed' },
+      { label: 'Omarchy', href: 'https://github.com/omacom/omarchy', title: 'Omarchy project' },
+    ],
+  },
+];
+const originals = [
+  { id: 'bend', name: 'openai-bend', description: 'An unofficial, experimental OpenAI SDK for Bend. Typed requests, streaming and tool calling go through a local companion using the official TypeScript SDK, with examples and tests for native and JavaScript clients. Its scope and limits stay visible in the documentation.', href: 'https://github.com/gouveags/openai-bend' },
+  { id: 'anthropic-bend', name: 'anthropic-bend', description: 'An unofficial, experimental Anthropic SDK for Bend, built around the Messages API. It shares the local-companion approach with openai-bend and includes typed requests, streaming, tool-use helpers, examples and compatibility tests.', href: 'https://github.com/gouveags/anthropic-bend' },
+  { id: 'bend-grammar', name: 'bend-grammar', description: 'I built a TextMate grammar for Bend and Bend 2, with tokenizer regression tests, and contributed Bend language support to GitHub Linguist. The Linguist contribution was merged.', href: 'https://github.com/gouveags/bend-grammar' },
+];
+---
+<Layout title="Open source" pageTitle="Open source" kind="page" description="Open-source work alongside Gabriel Gouvêa’s career: PostHog, LangChain, Linux desktop communities, and unofficial Bend SDK experiments.">
+  <div class="work-layout oss-editorial">
+    <aside class="work-sidebar" aria-label="Open-source navigation">
+      <p class="eyebrow">Career</p>
+      <nav aria-label="Career pages">
+        <a href="/about/"><Icon name="info" />Career</a>
+        <a href="/open-source/" aria-current="page"><Icon name="code" />Open source</a>
+        <a href="/projects/"><Icon name="folder" />Projects</a>
+      </nav>
+      <div class="sidebar-section">
+        <p class="eyebrow">Explore</p>
+        <nav aria-label="Contribution projects">
+          <a href="/open-source/#posthog" data-filter-category="contributions">PostHog</a>
+          <a href="/open-source/#langchain" data-filter-category="contributions">LangChain</a>
+          <a href="/open-source/#bend" data-filter-category="original">Bend</a>
+        </nav>
+      </div>
+    </aside>
+    <div class="page-content">
+    <header class="page-header">
+      <nav class="eyebrow" aria-label="Breadcrumb"><a href="/about/">Career</a> / <span aria-current="page">Open source</span></nav>
+      <h1>Work I keep coming back to</h1>
+      <p class="lead">Open source has become a regular part of my work. I contribute features and fixes, spend time on tests and follow-up discussions, and come back when there’s another part of the problem to solve.</p>
+      <p>Much of it connects to the systems I work on professionally: agents, integrations and observability. There’s room for desktop fixes and language experiments too.</p>
+    </header>
+    <div class="tabs js-only" role="group" aria-label="Open-source work">
+      <button type="button" data-filter-target="oss-list" data-filter-value="contributions" aria-pressed="true">Contributions</button>
+      <button type="button" data-filter-target="oss-list" data-filter-value="original" aria-pressed="false">Original projects</button>
+    </div>
+    <div class="contribution-list" id="oss-list">
+      {contributions.map((item) => (
+        <article class="contribution-entry" id={item.id} data-category="contributions">
+          <h2 class="contribution-title">{item.name}</h2>
+          <p class="contribution-copy" id={item.id === 'posthog' ? 'posthog-pricing' : undefined}>{item.description}</p>
+          {item.details.map((paragraph) => <p class="contribution-copy">{paragraph}</p>)}
+          <div class="contribution-links"><a class:list={{ "contribution-brand": !!item.logo }} href={item.project} aria-label={item.id === 'linux' ? 'Noctalia project' : `${item.name} project`}>{item.logo ? <img class={`project-wordmark ${item.id}`} src={item.logo} alt="" width={item.id === 'posthog' ? 160 : 189} height={item.id === 'posthog' ? 28 : 40} /> : <>{item.id === 'linux' ? 'Noctalia project' : 'Project'} <Icon name="arrow-up-right" /></>}</a><a href={item.history}>{item.id === 'linux' ? 'Linux pull requests' : 'Public pull requests'} <Icon name="arrow-up-right" /></a></div>
+          <div class="contribution-receipts" aria-label={`${item.name} references`}>
+            <span>{item.id === 'linux' ? 'Around the desktop' : 'Selected changes'}</span>
+            {item.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer" title={link.title} aria-label={`${link.label}: ${link.title} (opens in a new tab)`}>{link.label}<Icon name="arrow-up-right" /></a>)}
+          </div>
+        </article>
+      ))}
+      {originals.map((item) => (
+        <article class="contribution-entry" id={item.id} data-category="original">
+          <h2 class="contribution-title">{item.name}</h2>
+          <p class="contribution-copy">{item.description}</p>
+          <div class="contribution-links"><a href={item.href} target="_blank" rel="noopener noreferrer" aria-label={`View ${item.name} on GitHub (opens in a new tab)`}>View code <Icon name="arrow-up-right" /></a></div>
+          {item.id === 'bend-grammar' && <div class="contribution-receipts"><span>Selected change</span><a href="https://github.com/github-linguist/linguist/pull/8218" target="_blank" rel="noopener noreferrer">Bend language support <Icon name="arrow-up-right" /></a></div>}
+        </article>
+      ))}
+    </div>
+    <footer class="page-footer">
+      <p>I’ve also <a class="text-link" href="https://github.com/langfuse/langfuse/pull/17451">proposed improvements to Langfuse’s AI cost accounting</a>. The full history includes merged work, open proposals and things that didn’t land.</p>
+      <a class="text-link" href="https://github.com/search?q=is%3Apr+is%3Apublic+author%3Agouveags&type=pullrequests" target="_blank" rel="noopener noreferrer">View all public pull requests <Icon name="arrow-right" /></a>
+    </footer>
+    </div>
+  </div>
+</Layout>
