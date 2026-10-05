@@ -6,12 +6,12 @@ import { readingTime } from '../../utils/reading-time';
 const posts = (await getCollection('blog')).sort((a, b) => b.data.order - a.data.order);
 const categoryLabel = { site: 'This site', engineering: 'Engineering' };
 ---
-<Layout title="Blog" pageTitle="Blog" kind="page" description="Notes on craft, architecture, and product decisions by Gabriel Gouvêa.">
+<Layout title="Blog" pageTitle="Blog" kind="page" description="Notes from building software, contributing in the open, and making my own tools feel a little better to use.">
   <div class="page-content blog-page">
     <header class="page-header">
       <p class="eyebrow">Notes and things I am learning</p>
-      <h1>The blog.</h1>
-      <p class="lead">Ideas, experiments, and the occasional detour.</p>
+      <h1>Things I’ve been thinking about.</h1>
+      <p class="lead">Notes from building software, contributing in the open, and making my own tools feel a little better to use.</p>
     </header>
     <div class="tabs js-only" role="group" aria-label="Filter blog notes">
       <button type="button" data-filter-target="blog-list" data-filter-value="all" aria-pressed="true">All notes</button>

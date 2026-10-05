@@ -31,13 +31,13 @@ test('article TOC deep links survive reload and Back, and copy the article URL',
   const article = app(page, articlePath);
   if (testInfo.project.name === 'mobile') await article.locator('.mobile-contents summary').click();
   const toc = article.locator(testInfo.project.name === 'mobile' ? '.mobile-contents nav' : '.reader-sidebar nav');
-  const link = toc.getByRole('link', { name: 'What I brought to the web', exact: true });
+  const link = toc.getByRole('link', { name: 'Borrowing the parts I enjoy', exact: true });
   await link.click();
-  await expect(page).toHaveURL(/#what-i-brought-to-the-web$/);
-  await expect(article.locator('#what-i-brought-to-the-web')).toBeInViewport();
+  await expect(page).toHaveURL(/#borrowing-the-parts-i-enjoy$/);
+  await expect(article.locator('#borrowing-the-parts-i-enjoy')).toBeInViewport();
   await page.reload();
   await ready(page, articlePath);
-  await expect(article.locator('#what-i-brought-to-the-web')).toBeInViewport();
+  await expect(article.locator('#borrowing-the-parts-i-enjoy')).toBeInViewport();
   await article.getByRole('button', { name: 'Copy link', exact: true }).click();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(new URL(articlePath, page.url()).href);
   await expect(page.locator('#announcement')).toHaveText('Link copied');
@@ -45,6 +45,63 @@ test('article TOC deep links survive reload and Back, and copy the article URL',
   await active(page, articlePath);
   await expect(page).toHaveURL(new RegExp(`${articlePath}$`));
 });
+
+test('four published notes filter into three engineering articles and one site essay', async ({ page }, testInfo) => {
+  await page.goto('/blog/');
+  await ready(page, '/blog/');
+  const blog = app(page, '/blog/');
+  await expect(blog.locator('.blog-entry:visible')).toHaveCount(4);
+  await blog.getByRole('button', { name: 'This site', exact: true }).click();
+  await expect(blog.locator('.blog-entry:visible')).toHaveCount(1);
+  await expect(blog.locator(`h2 a[href="${articlePath}"]`)).toBeVisible();
+  await blog.getByRole('button', { name: 'Engineering', exact: true }).click();
+  await expect(blog.locator('.blog-entry:visible')).toHaveCount(3);
+  await expect(blog.locator(`h2 a[href="${articlePath}"]`)).toBeHidden();
+
+  const path = '/blog/let-the-agent-see-what-broke/';
+  await blog.locator(`h2 a[href="${path}"]`).click();
+  await active(page, path);
+  const article = app(page, path);
+  await expect(article.locator('h1')).toHaveText('Let the agent see what broke');
+  await expect(article.locator('.article-source')).toHaveText('AI-assisted writing approved for publication by Gabriel Gouvêa.');
+  if (testInfo.project.name === 'mobile') await article.locator('.mobile-contents summary').click();
+  const toc = article.locator(testInfo.project.name === 'mobile' ? '.mobile-contents nav' : '.reader-sidebar nav');
+  await toc.getByRole('link', { name: 'Test the path people actually use', exact: true }).click();
+  await expect(page).toHaveURL(/#test-the-path-people-actually-use$/);
+  await expect(article.locator('#test-the-path-people-actually-use')).toBeInViewport();
+  await article.locator('.article-footer').getByRole('link', { name: 'Blog', exact: true }).click();
+  await active(page, '/blog/');
+  await expect(blog.getByRole('button', { name: 'Engineering', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(blog.locator('.blog-entry:visible')).toHaveCount(3);
+  await blog.getByRole('button', { name: 'All notes', exact: true }).click();
+  await expect(blog.locator('.blog-entry:visible')).toHaveCount(4);
+});
+
+for (const post of [
+  { slug: 'the-field-i-almost-threw-away', title: 'The field I almost threw away', query: 'field almost threw away', minutes: 4 },
+  { slug: 'let-the-agent-see-what-broke', title: 'Let the agent see what broke', query: 'agent see broke', minutes: 3 },
+]) {
+  test(`search opens the published essay: ${post.title}`, async ({ page }, testInfo) => {
+    await page.goto('/');
+    await ready(page, '/');
+    await openSearch(page, testInfo.project.name === 'mobile');
+    const input = page.locator('#search-input');
+    await input.fill(post.query);
+    const results = page.locator('#search-results a:visible');
+    await expect(results).toHaveCount(1);
+    const path = `/blog/${post.slug}/`;
+    await expect(results).toHaveAttribute('href', path);
+    await input.press('ArrowDown');
+    await input.press('Enter');
+    await active(page, path);
+    await expect(page.locator('#launcher')).toBeHidden();
+    await expect(app(page, path).locator('h1')).toHaveText(post.title);
+    await expect(app(page, path).locator('h1')).toBeFocused();
+    await page.reload();
+    await ready(page, path);
+    await expect(app(page, path).locator('.article-meta')).toContainText(`5 October 2026 · ${post.minutes} min read`);
+  });
+}
 
 test('search handles no matches, resets, navigates by keyboard, and restores focus', async ({ page }, testInfo) => {
   await page.goto('/');

@@ -13,6 +13,7 @@ export { expect };
 export const routes = [
   '/', '/open-source/', '/projects/', '/blog/', '/about/', '/contact/', '/guide/', '/credits/',
   '/blog/why-this-desktop/', '/blog/vision-design-and-tech-choices/',
+  '/blog/the-field-i-almost-threw-away/', '/blog/let-the-agent-see-what-broke/',
 ];
 export const articlePath = '/blog/why-this-desktop/';
 export const app = (page: Page, path: string): Locator => page.locator(`.app-window[data-path="${path}"]`);

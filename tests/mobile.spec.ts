@@ -14,7 +14,7 @@ test('Home app grid, Back, and Recents preserve a filtered blog and article scro
   await expect(visibleApps(page)).toHaveCount(1);
   const blog = app(page, '/blog/');
   await blog.getByRole('button', { name: 'Engineering', exact: true }).click();
-  await expect(blog.locator('.blog-entry:visible')).toHaveCount(1);
+  await expect(blog.locator('.blog-entry:visible')).toHaveCount(3);
   await blog.locator(`h2 a[href="${articlePath}"]`).click();
   await active(page, articlePath);
   await expect(app(page, articlePath).locator('h1')).toBeFocused();
@@ -40,7 +40,7 @@ test('Home app grid, Back, and Recents preserve a filtered blog and article scro
   await page.locator('.mobile-nav').getByRole('button', { name: 'Back', exact: true }).click();
   await active(page, '/blog/');
   await expect(blog.getByRole('button', { name: 'Engineering', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await expect(blog.locator('.blog-entry:visible')).toHaveCount(1);
+  await expect(blog.locator('.blog-entry:visible')).toHaveCount(3);
 });
 
 test('closing a recent app keeps the picker open and does not accidentally resume it', async ({ page }) => {

@@ -34,6 +34,6 @@ Second- and third-level Markdown headings automatically populate the desktop tab
 
 `vision-design-and-tech-choices.md` preserves the original five paragraphs, title, summary, display date, and source note from the former inline `blogPosts` array in `scripts/main.js`. Its `legacy: true` flag adds an explicit archive note outside the article body explaining that it describes the previous plain HTML/CSS/JavaScript site, while the current site uses Astro. The historical text has not been rewritten to imply that it describes this Astro implementation. Its former manual six-minute reading label is replaced by the same computed estimate as other notes.
 
-`why-this-desktop.md` is the short approved origin note about Omarchy and Gabriel’s Fedora, Hyprland, and Noctalia setup. There are no placeholder or proposed articles in the published index.
+`why-this-desktop.md` is the expanded approved origin essay about Omakub, Omarchy, and Gabriel’s Fedora, Hyprland, and Noctalia setup. Its existing URL and section anchors are preserved. Two approved engineering essays, `the-field-i-almost-threw-away.md` and `let-the-agent-see-what-broke.md`, discuss tool-output preservation and evidence for AI-assisted changes, with public source links and publication-date status snapshots. All three show their AI-assisted, user-approved writing attribution. There are no placeholder or proposed articles in the published index.
 
 The collection schema lives in `src/content.config.ts`; the index and reader templates live in `src/pages/blog/`.

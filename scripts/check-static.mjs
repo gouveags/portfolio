@@ -10,6 +10,7 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 const expectedRoutes = [
   '/', '/about/', '/projects/', '/open-source/', '/blog/', '/contact/', '/guide/', '/credits/',
   '/blog/why-this-desktop/', '/blog/vision-design-and-tech-choices/',
+  '/blog/the-field-i-almost-threw-away/', '/blog/let-the-agent-see-what-broke/',
 ];
 
 async function walk(directory) {

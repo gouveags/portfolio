@@ -44,11 +44,32 @@ jobs:
           path: playwright-report/
           if-no-files-found: ignore
           retention-days: 14
-      - name: Upload rendered screenshots
+      # Keep independently downloadable evidence below the transfer size limit.
+      - name: Upload desktop screenshots
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: portfolio-screenshots
-          path: test-results/
+          name: portfolio-desktop-screenshots
+          path: |
+            test-results/*-desktop/**
+            !test-results/personal-photos-*/**
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Upload mobile screenshots
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-mobile-screenshots
+          path: |
+            test-results/*-mobile/**
+            !test-results/personal-photos-*/**
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Upload personal photo screenshots
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-personal-photo-screenshots
+          path: test-results/personal-photos-*/**
           if-no-files-found: ignore
           retention-days: 14

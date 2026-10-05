@@ -13,7 +13,7 @@ interface Props {
   title: string; pageTitle?: string; kind?: 'home' | 'page' | 'article';
   description?: string; filename?: string; noindex?: boolean;
 }
-const { title, pageTitle = title, kind = 'page', description = 'Gabriel Gouvêa: software engineer building AI products, backend systems, and developer tools. Explore projects, open source, and notes.', filename = pageTitle, noindex = false } = Astro.props;
+const { title, pageTitle = title, kind = 'page', description = 'Gabriel Gouvêa is a software engineer building AI products, infrastructure and developer tools. Explore his career, open-source contributions, projects and writing.', filename = pageTitle, noindex = false } = Astro.props;
 const path = Astro.url.pathname === '/404/' ? '/404.html' : Astro.url.pathname;
 const documentTitle = kind === 'home' ? 'Gabriel Gouvêa | Software Engineer' : `${title} | Gabriel Gouvêa`;
 const canonical = new URL(path, Astro.site);

@@ -27,7 +27,7 @@ export const apps = [
     path: "/blog/",
     title: "Blog",
     icon: "file-text",
-    excerpt: "Ideas, experiments, and the occasional detour.",
+    excerpt: "Notes from building software, contributing in the open, and making my tools feel better to use.",
   },
   {
     path: "/contact/",
