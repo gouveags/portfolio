@@ -16,6 +16,21 @@ const { title, pageTitle = title, kind = 'page', description = 'Gabriel Gouvêa:
 const path = Astro.url.pathname === '/404/' ? '/404.html' : Astro.url.pathname;
 const documentTitle = kind === 'home' ? 'Gabriel Gouvêa | Software Engineer' : `${title} | Gabriel Gouvêa`;
 const canonical = new URL(path, Astro.site);
+// Vercel injects this at build time; previews must never become search results.
+const preview = process.env.VERCEL_ENV === 'preview' || process.env.VERCEL_ENV === 'development';
+const socialImage = new URL('/assets/me.png', Astro.site);
+const identity = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'Person', '@id': new URL('/#person', Astro.site).href,
+      name: 'Gabriel Gouvêa', alternateName: ['Gabriel Gouvea', 'gouveags'],
+      url: new URL('/', Astro.site).href, image: socialImage.href,
+      sameAs: ['https://github.com/gouveags', 'https://linkedin.com/in/gouveags', 'https://x.com/gouveags'] },
+    { '@type': 'WebSite', '@id': new URL('/#website', Astro.site).href,
+      name: 'Gabriel Gouvêa', alternateName: ['Gabriel Gouvea', 'gouveags'],
+      url: new URL('/', Astro.site).href }
+  ]
+};
 const posts = await getCollection('blog');
 const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title: p.data.title, icon: 'file-text', excerpt: p.data.summary})), {path:'/credits/',title:'Photo credits',icon:'camera',excerpt:'Real photographs and their licenses.'}];
 ---
@@ -32,10 +47,18 @@ const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title:
     <meta property="og:title" content={documentTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {(noindex || preview) && <meta name="robots" content="noindex, follow" />}
+    <meta property="og:site_name" content="Gabriel Gouvêa" />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="395" />
+    <meta property="og:image:height" content="395" />
+    <meta property="og:image:alt" content="Gabriel Gouvêa" />
     <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content="Gabriel Gouvêa" />
+    {kind === 'home' && <script type="application/ld+json" set:html={JSON.stringify(identity).replace(/</g, '\u003c')} />}
     <link rel="icon" href="/assets/favicon.png" type="image/png" />
-    <link rel="sitemap" href="/sitemap.xml" />
+    {!preview && <link rel="sitemap" href="/sitemap.xml" />}
   </head>
   <body data-page-kind={kind} data-active-path={path}>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -46,7 +69,8 @@ const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title:
       </picture>
     </div>
     <header class="desktop-bar">
-      <a class="brand" href="/" aria-label="Gabriel Gouvêa home"><span class="monogram">G</span><span>gouveags</span></a>
+      <a class="brand" href="/" aria-label="Gabriel Gouvêa home"><span class="monogram">G</span></a>
+      <LocalClock />
       <span class="route-label">/ <span id="route-label">{pageTitle}</span></span>
       <div class="workspace-indicator" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
       <div class="bar-actions">
@@ -54,15 +78,14 @@ const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title:
         <button class="icon-button js-only" data-action="recents" aria-label="Recent windows" title="Recent windows"><Icon name="squares-four" /></button>
         <button class="icon-button js-only" data-action="tile" aria-label="Tile open windows" title="Tile open windows"><Icon name="columns" /></button>
         <a class="icon-button" href="/guide/" aria-label="Navigation guide" title="Navigation guide"><Icon name="question" /></a>
-        <LocalClock />
       </div>
     </header>
     <header class="mobile-header">
-      <a class="brand mobile-brand" href="/" aria-label="Gabriel Gouvêa home"><span class="monogram">G</span><span>gouveags</span></a>
+      <a class="brand mobile-brand" href="/" aria-label="Gabriel Gouvêa home"><span class="monogram">G</span></a>
+      <LocalClock />
       <button class="icon-button mobile-back js-only" data-action="back" aria-label="Go back"><Icon name="arrow-left" /></button>
       <span id="mobile-title">{pageTitle}</span>
       <button class="icon-button js-only" data-action="search" aria-label="Search pages"><Icon name="magnifying-glass" /></button>
-      <LocalClock />
     </header>
     <nav class="reader-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a><span>/</span><span id="article-label">{title}</span></nav>
     <main id="main-content" tabindex="-1">
@@ -85,7 +108,7 @@ const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title:
     <footer class="desktop-footer">
       <div class="wallpaper-credit"><span id="wallpaper-title">Classic Porsche 911 Carrera</span><small>Photo: <a id="wallpaper-photographer" href="https://commons.wikimedia.org/wiki/File:Classic_Porsche_911_Carrera_(49594785528).jpg" target="_blank" rel="noopener noreferrer">Jilles Dissel</a> · <a href="/credits/">Credits</a></small></div>
       <nav class="dock" aria-label="Main navigation">
-        {apps.filter(a => !['/about/', '/guide/'].includes(a.path)).map(app => <a href={app.path} data-app-link aria-current={path === app.path ? 'page' : kind === 'article' && app.path === '/blog/' ? 'true' : undefined}><Icon name={app.icon} /><span>{app.title}</span><i aria-hidden="true"></i></a>)}
+        {apps.filter(a => !['/open-source/', '/guide/'].includes(a.path)).map(app => <a href={app.path} data-app-link aria-current={path === app.path ? 'page' : kind === 'article' && app.path === '/blog/' ? 'true' : undefined}><Icon name={app.icon} /><span>{app.title}</span><i aria-hidden="true"></i></a>)}
       </nav>
       <div class="wallpaper-controls js-only"><WallpaperDots /><div class="wallpaper-actions"><button class="icon-button" data-action="wallpaper-previous" aria-label="Previous wallpaper"><Icon name="caret-left" /></button><button class="icon-button" data-action="wallpaper-next" aria-label="Next wallpaper"><Icon name="caret-right" /></button><button class="pause-button" data-action="wallpaper-pause" aria-label="Pause wallpaper motion" aria-pressed="false"><Icon name="pause" /><span>Pause</span></button></div></div>
     </footer>

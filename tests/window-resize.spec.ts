@@ -1,4 +1,13 @@
-import { test, expect, app, dock, ready, visibleApps, routes } from "./helpers";
+import {
+  openSource,
+  test,
+  expect,
+  app,
+  dock,
+  ready,
+  visibleApps,
+  routes,
+} from "./helpers";
 
 test("all available apps tile within the desktop and recover from focus, close and history", async ({
   page,
@@ -7,7 +16,7 @@ test("all available apps tile within the desktop and recover from focus, close a
   await page.goto("/");
   await ready(page, "/");
   for (const path of ["/open-source/", "/blog/", "/projects/"])
-    await dock(page, path);
+    await (path === "/open-source/" ? openSource(page) : dock(page, path));
   await expect(visibleApps(page)).toHaveCount(3);
   await app(page, "/projects/").locator('[data-action="focus"]').click();
   await expect(visibleApps(page)).toHaveCount(1);
@@ -66,7 +75,7 @@ test("pointer and keyboard resizing reallocates neighboring tiles and survives v
   test.skip(info.project.name !== "desktop");
   await page.goto("/");
   await ready(page, "/");
-  await dock(page, "/open-source/");
+  await openSource(page);
   await dock(page, "/blog/");
   const first = app(page, "/open-source/");
   const handle = first.getByRole("button", { name: "Resize Open source" });

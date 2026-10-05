@@ -42,11 +42,13 @@ A pull request may create an automatic preview through an existing Vercel integr
 
 - `src/content/blog/*.md`: posts, validated frontmatter, and static article routes
 - `src/data/projects.ts`: selected work
-- `src/pages/open-source.astro`: source-linked contributions and experiments
-- `src/pages/about.astro`: biography and professional timeline
+- `src/pages/open-source.astro`: source-linked contributions and experiments, linked from Career
+- `src/pages/about.astro`: Career, from Icarus telemetry through Realms/EduxGen.AI to MOVEdot
 - `public/assets/`: the original portrait, favicon, and résumé
 
 See [the documentation index](./docs/README.md) for design and photo sources, and [the blog guide](./docs/BLOG_POSTS.md) to add a post. The previous site’s article is preserved unchanged and explicitly labeled as a note about the previous version.
+
+Career uses the existing `/about/` URL and is a primary dock/mobile entry. Open source remains at `/open-source/`, linked from Career and available in search; its breadcrumb returns to Career. Existing URLs and `/#experience` links remain valid.
 
 ## The shell
 
@@ -62,7 +64,7 @@ Wallpapers are real photographs, not generated images or video. Each photograph 
 
 - [GitHub](https://github.com/gouveags)
 - [LinkedIn](https://linkedin.com/in/gouveags)
-- [Email](mailto:gabrielgouvea@poli.ufrj.br)
+- [Email](mailto:gabrielsgouvea@hotmail.com)
 - [Portfolio](https://gouveagsportfolio.vercel.app/)
 
 Desktop layout behavior and resize controls: [Window management](docs/WINDOW-MANAGEMENT.md).

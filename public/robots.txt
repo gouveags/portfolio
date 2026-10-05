@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://gouveagsportfolio.vercel.app/sitemap.xml

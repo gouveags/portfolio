@@ -2,25 +2,26 @@
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import WallpaperDots from '../components/WallpaperDots.astro';
-import { apps } from '../data/navigation';
-const introduction = 'I build AI products, backend systems, and developer tools. This is where I share what I’m working on and what I’m learning along the way.';
+import { primaryApps } from '../data/navigation';
+const introduction = 'Hi, I’m Gabriel. I build AI products and the systems behind them, currently at MOVEdot. This is where I keep that story, my open-source work, and a few things I’ve been thinking about.';
 const desktopStory = 'Omarchy and my Fedora + Hyprland + Noctalia setup made me enjoy using Linux. I wanted this little corner of the web to feel just as personal. Make yourself at home.';
 const socials = [
   { name: 'GitHub', href: 'https://github.com/gouveags' },
   { name: 'LinkedIn', href: 'https://linkedin.com/in/gouveags' },
-  { name: 'Email', href: 'mailto:gabrielgouvea@poli.ufrj.br' },
+  { name: 'X', href: 'https://x.com/gouveags' },
+  { name: 'Email', href: 'mailto:gabrielsgouvea@hotmail.com' },
 ];
 ---
-<Layout title="Home" pageTitle="Home" filename="welcome.md" kind="home" description="Gabriel Gouvêa. Software engineer building AI products, backend systems, and developer tools. Make yourself at home.">
+<Layout title="Home" pageTitle="Home" filename="welcome.md" kind="home" description="Gabriel Gouvêa (Gabriel Gouvea). Software engineer building AI products, backend systems, and developer tools. Make yourself at home.">
   <div class="desktop-welcome">
     <div class="welcome-copy personal-welcome">
       <header class="welcome-profile">
         <img class="welcome-portrait" src="/assets/me.png" alt="Gabriel Gouvêa" width="72" height="72" />
-        <div><p class="eyebrow">Software engineer</p><h1>Hey, I’m Gabriel.</h1></div>
+        <div><p class="eyebrow">Software engineer</p><h1>Gabriel Gouvêa</h1></div>
       </header>
       <p>{introduction}</p>
       <p class="welcome-story">{desktopStory}</p>
-      <div class="welcome-actions"><a href="/blog/" class="button">Read the blog <Icon name="arrow-right" /></a><a href="/about/" class="text-link">More about me <Icon name="arrow-right" /></a></div>
+      <div class="welcome-actions"><a href="/blog/" class="button">Read my writing <Icon name="arrow-right" /></a><a href="/about/" class="text-link">More about me <Icon name="arrow-right" /></a></div>
       <nav class="welcome-socials" aria-label="Find me online">{socials.map(social => <a href={social.href}>{social.name}<Icon name="arrow-up-right" /></a>)}</nav>
     </div>
     <footer class="welcome-footer"><span>Click around. Every window is a real page.</span><a href="/guide/">? Guide</a></footer>
@@ -29,14 +30,14 @@ const socials = [
     <div class="mobile-welcome personal-welcome">
       <header class="welcome-profile">
         <img class="welcome-portrait" src="/assets/me.png" alt="Gabriel Gouvêa" width="72" height="72" />
-        <div><p class="eyebrow">Software engineer</p><h1>Hey, I’m Gabriel.</h1></div>
+        <div><p class="eyebrow">Software engineer</p><h1>Gabriel Gouvêa</h1></div>
       </header>
       <p>{introduction}</p>
       <p class="welcome-story">{desktopStory}</p>
-      <div class="welcome-actions"><a href="/blog/" class="button">Read the blog <Icon name="arrow-right" /></a><a href="/about/" class="text-link">More about me <Icon name="arrow-right" /></a></div>
+      <div class="welcome-actions"><a href="/blog/" class="button">Read my writing <Icon name="arrow-right" /></a><a href="/about/" class="text-link">More about me <Icon name="arrow-right" /></a></div>
       <nav class="welcome-socials" aria-label="Find me online">{socials.map(social => <a href={social.href}>{social.name}<Icon name="arrow-up-right" /></a>)}</nav>
     </div>
-    <nav class="app-grid" aria-label="Apps">{apps.slice(1).map(app => <a href={app.path}><span class="app-icon"><Icon name={app.icon} /></span><span>{app.title}</span></a>)}</nav>
+    <nav class="app-grid" aria-label="Apps">{primaryApps.slice(1).map(app => <a href={app.path}><span class="app-icon"><Icon name={app.icon} /></span><span>{app.title}</span></a>)}</nav>
     <button class="home-search js-only" data-action="search"><Icon name="magnifying-glass" /><span>Find a page, project or note</span></button>
     <WallpaperDots />
     <div class="mobile-home-credit"><a href="/credits/">Photo credits</a><span>·</span><button class="js-only" data-action="wallpaper-next">Wallpaper <Icon name="arrow-right" /></button><button class="js-only" data-action="wallpaper-pause" aria-label="Pause wallpaper motion" aria-pressed="false">Pause</button></div>

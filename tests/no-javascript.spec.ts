@@ -20,8 +20,10 @@ for (const route of routes) {
 test('native links load real pages and original projects remain visible', async ({ page }, testInfo) => {
   await page.goto('/');
   const link = page.locator(testInfo.project.name === 'mobile'
-    ? '.app-grid a[href="/open-source/"]' : '.dock a[href="/open-source/"]');
+    ? '.app-grid a[href="/about/"]' : '.dock a[href="/about/"]');
   await link.click();
+  await expect(page).toHaveURL(/\/about\/$/);
+  await page.getByRole('link', { name: 'Explore my open-source work' }).click();
   await expect(page).toHaveURL(/\/open-source\/$/);
   await expect(page.locator('#bend')).toBeVisible();
   await expect(page.locator('#posthog')).toBeVisible();

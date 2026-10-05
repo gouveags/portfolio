@@ -13,6 +13,33 @@ const opener = (page: import("@playwright/test").Page) =>
     .getByRole("button", { name: /^Open calendar,/ })
     .filter({ visible: true });
 
+test("clock and popup sit on the left without the handle label", async ({
+  page,
+}, testInfo) => {
+  for (const path of ["/", "/about/"]) {
+    await page.goto(path);
+    await ready(page, path);
+    const bar = page.locator(
+      testInfo.project.name === "mobile" ? ".mobile-header" : ".desktop-bar",
+    );
+    await expect(bar).not.toContainText("gouveags");
+    const trigger = opener(page);
+    const clockBounds = await trigger.boundingBox();
+    expect(clockBounds!.x).toBeLessThan(100);
+    await trigger.click();
+    const bounds = await page
+      .getByRole("dialog", { name: "Calendar" })
+      .boundingBox();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x).toBeLessThanOrEqual(24);
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(
+      page.viewportSize()!.width,
+    );
+    await page.keyboard.press("Escape");
+    await expect(trigger).toBeFocused();
+  }
+});
+
 test("clock uses device-local date and updates across midnight", async ({
   page,
 }) => {

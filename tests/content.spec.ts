@@ -7,7 +7,8 @@ test('filter controls and a direct #bend route reveal the matching content', asy
   await expect(window.locator('[data-category="contributions"]:visible')).toHaveCount(3);
   await expect(window.locator('[data-category="original"]:visible')).toHaveCount(0);
   await window.getByRole('button', { name: 'Original projects', exact: true }).click();
-  await expect(window.locator('[data-category="original"]:visible')).toHaveCount(2);
+  await expect(window.locator('[data-category="original"]:visible')).toHaveCount(3);
+  await expect(window.getByRole('link', { name: 'View bend-grammar on GitHub (opens in a new tab)', exact: true })).toHaveAttribute('href', 'https://github.com/gouveags/bend-grammar');
   await expect(window.locator('[data-category="contributions"]:visible')).toHaveCount(0);
   await window.getByRole('button', { name: 'Contributions', exact: true }).click();
   if (testInfo.project.name === 'desktop') {

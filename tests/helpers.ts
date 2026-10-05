@@ -88,3 +88,10 @@ export async function settledScreenshot(page: Page, path: string) {
   });
   await page.screenshot({ path, animations: 'disabled' });
 }
+
+export async function openSource(page: Page) {
+  await openSearch(page, false);
+  await page.locator('#search-input').fill('Open source');
+  await page.locator('#search-results a[href="/open-source/"]').click();
+  await active(page, '/open-source/');
+}

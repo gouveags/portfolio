@@ -6,6 +6,12 @@ export const apps = [
     excerpt: "A few things I build, write, and enjoy learning about.",
   },
   {
+    path: "/about/",
+    title: "Career",
+    icon: "info",
+    excerpt: "From race-car telemetry to AI products and agent infrastructure.",
+  },
+  {
     path: "/open-source/",
     title: "Open source",
     icon: "code",
@@ -24,12 +30,6 @@ export const apps = [
     excerpt: "Ideas, experiments, and the occasional detour.",
   },
   {
-    path: "/about/",
-    title: "About",
-    icon: "info",
-    excerpt: "Software engineer, AI engineer, product builder.",
-  },
-  {
     path: "/contact/",
     title: "Contact",
     icon: "envelope",
@@ -42,3 +42,6 @@ export const apps = [
     excerpt: "A few ways around this little desktop.",
   },
 ];
+
+// Child pages remain in search while the primary navigation follows the career story.
+export const primaryApps = apps.filter((app) => app.path !== "/open-source/");

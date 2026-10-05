@@ -2589,7 +2589,6 @@ h3 {
 }
 
 /* Floating copy stays over the photograph without a readability panel. */
-.home-whisper,
 .wallpaper-credit,
 .mobile-welcome,
 body[data-page-kind="home"] .mobile-header .brand,
@@ -2597,6 +2596,17 @@ body[data-page-kind="home"] .mobile-header .brand,
   text-shadow:
     0 1px 3px #000,
     0 0 4px #000;
+}
+.home-whisper {
+  text-shadow:
+    -0.75px 0 #000,
+    0.75px 0 #000,
+    0 -0.75px #000,
+    0 0.75px #000;
+}
+.home-whisper .eyebrow,
+.home-whisper p {
+  color: #eee;
 }
 body[data-page-kind="home"] .mobile-header > .icon-button .icon {
   filter: drop-shadow(0 1px 2px #000);
@@ -2678,7 +2688,7 @@ body[data-page-kind="home"] .mobile-header > .icon-button .icon {
   }
 }
 
-/* The clock anchors the right edge of the desktop and phone bars. */
+/* The clock sits beside the home mark on the left of both bars. */
 .enhanced .local-clock.js-only {
   display: grid !important;
 }
@@ -2690,7 +2700,7 @@ body[data-page-kind="home"] .mobile-header > .icon-button .icon {
   margin-left: 4px;
   border-left: 1px solid #333;
   background: transparent;
-  text-align: right;
+  text-align: left;
   color: #eee;
   text-shadow:
     0 1px 3px #000,
@@ -2712,7 +2722,7 @@ body[data-page-kind="home"] .mobile-header > .icon-button .icon {
 }
 #calendar {
   position: fixed;
-  inset: 72px 20px auto auto;
+  inset: 72px auto auto 20px;
   margin: 0;
   width: 336px;
   max-width: calc(100vw - 28px);
@@ -2835,7 +2845,7 @@ body[data-page-kind="home"] .mobile-header > .icon-button .icon {
   }
   #calendar {
     top: 74px;
-    right: 14px;
+    left: 14px;
     padding: 16px;
   }
 }

@@ -1,4 +1,4 @@
-import { test, expect, app, active, ready, dock, visibleApps, noHorizontalOverflow, settledScreenshot } from './helpers';
+import { openSource, test, expect, app, active, ready, dock, visibleApps, noHorizontalOverflow, settledScreenshot } from './helpers';
 
 test.beforeEach(async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop', 'Desktop window behavior');
@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }, testInfo) => {
 
 test('real navigation tiles open windows, selects, focuses, and restores', async ({ page }, testInfo) => {
   await expect(page.locator('.desktop-welcome h1')).toBeVisible();
-  await dock(page, '/open-source/');
+  await openSource(page);
   await dock(page, '/blog/');
   await expect(visibleApps(page)).toHaveCount(2);
   await expect(page.locator('#workspace')).toHaveAttribute('data-layout', 'tiled');
@@ -37,7 +37,7 @@ test('real navigation tiles open windows, selects, focuses, and restores', async
 });
 
 test('minimize preserves an app, recents resumes it, close removes it', async ({ page }) => {
-  await dock(page, '/open-source/');
+  await openSource(page);
   await dock(page, '/blog/');
   await app(page, '/blog/').getByRole('button', { name: 'Minimize Blog', exact: true }).click();
   await active(page, '/open-source/');
@@ -62,7 +62,7 @@ test('minimize preserves an app, recents resumes it, close removes it', async ({
 });
 
 test('Back and Forward restore routes, filters, focus, and a closed page', async ({ page }) => {
-  await dock(page, '/open-source/');
+  await openSource(page);
   await app(page, '/open-source/').getByRole('button', { name: 'Original projects' }).click();
   await dock(page, '/blog/');
   await app(page, '/blog/').getByRole('button', { name: 'Focus Blog', exact: true }).click();
@@ -84,9 +84,9 @@ test('Back and Forward restore routes, filters, focus, and a closed page', async
 });
 
 test('repeated navigation does not duplicate windows or history entries', async ({ page }) => {
-  await dock(page, '/open-source/');
+  await openSource(page);
   const length = await page.evaluate(() => history.length);
-  for (let i = 0; i < 4; i++) await dock(page, '/open-source/');
+  for (let i = 0; i < 4; i++) await openSource(page);
   await expect(app(page, '/open-source/')).toHaveCount(1);
   expect(await page.evaluate(() => history.length)).toBe(length);
   await dock(page, '/blog/');
@@ -106,13 +106,13 @@ test('a newer navigation wins over a delayed earlier real route response', async
   const started = new Promise<void>((resolve) => { requestStarted = resolve; });
   let routeFinished!: () => void;
   const finished = new Promise<void>((resolve) => { routeFinished = resolve; });
-  await page.route('**/open-source/', async (route) => {
+  await page.route('**/about/', async (route) => {
     const response = await route.fetch(); // The actual production HTML, not a fixture.
     requestStarted();
     await gate;
     try { await route.fulfill({ response }); } finally { routeFinished(); }
   });
-  await page.locator('.dock a[href="/open-source/"]').click();
+  await page.locator('.dock a[href="/about/"]').click();
   await started;
   await dock(page, '/blog/');
   release();
@@ -125,7 +125,7 @@ test('a newer navigation wins over a delayed earlier real route response', async
 });
 
 test('a current-page fragment cancels an older in-flight app navigation', async ({ page }) => {
-  await dock(page, '/open-source/');
+  await openSource(page);
   let release!: () => void;
   let requestStarted!: () => void;
   let routeFinished!: () => void;

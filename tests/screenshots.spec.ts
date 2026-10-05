@@ -1,6 +1,6 @@
 // Independent evidence capture: these tests still run when behavior/axe tests fail.
 // Screenshots are build artifacts under test-results, never committed baselines.
-import { test, expect, ready, app, dock, articlePath, settledScreenshot } from './helpers';
+import { openSource, test, expect, ready, app, dock, articlePath, settledScreenshot } from './helpers';
 
 for (const route of ['/', '/open-source/', '/blog/', articlePath]) {
   test(`capture visual evidence: ${route}`, async ({ page }, testInfo) => {
@@ -16,7 +16,7 @@ test('capture desktop tiling or phone recents', async ({ page }, testInfo) => {
   await page.goto('/');
   await ready(page, '/');
   if (testInfo.project.name === 'desktop') {
-    await dock(page, '/open-source/');
+    await openSource(page);
     await dock(page, '/blog/');
     await expect(page.locator('#workspace')).toHaveAttribute('data-layout', 'tiled');
     await settledScreenshot(page, testInfo.outputPath('desktop-tiled-workspace.png'));

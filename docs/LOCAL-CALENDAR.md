@@ -1,6 +1,6 @@
 # Local clock and calendar
 
-The right side of the desktop and mobile top bar displays the visitor's device-local time and date. Opening it shows the current month, highlights today, and offers previous month, next month, and Today controls. The calendar has no event integration or date-selection workflow.
+The left side of the desktop and mobile top bar displays the visitor's device-local time and date, next to the Home monogram. Opening it shows the current month, highlights today, and offers previous month, next month, and Today controls. The calendar has no event integration or date-selection workflow.
 
 The widget uses browser `Date` and `Intl` only. It sends no IP or location request and requires no account, backend, permission prompt, or network service. The site's existing dialog behavior provides focus containment, Escape/outside-click dismissal, and focus return to the opener.
 
