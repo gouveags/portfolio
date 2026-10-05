@@ -3,20 +3,39 @@ import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import WallpaperDots from '../components/WallpaperDots.astro';
 import { apps } from '../data/navigation';
+const introduction = 'I build AI products, backend systems, and developer tools. This is where I share what I’m working on and what I’m learning along the way.';
+const desktopStory = 'Omarchy and my Fedora + Hyprland + Noctalia setup made me enjoy using Linux. I wanted this little corner of the web to feel just as personal. Make yourself at home.';
+const socials = [
+  { name: 'GitHub', href: 'https://github.com/gouveags' },
+  { name: 'LinkedIn', href: 'https://linkedin.com/in/gouveags' },
+  { name: 'Email', href: 'mailto:gabrielgouvea@poli.ufrj.br' },
+];
 ---
 <Layout title="Home" pageTitle="Home" filename="welcome.md" kind="home" description="Gabriel Gouvêa. Software engineer building AI products, backend systems, and developer tools. Make yourself at home.">
   <div class="desktop-welcome">
-    <div class="welcome-copy">
-      <p class="eyebrow">Gabriel Gouvêa · Software engineer</p>
-      <h1>Make yourself<br />at home.</h1>
-      <p>This little desktop takes its shape from Omarchy<br class="wide-break" /> and my Fedora + Hyprland + Noctalia setup.</p>
-      <p>They made me enjoy using Linux. I wanted to bring<br class="wide-break" /> a little of that feeling here: simple, useful, and<br class="wide-break" /> good to move around in.</p>
-      <div class="welcome-actions"><a href="/open-source/" class="button">Explore open source <Icon name="arrow-right" /></a><a href="/blog/" class="text-link">Read the blog <Icon name="arrow-right" /></a></div>
+    <div class="welcome-copy personal-welcome">
+      <header class="welcome-profile">
+        <img class="welcome-portrait" src="/assets/me.png" alt="Gabriel Gouvêa" width="72" height="72" />
+        <div><p class="eyebrow">Software engineer</p><h1>Hey, I’m Gabriel.</h1></div>
+      </header>
+      <p>{introduction}</p>
+      <p class="welcome-story">{desktopStory}</p>
+      <div class="welcome-actions"><a href="/blog/" class="button">Read the blog <Icon name="arrow-right" /></a><a href="/about/" class="text-link">More about me <Icon name="arrow-right" /></a></div>
+      <nav class="welcome-socials" aria-label="Find me online">{socials.map(social => <a href={social.href}>{social.name}<Icon name="arrow-up-right" /></a>)}</nav>
     </div>
     <footer class="welcome-footer"><span>Click around. Every window is a real page.</span><a href="/guide/">? Guide</a></footer>
   </div>
   <div class="mobile-home">
-    <div class="mobile-welcome"><p class="eyebrow">Gabriel Gouvêa</p><h1>Hey.<br />Welcome in.</h1><p>A few things I build, write,<br />and enjoy learning about.</p></div>
+    <div class="mobile-welcome personal-welcome">
+      <header class="welcome-profile">
+        <img class="welcome-portrait" src="/assets/me.png" alt="Gabriel Gouvêa" width="72" height="72" />
+        <div><p class="eyebrow">Software engineer</p><h1>Hey, I’m Gabriel.</h1></div>
+      </header>
+      <p>{introduction}</p>
+      <p class="welcome-story">{desktopStory}</p>
+      <div class="welcome-actions"><a href="/blog/" class="button">Read the blog <Icon name="arrow-right" /></a><a href="/about/" class="text-link">More about me <Icon name="arrow-right" /></a></div>
+      <nav class="welcome-socials" aria-label="Find me online">{socials.map(social => <a href={social.href}>{social.name}<Icon name="arrow-up-right" /></a>)}</nav>
+    </div>
     <nav class="app-grid" aria-label="Apps">{apps.slice(1).map(app => <a href={app.path}><span class="app-icon"><Icon name={app.icon} /></span><span>{app.title}</span></a>)}</nav>
     <button class="home-search js-only" data-action="search"><Icon name="magnifying-glass" /><span>Find a page, project or note</span></button>
     <WallpaperDots />
