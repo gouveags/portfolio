@@ -11,6 +11,8 @@ Omarchy caught my attention, and my own Fedora, Hyprland and Noctalia setup made
 
 It feels slick, useful, and easy to move around in. I wanted this corner of the web to carry a little of that feeling.
 
+I wanted a quiet black-and-white interface, with room for real photographs and the work itself. Underneath the windows, this is a static Astro site. Each page has its own address and can be read without JavaScript, so you can open an article directly and start reading.
+
 ## What I brought to the web
 
 Open a project, keep an article beside it, or settle into one window. You can explore with the mouse or learn a few shortcuts as you go.

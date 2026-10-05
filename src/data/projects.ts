@@ -3,7 +3,7 @@ export const projects = [
     name: "Copa Ace",
     description: "Official website for the Copa Ace CS2 tournament.",
     detail:
-      "A public tournament website, with the implementation available on GitHub.",
+      "I’ve contributed frontend performance improvements, registration fixes, admin request protection and automatic FACEIT championship updates.",
     links: [
       { label: "Visit website", href: "https://aceprodutora.com.br/" },
       { label: "View code", href: "https://github.com/cespedesdan/ace-prod" },
