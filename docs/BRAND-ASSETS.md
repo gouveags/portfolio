@@ -12,6 +12,8 @@ Project names use the same heading typography throughout the site. Official word
 
 ## Layout references
 
+Inter and JetBrains Mono are self-hosted from the pinned `@fontsource-variable/inter` 5.3.0 and `@fontsource/jetbrains-mono` 5.3.0 packages. Their complete, unmodified copyright and SIL Open Font License 1.1 notices are shipped at `public/assets/fonts/INTER-LICENSE.txt` and `public/assets/fonts/JETBRAINS-MONO-LICENSE.txt`, copied byte-for-byte from each package's `LICENSE`. The Credits page links to both notices. The static verification checks their source and built copies against the installed packages; dependency upgrades must retain the corresponding notices.
+
 [Frank Chimero’s portfolio](https://frankchimero.com/) and [Guillermo Rauch’s writing index](https://rauchg.com/) informed the restrained hierarchy: names first, supporting text next, links as links. No layout, artwork, or text was copied. The visual audit covers Home, Career, Open source, Projects, Blog, and Contact at desktop and mobile sizes. Invented project initials are removed, Projects and Blog share a readable content width, and filters use one underline treatment. Functional OS window boundaries, mobile reading surfaces, and mobile app navigation tiles remain: their borders communicate interaction or preserve readability over photography. No new brand is invented for projects without verified assets.
 
 The focused visual checks use `tests/accessibility.spec.ts` for desktop/mobile screenshots, axe checks, and overflow checks, plus `tests/content.spec.ts` and `tests/career.spec.ts` for filters, deep links, and navigation. All text links in the contribution lists and Contact actions retain at least 44px target height.

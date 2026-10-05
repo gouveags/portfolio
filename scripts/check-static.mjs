@@ -142,6 +142,19 @@ try {
 } catch (error) { failures.push(`Resume verification: ${error.message}`); }
 check(pages.get('/about/')?.html.includes(`href="/${resume}"`), 'Career page must link to the current resume');
 
+for (const [source, notice] of [
+  ['node_modules/@fontsource-variable/inter/LICENSE', 'assets/fonts/INTER-LICENSE.txt'],
+  ['node_modules/@fontsource/jetbrains-mono/LICENSE', 'assets/fonts/JETBRAINS-MONO-LICENSE.txt'],
+]) {
+  try {
+    const original = await readFile(source);
+    for (const directory of ['public', root]) {
+      const filename = path.join(directory, notice);
+      check(original.equals(await readFile(filename)), `${filename}: preserve the font package's complete license notice`);
+    }
+  } catch (error) { failures.push(`Font license verification: ${error.message}`); }
+}
+
 if (failures.length) {
   console.error(`\nStatic verification failed (${failures.length}):\n${failures.map((failure) => `  - ${failure}`).join('\n')}`);
   process.exitCode = 1;
