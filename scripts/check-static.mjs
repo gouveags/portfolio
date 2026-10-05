@@ -132,16 +132,17 @@ for (const filename of files.filter((file) => file.endsWith('.css'))) {
 const resume = 'assets/CV_Gabriel_Silva_Gouvea_en-US.pdf';
 try {
   const original = await readFile(resume);
-  assert.equal(original.subarray(0, 5).toString(), '%PDF-', 'Original resume is not a PDF');
+  check(createHash('sha256').update(original).digest('hex') === '6d73ea37702a0da037ccb950bdb81f1730614b0044e641f98822509e71f925c2', 'Resume must match the latest user-supplied PDF');
+  assert.equal(original.subarray(0, 5).toString(), '%PDF-', 'Resume source is not a PDF');
   for (const filename of [`public/${resume}`, `dist/${resume}`]) {
     const copy = await readFile(filename);
     check(original.equals(copy), `${filename}: resume must remain an exact byte-for-byte copy`);
   }
-  console.log(`Original resume SHA-256: ${createHash('sha256').update(original).digest('hex')}`);
+  console.log(`Resume source SHA-256: ${createHash('sha256').update(original).digest('hex')}`);
 } catch (error) { failures.push(`Resume verification: ${error.message}`); }
-check(pages.get('/about/')?.html.includes(`href="/${resume}"`), 'About page must link to the original resume');
+check(pages.get('/about/')?.html.includes(`href="/${resume}"`), 'Career page must link to the current resume');
 
 if (failures.length) {
   console.error(`\nStatic verification failed (${failures.length}):\n${failures.map((failure) => `  - ${failure}`).join('\n')}`);
   process.exitCode = 1;
-} else console.log(`Static verification passed: ${pages.size} routes, ${internalLinks} internal links/fragments, ${assets} asset references, original resume unchanged.`);
+} else console.log(`Static verification passed: ${pages.size} routes, ${internalLinks} internal links/fragments, ${assets} asset references, supplied resume preserved byte-for-byte.`);

@@ -44,7 +44,7 @@ A pull request may create an automatic preview through an existing Vercel integr
 - `src/data/projects.ts`: selected work
 - `src/pages/open-source.astro`: source-linked contributions and experiments, linked from Career
 - `src/pages/about.astro`: Career, from Icarus telemetry through Realms/EduxGen.AI to MOVEdot
-- `public/assets/`: the original portrait, favicon, and résumé
+- `public/assets/`: the original portrait and favicon, plus the latest user-supplied résumé
 
 See [the documentation index](./docs/README.md) for design and photo sources, and [the blog guide](./docs/BLOG_POSTS.md) to add a post. The previous site’s article is preserved unchanged and explicitly labeled as a note about the previous version.
 
