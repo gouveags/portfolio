@@ -256,6 +256,18 @@ kbd {
 .enhanced .wallpaper img {
   animation: wallpaper-drift 36s ease-in-out infinite alternate;
 }
+/* Fill the viewport without letterboxing or additional photo effects. */
+.wallpaper picture:is([data-wallpaper="ferrari"], [data-wallpaper="spa"]) img {
+  object-fit: cover;
+  filter: grayscale(1);
+  animation: none;
+  transform: none;
+}
+.wallpaper:has(
+    picture:is([data-wallpaper="ferrari"], [data-wallpaper="spa"])
+  ):after {
+  opacity: 0;
+}
 .wallpaper:after {
   content: "";
   position: absolute;
@@ -2520,4 +2532,36 @@ h3 {
     top: 88px;
     bottom: 112px;
   }
+}
+
+/* Keep labels readable without darkening the selected F1 photograph. */
+body:has(
+    #wallpaper-picture:is([data-wallpaper="ferrari"], [data-wallpaper="spa"])
+  )
+  :is(
+    .home-whisper,
+    .wallpaper-credit,
+    .wallpaper-controls,
+    .mobile-welcome,
+    .mobile-home-credit
+  ) {
+  background: #000;
+  border-radius: 8px;
+  box-shadow: 0 0 0 10px #000;
+}
+body:has(
+    #wallpaper-picture:is([data-wallpaper="ferrari"], [data-wallpaper="spa"])
+  )
+  .mobile-header {
+  background: #000;
+}
+body:has(
+    #wallpaper-picture:is([data-wallpaper="ferrari"], [data-wallpaper="spa"])
+  )
+  .app-grid
+  a
+  > span:last-child {
+  background: #000;
+  border-radius: 4px;
+  box-shadow: 0 0 0 4px #000;
 }

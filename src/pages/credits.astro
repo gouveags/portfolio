@@ -8,8 +8,8 @@ import wallpapers from '../data/wallpapers.json';
     <p class="eyebrow">Behind the desktop</p>
     <h1>Photo credits</h1>
     <p class="lead">Real places. Real photographs. A few things I like, brought together on a quiet desktop.</p>
-    <p>These wallpapers are licensed photographs, with credit to their original photographers below. The images were resized and encoded as WebP; the mobile versions are cropped for portrait screens. The site adds grayscale, darkening, responsive cropping, and optional gentle pan, zoom, and crossfade motion.</p>
-    <p>Each adapted photograph is offered under the same Creative Commons Attribution-ShareAlike license as its source. No generative editing or compositing was used. Motion comes from still photographs, not video footage.</p>
+    <p>Sources and photographers are credited below. The Porsche and Theatro images use resized WebP variants; the other photographs retain their source JPEGs. The F1 photographs use grayscale and viewport-filling cropping only. Porsche and Theatro also use darkening and optional gentle pan and zoom.</p>
+    <p>Creative Commons photographs retain their individually listed licenses. No generative editing or compositing was used. Motion comes from still photographs, not video footage.</p>
 
     <div class="entry-list credits-list">
       {wallpapers.map((wallpaper) => (
@@ -20,19 +20,18 @@ import wallpapers from '../data/wallpapers.json';
           <p>{wallpaper.credit}</p>
           <p>
             <a class="text-link" href={wallpaper.source} target="_blank" rel="noopener noreferrer">Original photograph and source</a>
-            {' · '}
-            <a class="text-link" href={wallpaper.licenseUrl} target="_blank" rel="noopener noreferrer">{wallpaper.license} license</a>
+            {wallpaper.licenseUrl && <>{' · '}<a class="text-link" href={wallpaper.licenseUrl} target="_blank" rel="noopener noreferrer">{wallpaper.license} license</a></>}
           </p>
-          <p>
+          {wallpaper.licenseUrl && <p>
             <a class="text-link" href={wallpaper.src} download>Download desktop adaptation</a>
             {' · '}
             <a class="text-link" href={wallpaper.mobileSrc} download>Download mobile adaptation</a>
-          </p>
+          </p>}
         </div></section>
       ))}
     </div>
 
-    <p>Photographers, licensors, brands, teams, venues, and other rights holders do not sponsor or endorse this site. The photo licenses do not grant trademark, privacy, or publicity rights. The Eau Rouge image was taken during the 2013 Belgian Grand Prix weekend; it does not depict the current season.</p>
+    <p>Photographers, licensors, brands, teams, venues, and other rights holders do not sponsor or endorse this site. The photo licenses do not grant trademark, privacy, or publicity rights. The Eau Rouge photograph is historical; the Hamilton Ferrari photograph depicts the 2026 SF-26.</p>
     <p><a class="text-link" href="/">Back home</a></p>
   </article>
 </Layout>

@@ -46,7 +46,7 @@ A pull request may create an automatic preview through an existing Vercel integr
 - `src/pages/about.astro`: biography and professional timeline
 - `public/assets/`: the original portrait, favicon, and résumé
 
-See [the blog guide](./docs/BLOG_POSTS.md) to add a post. The previous site’s article is preserved unchanged and explicitly labeled as a note about the previous version.
+See [the documentation index](./docs/README.md) for design and photo sources, and [the blog guide](./docs/BLOG_POSTS.md) to add a post. The previous site’s article is preserved unchanged and explicitly labeled as a note about the previous version.
 
 ## The shell
 
@@ -56,7 +56,7 @@ All enhanced controls have visible labels or accessible names. Keyboard shortcut
 
 ## Photographs and licenses
 
-Wallpapers are real photographs, not generated images or video. All four have explicit source attribution and CC BY-SA licenses on `/credits/`, in [PHOTO-LICENSES.md](./docs/PHOTO-LICENSES.md), and embedded in optimized WebP metadata. The photo adaptations retain their respective licenses; those licenses do not apply to the entire website. No endorsement is implied.
+Wallpapers are real photographs, not generated images or video. Each photograph has source attribution and its individual rights recorded on `/credits/` and in [PHOTO-LICENSES.md](./docs/PHOTO-LICENSES.md). The current F1 selections use the original JPEGs with grayscale and responsive viewport cropping only. Trophy references without verified publication rights are excluded from the site. Creative Commons licenses apply only to their respective photographs, not the entire website. No endorsement is implied.
 
 ## Contact
 

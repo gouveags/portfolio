@@ -1,5 +1,47 @@
 # Wallpaper photographs and licenses
 
+## Current selection — 2026-10-05
+
+Order: Porsche, Theatro, Lewis Hamilton’s 2026 Ferrari SF-26, Eau Rouge / Raidillon uphill. Desktop and mobile defaults remain Porsche and Theatro.
+
+The two new selections retain the downloaded JPEG bytes. CSS applies grayscale and viewport-filling responsive cropping only, without additional darkening, zoom, or motion; there is no generated imagery or raster editing. Mobile and desktop share the source JPEG for these selections. They are larger than the previous WebP budgets; the original bytes are retained to preserve the photographs. Existing WebPs retain their embedded attribution. New JPEG attribution is recorded here, in the public notice, and on `/credits/` rather than claiming embedded metadata.
+
+Trophy references without verified publication rights are excluded from the public assets and wallpaper selection. The licensed SF-26 photograph is the current Hamilton selection.
+
+### Lewis Hamilton · Ferrari SF-26, 2026
+
+- Photographer/source credit: Liauzh
+- Source: https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Ferrari_-_Lewis_Hamilton_-_FP1.jpg
+- Rights: CC BY 4.0
+- License URL: https://creativecommons.org/licenses/by/4.0/
+- Local asset: `/wallpapers/hamilton-sf26.jpg`
+- Bytes: 663560
+- SHA-256: `48549e1cd719d83412e699819c3177bcd2271ba523a6596e3c5e0c73e0b3a706`
+- Desktop object position: `50% 58%`
+- Mobile object position: `62% 50%`
+
+“2026 Chinese GP - Ferrari - Lewis Hamilton - FP1” by Liauzh, via Wikimedia Commons, CC BY 4.0. Photographed on 13 March 2026. The original JPEG is retained; the site applies CSS grayscale and viewport-filling responsive cropping, with no additional darkening, zoom, or motion. No generative editing was used. No endorsement is implied.
+
+### Eau Rouge / Raidillon · The climb
+
+- Photographer/source credit: Paul Hermans
+- Source: https://commons.wikimedia.org/wiki/File:Raidillon.jpg
+- Rights: CC BY-SA 3.0
+- License URL: https://creativecommons.org/licenses/by-sa/3.0/
+- Local asset: `/wallpapers/eau-rouge-uphill.jpg`
+- Bytes: 671996
+- SHA-256: `60ecdf0f94009d6f16ad97b263206cc7643559e1d7c4b914271e7c725ba72e50`
+- Desktop object position: `50% 36%`
+- Mobile object position: `48% 36%`
+
+“Raidillon” by Paul Hermans, via Wikimedia Commons, CC BY-SA 3.0. A historical view looking uphill from Eau Rouge toward the Raidillon crest, uploaded in 2006. The original JPEG is retained; the site applies CSS grayscale and viewport-filling responsive cropping, with no additional darkening, zoom, or motion. This presentation is offered under CC BY-SA 3.0. No generative editing was used. No endorsement is implied.
+
+## Retained historical assets
+
+The register below documents the earlier four-wallpaper implementation. Its Ferrari 2019 and Spa 2013 files remain in the repository but are no longer selected by the site. Its size, framing, and verification statements describe that earlier implementation only. Porsche and Theatro are unchanged.
+
+# Previous wallpaper asset register
+
 Copyright and source licensing reviewed on 2026-10-05. The source photographs are real photographs. All eight distributed WebP variants carry attribution, source URL, and license URL in embedded XMP metadata as well as the public `/credits` page.
 
 ## Adaptations and reuse

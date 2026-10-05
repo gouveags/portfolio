@@ -27,28 +27,28 @@
   },
   {
     "id": "ferrari",
-    "title": "Ferrari F1 · Azerbaijan, 2019",
-    "photographer": "Jens Van Hecke",
-    "src": "/wallpapers/ferrari-desktop.webp",
-    "mobileSrc": "/wallpapers/ferrari-mobile.webp",
-    "source": "https://commons.wikimedia.org/wiki/File:Ferrari_F1_(51029943032).jpg",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "desktopPosition": "55% 68%",
-    "mobilePosition": "50% 50%",
-    "credit": "“Ferrari F1 (51029943032)” by Jens Van Hecke, via Wikimedia Commons, CC BY-SA 2.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 2.0. No endorsement is implied."
+    "title": "Lewis Hamilton · Ferrari SF-26, 2026",
+    "photographer": "Liauzh",
+    "src": "/wallpapers/hamilton-sf26.jpg",
+    "mobileSrc": "/wallpapers/hamilton-sf26.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Ferrari_-_Lewis_Hamilton_-_FP1.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "desktopPosition": "50% 58%",
+    "mobilePosition": "62% 50%",
+    "credit": "“2026 Chinese GP - Ferrari - Lewis Hamilton - FP1” by Liauzh, via Wikimedia Commons, CC BY 4.0. Photographed on 13 March 2026. The original JPEG is retained; the site applies CSS grayscale and viewport-filling responsive cropping, with no additional darkening, zoom, or motion. No generative editing was used. No endorsement is implied."
   },
   {
     "id": "spa",
-    "title": "Eau Rouge · Belgian GP, 2013",
-    "photographer": "Kevin A. McGill (kevinmcgill)",
-    "src": "/wallpapers/spa-desktop.webp",
-    "mobileSrc": "/wallpapers/spa-mobile.webp",
-    "source": "https://commons.wikimedia.org/wiki/File:Circuit_de_Spa-Francorchamps_(2).jpg",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "desktopPosition": "55% 55%",
-    "mobilePosition": "50% 50%",
-    "credit": "“Circuit de Spa-Francorchamps (2)” by Kevin A. McGill (kevinmcgill), via Wikimedia Commons, CC BY-SA 2.0. Resized and encoded as WebP; mobile image cropped for a portrait display. Presented with CSS grayscale, darkening, responsive cropping, and optional pan/zoom/crossfade motion. No generative editing or compositing was used. This photograph adaptation is offered under CC BY-SA 2.0. No endorsement is implied."
+    "title": "Eau Rouge / Raidillon · The climb",
+    "photographer": "Paul Hermans",
+    "src": "/wallpapers/eau-rouge-uphill.jpg",
+    "mobileSrc": "/wallpapers/eau-rouge-uphill.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Raidillon.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "desktopPosition": "50% 36%",
+    "mobilePosition": "48% 36%",
+    "credit": "“Raidillon” by Paul Hermans, via Wikimedia Commons, CC BY-SA 3.0. A historical view looking uphill from Eau Rouge toward the Raidillon crest, uploaded in 2006. The original JPEG is retained; the site applies CSS grayscale and viewport-filling responsive cropping, with no additional darkening, zoom, or motion. This presentation is offered under CC BY-SA 3.0. No generative editing was used. No endorsement is implied."
   }
 ]
