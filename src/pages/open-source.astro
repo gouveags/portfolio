@@ -2,9 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 const contributions = [
-  { id: 'posthog', mark: 'PH', name: 'PostHog', status: 'Contributions', description: 'Since July 2026, I’ve contributed to AI observability and cost accounting across PostHog: JavaScript and Python LangChain middleware, richer Gemini tool capture, and record/replay tests using real SDKs. Recent tool-result capture and Gemini Interactions work is still under review.', project: 'https://github.com/PostHog', history: 'https://github.com/pulls?q=is%3Apr+author%3Agouveags+org%3APostHog', links: [{ label: 'Middleware PR', href: 'https://github.com/PostHog/posthog-js/pull/4556', title: 'LangChain v1 agent middleware' }, { label: 'Cache pricing PR', href: 'https://github.com/PostHog/posthog/pull/71323', title: 'Anthropic cache writes by TTL' }, { label: 'Bedrock pricing PR', href: 'https://github.com/PostHog/posthog/pull/74380', title: 'Bedrock pricing by inference profile' }] },
-  { id: 'langchain', mark: 'LC', name: 'LangChain and LangGraph', status: 'Contributions & proposal', description: 'My LangChain AWS contributions focus on credential selection and incomplete Bedrock streams. I’ve also proposed changes to LangGraph error handling; that proposal is not merged.', project: 'https://github.com/langchain-ai', history: 'https://github.com/pulls?q=is%3Apr+author%3Agouveags+org%3Alangchain-ai', links: [{ label: 'Credentials PR', href: 'https://github.com/langchain-ai/langchain-aws/pull/1230', title: 'AWS credential precedence' }] },
-  { id: 'linux', mark: 'LX', name: 'Linux desktop', status: 'Participation', description: 'My Linux desktop is also a place to learn and contribute. I participate in the Noctalia, Terra, and Omarchy communities—the tools and setups that helped inspire this site.', project: 'https://github.com/noctalia-dev/noctalia-shell', history: 'https://github.com/gouveags', links: [{ label: 'Terra', href: 'https://github.com/terrapkg/packages', title: 'Terra packages' }, { label: 'Omarchy', href: 'https://github.com/basecamp/omarchy', title: 'Omarchy project' }] },
+  { id: 'posthog', logo: '/assets/brands/posthog-light.svg', name: 'PostHog', description: 'Since July 2026, I’ve contributed to AI observability and cost accounting across PostHog: JavaScript and Python LangChain middleware, richer Gemini tool capture, and record/replay tests using real SDKs. Recent tool-result capture and Gemini Interactions work is still under review.', project: 'https://github.com/PostHog', history: 'https://github.com/pulls?q=is%3Apr+author%3Agouveags+org%3APostHog', links: [{ label: 'Middleware PR', href: 'https://github.com/PostHog/posthog-js/pull/4556', title: 'LangChain v1 agent middleware' }, { label: 'Cache pricing PR', href: 'https://github.com/PostHog/posthog/pull/71323', title: 'Anthropic cache writes by TTL' }, { label: 'Bedrock pricing PR', href: 'https://github.com/PostHog/posthog/pull/74380', title: 'Bedrock pricing by inference profile' }] },
+  { id: 'langchain', logo: '/assets/brands/langchain-light.svg', name: 'LangChain and LangGraph', description: 'My LangChain AWS contributions focus on credential selection and incomplete Bedrock streams. I’ve also proposed changes to LangGraph error handling; that proposal is not merged.', project: 'https://github.com/langchain-ai', history: 'https://github.com/pulls?q=is%3Apr+author%3Agouveags+org%3Alangchain-ai', links: [{ label: 'Credentials PR', href: 'https://github.com/langchain-ai/langchain-aws/pull/1230', title: 'AWS credential precedence' }] },
+  { id: 'linux', logo: null, name: 'Linux desktop', description: 'My Linux desktop is also a place to learn and contribute. I participate in the Noctalia, Terra, and Omarchy communities—the tools and setups that helped inspire this site.', project: 'https://github.com/noctalia-dev/noctalia-shell', history: 'https://github.com/gouveags', links: [{ label: 'Terra', href: 'https://github.com/terrapkg/packages', title: 'Terra packages' }, { label: 'Omarchy', href: 'https://github.com/basecamp/omarchy', title: 'Omarchy project' }] },
 ];
 const originals = [
   { id: 'bend', name: 'openai-bend', description: 'An unofficial, experimental OpenAI SDK for Bend.', href: 'https://github.com/gouveags/openai-bend' },
@@ -13,7 +13,7 @@ const originals = [
 ];
 ---
 <Layout title="Open source" pageTitle="Open source" kind="page" description="Open-source work alongside Gabriel Gouvêa’s career: PostHog, LangChain, Linux desktop communities, and unofficial Bend SDK experiments.">
-  <div class="work-layout">
+  <div class="work-layout oss-editorial">
     <aside class="work-sidebar" aria-label="Open-source navigation">
       <p class="eyebrow">Career</p>
       <nav aria-label="Career pages">
@@ -40,28 +40,26 @@ const originals = [
       <button type="button" data-filter-target="oss-list" data-filter-value="contributions" aria-pressed="true">Contributions</button>
       <button type="button" data-filter-target="oss-list" data-filter-value="original" aria-pressed="false">Original projects</button>
     </div>
-    <div class="entry-list" id="oss-list">
+    <div class="contribution-list" id="oss-list">
       {contributions.map((item) => (
-        <article class="entry" id={item.id} data-category="contributions">
-          <span class="entry-mark" aria-hidden="true">{item.mark}</span>
-          <div class="entry-main">
-            <div class="entry-heading"><h2>{item.name}</h2><span class="tag">{item.status}</span></div>
-            <p id={item.id === 'posthog' ? 'posthog-pricing' : undefined}>{item.description}</p>
-            <div class="entry-links"><a class="text-link" href={item.project}>Project <Icon name="arrow-up-right" /></a><a class="text-link" href={item.history}>Contribution history <Icon name="arrow-up-right" /></a></div>
-          </div>
-          <div class="entry-meta entry-links">
-            {item.links.map((link) => <a class="text-link" href={link.href} target="_blank" rel="noopener noreferrer" title={link.title} aria-label={`${link.label}: ${link.title} (opens in a new tab)`}>{link.label}<Icon name="arrow-up-right" /></a>)}
+        <article class="contribution-entry" id={item.id} data-category="contributions">
+          <h2 class:list={['contribution-title', { 'langchain-heading': item.id === 'langchain' }]}>
+            {item.logo ? <img class={`project-wordmark ${item.id}`} src={item.logo} alt={item.id === 'posthog' ? 'PostHog' : 'LangChain'} width={item.id === 'posthog' ? 160 : 189} height={item.id === 'posthog' ? 28 : 40} /> : item.name}
+            {item.id === 'langchain' && <span class="related-project">and LangGraph</span>}
+          </h2>
+          <p class="contribution-copy" id={item.id === 'posthog' ? 'posthog-pricing' : undefined}>{item.description}</p>
+          <div class="contribution-links"><a href={item.project}>Project <Icon name="arrow-up-right" /></a><a href={item.history}>Contribution history <Icon name="arrow-up-right" /></a></div>
+          <div class="contribution-receipts" aria-label={`${item.name} references`}>
+            <span>{item.id === 'linux' ? 'Around the desktop' : 'Selected changes'}</span>
+            {item.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer" title={link.title} aria-label={`${link.label}: ${link.title} (opens in a new tab)`}>{link.label}<Icon name="arrow-up-right" /></a>)}
           </div>
         </article>
       ))}
       {originals.map((item) => (
-        <article class="entry" id={item.id} data-category="original">
-          <span class="entry-mark" aria-hidden="true">B</span>
-          <div class="entry-main">
-            <div class="entry-heading"><h2>{item.name}</h2><span class="tag">Experimental</span></div>
-            <p>{item.description}</p>
-          </div>
-          <div class="entry-meta"><a class="text-link" href={item.href} target="_blank" rel="noopener noreferrer" aria-label={`View ${item.name} on GitHub (opens in a new tab)`}>View code <Icon name="arrow-up-right" /></a></div>
+        <article class="contribution-entry" id={item.id} data-category="original">
+          <h2 class="contribution-title">{item.name}</h2>
+          <p class="contribution-copy">{item.description}</p>
+          <div class="contribution-links"><a href={item.href} target="_blank" rel="noopener noreferrer" aria-label={`View ${item.name} on GitHub (opens in a new tab)`}>View code <Icon name="arrow-up-right" /></a></div>
         </article>
       ))}
     </div>
