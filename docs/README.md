@@ -5,7 +5,8 @@
 - [Search and sharing](./SEO.md): canonical URLs, identity metadata, social cards, and preview indexing.
 - [Résumé source](./RESUME.md): the supplied PDF and Career facts.
 - [Blog posts](./BLOG_POSTS.md): writing and publishing posts.
-- [Window management](./WINDOW-MANAGEMENT.md): adaptive tiling, resizing, and mobile behavior.
+- [Window management](./WINDOW-MANAGEMENT.md): floating, snapping, adaptive tiling, resizing, and mobile behavior.
+- [Window movement specification](./features/desktop-window-movement.md): approved behavior and test plan.
 - [Local calendar](./LOCAL-CALENDAR.md): device-local clock, calendar, and privacy.
 - [Wallpaper controls](./WALLPAPER-CONTROLS.md): selection dots and verification.
 - [Photograph licenses](./PHOTO-LICENSES.md): wallpaper sources, attribution, and permitted reuse.

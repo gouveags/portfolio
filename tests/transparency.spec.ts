@@ -87,7 +87,7 @@ test("desktop note persists independently of welcome windows and navigation", as
     await expectNote();
     await page.reload();
     await expectNote();
-    await page.locator('.desktop-bar a[href="/"]').click();
+    await page.locator('.dock a[href="/"]').click();
     await ready(page, "/");
   }
   await app(page, "/")

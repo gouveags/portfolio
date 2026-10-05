@@ -312,17 +312,6 @@ kbd {
   border-radius: 15px;
   background: #000;
 }
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 20px;
-  font: 13px var(--mono);
-  letter-spacing: -0.02em;
-}
-.monogram {
-  font: 26px var(--sans);
-  letter-spacing: -0.06em;
-}
 .route-label {
   color: #929292;
   font: 10px var(--mono);
@@ -533,7 +522,7 @@ kbd {
       )
       bottom 3px right 3px / 8px 8px no-repeat;
   }
-  #workspace[data-layout="tiled"] .window-titlebar {
+  .enhanced .window-titlebar {
     cursor: grab;
     touch-action: none;
     user-select: none;
@@ -1144,6 +1133,7 @@ kbd {
 }
 .about-intro img {
   width: 100%;
+  height: auto;
   aspect-ratio: 1;
   object-fit: cover;
   filter: grayscale(1);
@@ -1563,13 +1553,6 @@ dialog[open] {
     gap: 15px;
     background: #000;
   }
-  .mobile-header .brand {
-    gap: 20px;
-    font: 15px var(--sans);
-  }
-  .mobile-header .monogram {
-    font-size: 27px;
-  }
   .mobile-header .icon {
     width: 24px;
     height: 24px;
@@ -1580,14 +1563,8 @@ dialog[open] {
   .mobile-header .mobile-back {
     margin-left: -8px;
   }
-  .mobile-brand {
-    display: none;
-  }
   .mobile-header #mobile-title {
     font-size: 16px;
-  }
-  body[data-page-kind="home"] .mobile-brand {
-    display: inline-flex;
   }
   body[data-page-kind="home"] .mobile-back,
   body[data-page-kind="home"] #mobile-title {
@@ -2701,7 +2678,6 @@ h3 {
     0 0 4px #000;
 }
 .home-whisper,
-body[data-page-kind="home"] .mobile-header .brand,
 body[data-page-kind="home"] .mobile-header .local-clock {
   text-shadow:
     -0.75px 0 #000,
@@ -2793,7 +2769,7 @@ body[data-page-kind="home"] .mobile-header > .icon-button .icon {
   }
 }
 
-/* The clock sits beside the home mark on the left of both bars. */
+/* The local clock anchors the left side of both bars. */
 .enhanced .local-clock.js-only {
   display: grid !important;
 }
@@ -2801,9 +2777,7 @@ body[data-page-kind="home"] .mobile-header > .icon-button .icon {
   flex: 0 0 auto;
   gap: 1px;
   min-height: 40px;
-  padding: 5px 0 5px 16px;
-  margin-left: 4px;
-  border-left: 1px solid #333;
+  padding: 5px 0;
   background: transparent;
   text-align: left;
   color: #eee;
@@ -2935,13 +2909,6 @@ body[data-page-kind="home"] .mobile-header > .icon-button .icon {
 @media (max-width: 799px) {
   .mobile-header {
     gap: 12px;
-  }
-  .mobile-header .brand {
-    gap: 12px;
-  }
-  .mobile-header .local-clock {
-    margin-left: 0;
-    padding-left: 10px;
   }
   #mobile-title {
     overflow: hidden;
@@ -3088,7 +3055,7 @@ body:has(
       )
     )
     .mobile-header
-    :is(.brand, .local-clock, [data-clock-date]) {
+    :is(.local-clock, [data-clock-date]) {
     color: #171717;
     text-shadow:
       0 1px 1px #fff,
@@ -3284,11 +3251,47 @@ body:has(
   border-bottom-color: #eee;
 }
 
-/* LangChain requires clear space around its supplied lockup equal to the mark height. */
-.oss-editorial .langchain-heading {
-  gap: 34px;
-  padding: 2px 34px 0;
-  margin-bottom: 34px;
+/* The supplied lockups remain intact, separate from the site's heading typography. */
+.contribution-brand {
+  width: fit-content;
+  padding: 24px;
+  margin: 0;
+}
+.contribution-brand .project-wordmark {
+  height: 24px;
+}
+.projects-editorial,
+.blog-page {
+  max-width: 960px;
+}
+.projects-editorial .entry-main p,
+.blog-page .entry-main p:not(.eyebrow) {
+  max-width: 70ch;
+  font-size: 15px;
+  line-height: 1.8;
+}
+.projects-editorial .entry-links a,
+.blog-page .entry-links a {
+  min-height: 44px;
+  align-items: center;
+}
+.blog-page .tabs {
+  gap: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.blog-page .tabs button {
+  min-height: 44px;
+  min-width: 0;
+  padding: 10px 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: #aaa;
+}
+.blog-page .tabs button[aria-pressed="true"] {
+  color: #eee;
+  border-bottom-color: #eee;
 }
 
 /* Home's introduction is a reading window; wallpaper decorations remain transparent. */
@@ -3347,5 +3350,28 @@ body:has(
   }
   .mobile-home .mobile-welcome .welcome-profile h1 {
     font-size: 27px;
+  }
+}
+
+/* Desktop placement is owned by the shell; mobile continues to use document flow. */
+@media (min-width: 800px) {
+  .window-snap-preview {
+    position: absolute;
+    pointer-events: none;
+    z-index: 10000;
+    border: 2px solid #fff;
+    border-radius: 12px;
+    background: #ffffff18;
+    color: #fff;
+    padding: 12px;
+    font: 12px var(--mono);
+  }
+  .window-placeholder {
+    visibility: hidden;
+    min-width: 0;
+    min-height: 0;
+  }
+  .app-window.is-moving {
+    z-index: 9999 !important;
   }
 }

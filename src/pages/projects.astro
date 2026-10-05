@@ -4,7 +4,7 @@ import Icon from '../components/Icon.astro';
 import { projects } from '../data/projects';
 ---
 <Layout title="Projects" pageTitle="Projects" kind="page" description="Selected projects by Gabriel Gouvêa: Copa Ace, the Mutuals Twitch/OBS integration, and experimental Bend SDKs.">
-  <div class="page-content">
+  <div class="page-content projects-editorial">
     <header class="page-header">
       <p class="eyebrow">Selected work</p>
       <h1>Things I have worked on.</h1>
@@ -13,7 +13,6 @@ import { projects } from '../data/projects';
     <div class="entry-list project-list">
       {projects.map((project) => (
         <article class="entry">
-          <span class="entry-mark" aria-hidden="true">{project.mark}</span>
           <div class="entry-main">
             <h2>{project.name}</h2>
             <p>{project.description}</p>

@@ -3,6 +3,18 @@ import wallpaperData from "../data/wallpapers.json";
 
 /** The HTML remains the app: every route works before this enhancement runs. */
 type PageKind = "home" | "page" | "article";
+type WindowRect = { x: number; y: number; width: number; height: number };
+type SnapZone =
+  | "left"
+  | "right"
+  | "top"
+  | "bottom"
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";
+type Placement =
+  { mode: "floating"; rect: WindowRect } | { mode: "snapped"; zone: SnapZone };
 type AppWindow = {
   path: string;
   node: HTMLElement;
@@ -12,6 +24,8 @@ type AppWindow = {
   kind: PageKind;
   minimized: boolean;
   scrollTop: number;
+  placement?: Placement;
+  layer?: number;
 };
 type ShellState = {
   portfolioOS: true;
@@ -23,6 +37,7 @@ type ShellState = {
   index: number;
   columns?: number[];
   rows?: number[];
+  placements?: Record<string, Placement>;
 };
 type NavigateOptions = {
   history?: "push" | "replace" | "pop";
@@ -142,27 +157,185 @@ function initializeShell(host: HTMLElement): void {
     );
   }
 
-  function moveWindow(path: string, destination: number): void {
-    const origin = visiblePaths.indexOf(path);
-    if (
-      origin < 0 ||
-      destination < 0 ||
-      destination >= visiblePaths.length ||
-      origin === destination
-    )
-      return;
-    const savedColumns = [...columns],
-      savedRows = [...rows];
-    saveHistory("replace", location.href);
-    visiblePaths.splice(origin, 1);
-    visiblePaths.splice(destination, 0, path);
-    activePath = path;
-    render();
-    columns = savedColumns;
-    rows = savedRows;
-    applyTracks();
-    saveHistory("push", path);
-    announce(`${windows.get(path)?.title} moved to tile ${destination + 1}`);
+  const snapZones: SnapZone[] = [
+    "left",
+    "right",
+    "top",
+    "bottom",
+    "top-left",
+    "top-right",
+    "bottom-left",
+    "bottom-right",
+  ];
+  let highestLayer = 1;
+  let frontPath = "";
+
+  function bounded(rect: WindowRect): WindowRect {
+    const area = host.getBoundingClientRect();
+    const width = Math.max(
+      Math.min(240, area.width),
+      Math.min(area.width, rect.width),
+    );
+    const height = Math.max(
+      Math.min(120, area.height),
+      Math.min(area.height, rect.height),
+    );
+    return {
+      width,
+      height,
+      x: Math.max(0, Math.min(area.width - width, rect.x)),
+      y: Math.max(0, Math.min(area.height - height, rect.y)),
+    };
+  }
+
+  function currentRect(node: HTMLElement): WindowRect {
+    const area = host.getBoundingClientRect(),
+      rect = node.getBoundingClientRect();
+    return {
+      x: rect.x - area.x,
+      y: rect.y - area.y,
+      width: rect.width,
+      height: rect.height,
+    };
+  }
+
+  function detachedRect(
+    node: HTMLElement,
+    pointer?: { x: number; y: number },
+  ): WindowRect {
+    const rect = currentRect(node),
+      area = host.getBoundingClientRect();
+    const width =
+      rect.width >= area.width - 1
+        ? Math.max(Math.min(240, area.width), area.width * 0.8)
+        : rect.width;
+    const height =
+      rect.height >= area.height - 1
+        ? Math.max(Math.min(120, area.height), area.height * 0.8)
+        : rect.height;
+    const anchorX = pointer
+      ? Math.max(0, Math.min(1, (pointer.x - area.x - rect.x) / rect.width))
+      : 0;
+    const anchorY = pointer
+      ? Math.max(0, Math.min(1, (pointer.y - area.y - rect.y) / rect.height))
+      : 0;
+    return bounded({
+      x: rect.x + (rect.width - width) * anchorX,
+      y: rect.y + (rect.height - height) * anchorY,
+      width,
+      height,
+    });
+  }
+
+  function snapRect(zone: SnapZone): WindowRect {
+    const area = host.getBoundingClientRect();
+    const horizontal = zone.includes("left") || zone.includes("right");
+    const vertical = zone.includes("top") || zone.includes("bottom");
+    return {
+      x: zone.includes("right") ? area.width / 2 : 0,
+      y: zone.includes("bottom") ? area.height / 2 : 0,
+      width: horizontal ? area.width / 2 : area.width,
+      height: vertical ? area.height / 2 : area.height,
+    };
+  }
+
+  function writeRect(node: HTMLElement, rect: WindowRect): void {
+    node.style.position = "absolute";
+    node.style.left = `${rect.x}px`;
+    node.style.top = `${rect.y}px`;
+    node.style.width = `${rect.width}px`;
+    node.style.height = `${rect.height}px`;
+    node.style.margin = "0";
+    node.style.maxWidth = "100%";
+    node.style.maxHeight = "100%";
+  }
+
+  function applyPlacement(entry: AppWindow): void {
+    // Hidden apps retain their geometry in their own workspace. In particular,
+    // Home uses a smaller area than the app workspace; visiting it must not
+    // clamp every cached app to Home's bounds.
+    if (entry.node.hidden) return;
+    if (desktop.matches && !focusMode && entry.placement) {
+      const rect =
+        entry.placement.mode === "snapped"
+          ? snapRect(entry.placement.zone)
+          : bounded(entry.placement.rect);
+      if (entry.placement.mode === "floating") entry.placement.rect = rect;
+      entry.node.dataset.windowMode = entry.placement.mode;
+      writeRect(entry.node, rect);
+    } else {
+      if (
+        entry.node.dataset.windowMode &&
+        entry.node.dataset.windowMode !== "tiled"
+      ) {
+        for (const property of [
+          "position",
+          "left",
+          "top",
+          "width",
+          "height",
+          "margin",
+          "max-width",
+          "max-height",
+        ])
+          entry.node.style.removeProperty(property);
+      }
+      entry.node.dataset.windowMode = "tiled";
+    }
+  }
+
+  function restorePlacements(value: unknown): void {
+    const entries =
+      value && typeof value === "object" && !Array.isArray(value)
+        ? (value as Record<string, unknown>)
+        : {};
+    windows.forEach((entry) => {
+      entry.placement = undefined;
+      const candidate = entries[entry.path];
+      if (!candidate || typeof candidate !== "object") return;
+      const placement = candidate as Partial<Placement>;
+      if (placement.mode === "snapped" && snapZones.includes(placement.zone!))
+        entry.placement = { mode: "snapped", zone: placement.zone! };
+      if (
+        placement.mode === "floating" &&
+        placement.rect &&
+        [
+          placement.rect.x,
+          placement.rect.y,
+          placement.rect.width,
+          placement.rect.height,
+        ].every(
+          (number) => typeof number === "number" && Number.isFinite(number),
+        ) &&
+        placement.rect.width > 0 &&
+        placement.rect.height > 0
+      )
+        // render() establishes the destination workspace before applying and
+        // bounding its visible placements. The outgoing workspace may differ.
+        entry.placement = { mode: "floating", rect: { ...placement.rect } };
+    });
+  }
+
+  function snapAt(x: number, y: number): SnapZone | undefined {
+    if (x < 0 || y < 0 || x > innerWidth || y > innerHeight) return;
+    const area = host.getBoundingClientRect();
+    const left = x <= area.left + 40,
+      right = x >= area.right - 40;
+    const top = y <= area.top + 40,
+      bottom = y >= area.bottom - 40;
+    if (top && left) return "top-left";
+    if (top && right) return "top-right";
+    if (bottom && left) return "bottom-left";
+    if (bottom && right) return "bottom-right";
+    return left
+      ? "left"
+      : right
+        ? "right"
+        : top
+          ? "top"
+          : bottom
+            ? "bottom"
+            : undefined;
   }
 
   function syncDock(): void {
@@ -238,7 +411,14 @@ function initializeShell(host: HTMLElement): void {
     });
     columns = [];
     rows = [];
-    if (!desktop.matches || visible.length < 2) return;
+    if (!desktop.matches || visible.length === 0) return;
+    if (visible.length === 1) {
+      // A floating sibling still uses the tiled shell's compact styling, but
+      // the sole grid window must occupy the whole available grid area.
+      host.style.gridTemplateColumns = "minmax(0, 1fr)";
+      host.style.gridTemplateRows = "minmax(0, 1fr)";
+      return;
+    }
     const count = Math.ceil(Math.sqrt(visible.length));
     columns =
       savedTiling?.paths === visible.join(",")
@@ -258,6 +438,40 @@ function initializeShell(host: HTMLElement): void {
     edge = "se",
   ): void {
     if (!desktop.matches || node.hidden) return;
+    const entry = windows.get(node.dataset.path || "");
+    if (entry?.placement && !focusMode) {
+      const rect = currentRect(node);
+      const area = host.getBoundingClientRect();
+      const right = rect.x + rect.width,
+        bottom = rect.y + rect.height;
+      if (edge.includes("w")) {
+        rect.x = Math.max(
+          0,
+          Math.min(right - Math.min(240, area.width), rect.x + dx),
+        );
+        rect.width = right - rect.x;
+      }
+      if (edge.includes("e"))
+        rect.width = Math.max(
+          Math.min(240, area.width),
+          Math.min(area.width - rect.x, rect.width + dx),
+        );
+      if (edge.includes("n")) {
+        rect.y = Math.max(
+          0,
+          Math.min(bottom - Math.min(120, area.height), rect.y + dy),
+        );
+        rect.height = bottom - rect.y;
+      }
+      if (edge.includes("s"))
+        rect.height = Math.max(
+          Math.min(120, area.height),
+          Math.min(area.height - rect.y, rect.height + dy),
+        );
+      entry.placement = { mode: "floating", rect: bounded(rect) };
+      applyPlacement(entry);
+      return;
+    }
     if (tilePaths.length < 2) {
       const bounds = node.getBoundingClientRect();
       const area = host.getBoundingClientRect();
@@ -443,7 +657,7 @@ function initializeShell(host: HTMLElement): void {
         // Keyboard resizing uses the available interior boundary on an outer tile.
         const index = tilePaths.indexOf(path);
         const keyboardEdge =
-          tilePaths.length < 2
+          entry.placement || tilePaths.length < 2
             ? "se"
             : `${Math.floor(index / columns.length) < rows.length - 1 ? "s" : "n"}${index % columns.length < columns.length - 1 ? "e" : "w"}`;
         resizeWindow(node, ...delta, keyboardEdge);
@@ -457,6 +671,9 @@ function initializeShell(host: HTMLElement): void {
         const savedColumns = [...columns],
           savedRows = [...rows];
         const savedStyle = node.getAttribute("style");
+        const savedPlacement = entry.placement
+          ? structuredClone(entry.placement)
+          : undefined;
         let previous = { x: event.clientX, y: event.clientY };
         const finish = (rollback: boolean) => {
           resize.removeEventListener("pointermove", move);
@@ -465,11 +682,13 @@ function initializeShell(host: HTMLElement): void {
           resize.removeEventListener("lostpointercapture", cancel);
           cancelGesture = undefined;
           if (rollback) {
+            entry.placement = savedPlacement;
             columns = savedColumns;
             rows = savedRows;
             if (savedStyle === null) node.removeAttribute("style");
             else node.setAttribute("style", savedStyle);
             if (columns.length) applyTracks();
+            applyPlacement(entry);
           } else saveHistory("replace", location.href);
           if (resize.hasPointerCapture(event.pointerId))
             resize.releasePointerCapture(event.pointerId);
@@ -499,34 +718,68 @@ function initializeShell(host: HTMLElement): void {
       titlebar.tabIndex = 0;
       titlebar.setAttribute(
         "aria-label",
-        `Move ${title}. Drag onto another tile, or use Alt and arrow keys.`,
+        `Move ${title}. Drag to move; Alt arrows move; Control Alt arrows snap; Control Alt 1 to 4 snap corners; Control Alt Home tiles.`,
       );
       titlebar.addEventListener("keydown", (event) => {
         if (
           event.target !== titlebar ||
           !event.altKey ||
           !desktop.matches ||
-          focusMode ||
-          tilePaths.length < 2
+          focusMode
         )
           return;
-        const offsets: Record<string, number> = {
-          ArrowLeft: -1,
-          ArrowRight: 1,
-          ArrowUp: -columns.length,
-          ArrowDown: columns.length,
+        const keys: Record<string, SnapZone> = {
+          ArrowLeft: "left",
+          ArrowRight: "right",
+          ArrowUp: "top",
+          ArrowDown: "bottom",
+          "1": "top-left",
+          "2": "top-right",
+          "3": "bottom-left",
+          "4": "bottom-right",
         };
-        const offset = offsets[event.key];
-        if (offset === undefined) return;
-        event.preventDefault();
-        moveWindow(path, visiblePaths.indexOf(path) + offset);
+        if (event.ctrlKey && (keys[event.key] || event.key === "Home")) {
+          event.preventDefault();
+          cancelGesture?.();
+          saveHistory("replace", location.href);
+          entry.placement =
+            event.key === "Home"
+              ? undefined
+              : { mode: "snapped", zone: keys[event.key]! };
+        } else {
+          const step = event.shiftKey ? 64 : 24;
+          const offsets: Record<string, [number, number]> = {
+            ArrowLeft: [-step, 0],
+            ArrowRight: [step, 0],
+            ArrowUp: [0, -step],
+            ArrowDown: [0, step],
+          };
+          const delta = offsets[event.key];
+          if (!delta) return;
+          event.preventDefault();
+          cancelGesture?.();
+          saveHistory("replace", location.href);
+          const rect = detachedRect(node);
+          entry.placement = {
+            mode: "floating",
+            rect: bounded({
+              ...rect,
+              x: rect.x + delta[0],
+              y: rect.y + delta[1],
+            }),
+          };
+        }
+        activePath = path;
+        render();
+        saveHistory("push", path);
+        announce(`${title} ${entry.placement?.mode || "tiled"}`);
       });
       titlebar.addEventListener("pointerdown", (event) => {
         if (
           event.button !== 0 ||
+          !event.isPrimary ||
           !desktop.matches ||
           focusMode ||
-          tilePaths.length < 2 ||
           (event.target instanceof Element && event.target.closest("button, a"))
         )
           return;
@@ -534,8 +787,24 @@ function initializeShell(host: HTMLElement): void {
         event.stopPropagation();
         cancelGesture?.();
         const startViewport = { width: innerWidth, height: innerHeight };
-        let destination: HTMLElement | undefined;
+        const start = detachedRect(node, {
+          x: event.clientX,
+          y: event.clientY,
+        });
+        const savedPlacement = entry.placement
+          ? structuredClone(entry.placement)
+          : undefined;
+        const savedStyle = node.getAttribute("style");
+        const savedActive = activePath;
+        const savedLayer = entry.layer;
+        let zone: SnapZone | undefined;
         let moved = false;
+        const placeholder = document.createElement("div");
+        placeholder.className = "window-placeholder";
+        placeholder.style.order = node.style.order;
+        const preview = document.createElement("div");
+        preview.className = "window-snap-preview";
+        preview.setAttribute("aria-hidden", "true");
         const finish = (commit: boolean) => {
           commit =
             commit &&
@@ -545,17 +814,33 @@ function initializeShell(host: HTMLElement): void {
           titlebar.removeEventListener("pointerup", up);
           titlebar.removeEventListener("pointercancel", cancel);
           titlebar.removeEventListener("lostpointercapture", cancel);
-          const target = destination?.dataset.path;
-          destination?.classList.remove("is-snap-target");
+          placeholder.remove();
+          preview.remove();
           node.classList.remove("is-moving");
           cancelGesture = undefined;
           if (titlebar.hasPointerCapture(event.pointerId))
             titlebar.releasePointerCapture(event.pointerId);
-          if (commit && target && moved)
-            moveWindow(path, visiblePaths.indexOf(target));
-          else if (commit && !moved) selectWindow(path);
+          if (commit && moved) {
+            entry.placement = zone
+              ? { mode: "snapped", zone }
+              : entry.placement;
+            activePath = path;
+            render();
+            saveHistory("push", path);
+            announce(`${title} ${zone ? `snapped ${zone}` : "floating"}`);
+          } else {
+            entry.placement = savedPlacement;
+            entry.layer = savedLayer;
+            node.dataset.windowMode = savedPlacement?.mode || "tiled";
+            activePath = savedActive;
+            if (savedStyle === null) node.removeAttribute("style");
+            else node.setAttribute("style", savedStyle);
+            applyPlacement(entry);
+            if (commit) selectWindow(path);
+          }
         };
         const move = (pointer: PointerEvent) => {
+          if (pointer.pointerId !== event.pointerId) return;
           if (
             !moved &&
             Math.hypot(
@@ -564,22 +849,35 @@ function initializeShell(host: HTMLElement): void {
             ) < 6
           )
             return;
+          if (!moved) {
+            saveHistory("replace", location.href);
+            if (!entry.placement) host.append(placeholder);
+            host.append(preview);
+            entry.layer = ++highestLayer;
+          }
           moved = true;
           node.classList.add("is-moving");
-          destination?.classList.remove("is-snap-target");
-          destination = Array.from(windows.values()).find((entry) => {
-            if (entry.node.hidden || entry.path === path) return false;
-            const rect = entry.node.getBoundingClientRect();
-            return (
-              pointer.clientX >= rect.left &&
-              pointer.clientX <= rect.right &&
-              pointer.clientY >= rect.top &&
-              pointer.clientY <= rect.bottom
-            );
-          })?.node;
-          destination?.classList.add("is-snap-target");
+          entry.placement = {
+            mode: "floating",
+            rect: bounded({
+              ...start,
+              x: start.x + pointer.clientX - event.clientX,
+              y: start.y + pointer.clientY - event.clientY,
+            }),
+          };
+          applyPlacement(entry);
+          node.style.zIndex = String(entry.layer);
+          zone = snapAt(pointer.clientX, pointer.clientY);
+          preview.hidden = !zone;
+          if (zone) {
+            preview.dataset.snapZone = zone;
+            preview.textContent = `Snap ${zone.replace("-", " ")}`;
+            writeRect(preview, snapRect(zone));
+          }
         };
-        const up = () => finish(true);
+        const up = (pointer: PointerEvent) => {
+          if (pointer.pointerId === event.pointerId) finish(true);
+        };
         const cancel = () => finish(false);
         cancelGesture = cancel;
         titlebar.addEventListener("pointermove", move);
@@ -617,6 +915,11 @@ function initializeShell(host: HTMLElement): void {
       index: historyIndex,
       columns: [...columns],
       rows: [...rows],
+      placements: Object.fromEntries(
+        [...windows.values()]
+          .filter((entry) => entry.placement)
+          .map((entry) => [entry.path, entry.placement!]),
+      ),
     };
   }
 
@@ -642,6 +945,10 @@ function initializeShell(host: HTMLElement): void {
   function render(): void {
     const active = windows.get(activePath);
     if (!active) return;
+    if (frontPath !== activePath) {
+      active.layer = ++highestLayer;
+      frontPath = activePath;
+    }
     const hideHome = active.kind === "home" && desktop.matches && homeHidden;
     const focused =
       focusMode && !hideHome && (active.kind !== "home" || desktop.matches);
@@ -710,7 +1017,13 @@ function initializeShell(host: HTMLElement): void {
         : visible.length > 1
           ? "tiled"
           : "single";
-    layoutWindows(visible);
+    layoutWindows(
+      visible.filter((path) => focusMode || !windows.get(path)?.placement),
+    );
+    windows.forEach((entry) => {
+      applyPlacement(entry);
+      entry.node.style.zIndex = String(entry.layer || 1);
+    });
     host.dataset.homeHidden = String(hideHome);
     document.body.dataset.pageKind = active.kind;
     document.body.dataset.activePath = activePath;
@@ -898,6 +1211,7 @@ function initializeShell(host: HTMLElement): void {
         // keeps the desktop's previous welcome-window visibility.
         if (!options.remove && !options.minimize) homeHidden = false;
       }
+      if (options.snapshot) restorePlacements(options.snapshot.placements);
       render();
       if (options.snapshot) {
         const validTracks = (
@@ -971,9 +1285,10 @@ function initializeShell(host: HTMLElement): void {
   }
 
   function focusHomeLink(): void {
-    document
-      .querySelector<HTMLAnchorElement>('.desktop-bar a[href="/"]')
-      ?.focus({ preventScroll: true });
+    // The dock remains the Home affordance after removing the header brand.
+    const home = document.querySelector<HTMLAnchorElement>('.dock a[href="/"]');
+    home?.focus({ preventScroll: true });
+    home?.scrollIntoView({ block: "nearest", inline: "nearest" });
   }
 
   function dismissWindow(
@@ -1301,6 +1616,9 @@ function initializeShell(host: HTMLElement): void {
       columns = [];
       rows = [];
       savedTiling = undefined;
+      windows.forEach((entry) => {
+        entry.placement = undefined;
+      });
       layoutKey = "";
       render();
       saveHistory(
@@ -1368,7 +1686,10 @@ function initializeShell(host: HTMLElement): void {
       cancelGesture();
     }
   });
-  window.addEventListener("resize", () => cancelGesture?.());
+  window.addEventListener("resize", () => {
+    cancelGesture?.();
+    windows.forEach(applyPlacement);
+  });
   window.addEventListener("blur", () => cancelGesture?.());
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) cancelGesture?.();
@@ -1395,8 +1716,10 @@ function initializeShell(host: HTMLElement): void {
   // Keep title-bar controls reachable when a previously resized track shrinks.
   new ResizeObserver(() => {
     if (!desktop.matches) return;
+    windows.forEach(applyPlacement);
     if (tilePaths.length < 2) {
-      windows.forEach(({ node }) => {
+      windows.forEach(({ node, placement }) => {
+        if (placement) return;
         for (const property of [
           "margin-left",
           "margin-top",

@@ -193,8 +193,9 @@ test('welcome controls focus, restore, minimize, close, and reopen Home', async 
     await expect(visibleApps(page)).toHaveCount(0);
     await expect(page).toHaveURL(/\/$/);
     await expect(page.locator('#workspace')).toHaveAttribute('data-home-hidden', 'true');
-    const restore = page.locator('.desktop-bar a[href="/"]');
+    const restore = page.locator('.dock a[href="/"]');
     await expect(restore).toBeFocused();
+    await expect(restore).toBeInViewport();
     await restore.click();
     await active(page, '/');
     await expect(home).toHaveCount(1);

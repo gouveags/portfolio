@@ -23,6 +23,7 @@ test("clock and popup sit on the left without the handle label", async ({
       testInfo.project.name === "mobile" ? ".mobile-header" : ".desktop-bar",
     );
     await expect(bar).not.toContainText("gouveags");
+    await expect(bar.locator(".brand, .monogram")).toHaveCount(0);
     const trigger = opener(page);
     const clockBounds = await trigger.boundingBox();
     expect(clockBounds!.x).toBeLessThan(100);

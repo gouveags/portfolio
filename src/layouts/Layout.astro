@@ -69,7 +69,6 @@ const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title:
       </picture>
     </div>
     <header class="desktop-bar">
-      <a class="brand" href="/" aria-label="Gabriel Gouvêa home"><span class="monogram">G</span></a>
       <LocalClock />
       <span class="route-label">/ <span id="route-label">{pageTitle}</span></span>
       <div class="workspace-indicator" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
@@ -81,7 +80,6 @@ const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title:
       </div>
     </header>
     <header class="mobile-header">
-      <a class="brand mobile-brand" href="/" aria-label="Gabriel Gouvêa home"><span class="monogram">G</span></a>
       <LocalClock />
       <button class="icon-button mobile-back js-only" data-action="back" aria-label="Go back"><Icon name="arrow-left" /></button>
       <span id="mobile-title">{pageTitle}</span>

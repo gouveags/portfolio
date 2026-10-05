@@ -32,40 +32,38 @@ test("open apps focus without changing geometry through dock and search", async 
   expect(await boxes(page)).toEqual(before);
 });
 
-test("titlebar drag previews a destination, cancels safely, and docks with keyboard/history support", async ({
+test("titlebar drag previews a half, cancels safely, and snaps with keyboard/history support", async ({
   page,
 }) => {
-  const title = app(page, "/projects/").locator(".window-titlebar");
+  const window = app(page, "/projects/");
+  const title = window.locator(".window-titlebar");
   const start = (await title.boundingBox())!;
-  const target = (await app(page, "/blog/").boundingBox())!;
+  const area = (await page.locator("#workspace").boundingBox())!;
   const before = await boxes(page);
-  await page.mouse.move(start.x + 100, start.y + 22);
-  await page.mouse.down();
-  await page.mouse.move(target.x + target.width / 2, target.y + 80, {
-    steps: 5,
-  });
-  await expect(app(page, "/blog/")).toHaveClass(/is-snap-target/);
+  const drag = async () => {
+    await page.mouse.move(start.x + 100, start.y + 22);
+    await page.mouse.down();
+    await page.mouse.move(area.x + area.width - 2, area.y + area.height / 2, {
+      steps: 5,
+    });
+  };
+  await drag();
+  await expect(
+    page.locator('.window-snap-preview[data-snap-zone="right"]'),
+  ).toBeVisible();
   await page.keyboard.press("Escape");
   await page.mouse.up();
   expect(await boxes(page)).toEqual(before);
-  await page.mouse.move(start.x + 100, start.y + 22);
-  await page.mouse.down();
-  await page.mouse.move(target.x + target.width / 2, target.y + 80, {
-    steps: 5,
-  });
+  await drag();
   await page.mouse.up();
-  expect((await app(page, "/projects/").boundingBox())!.x).toBeGreaterThan(
-    (await app(page, "/blog/").boundingBox())!.x,
-  );
+  const snapped = (await window.boundingBox())!;
+  expect(snapped.x).toBeCloseTo(area.x + area.width / 2, 0);
+  expect(snapped.width).toBeCloseTo(area.width / 2, 0);
   await title.focus();
   await page.keyboard.press("Alt+ArrowLeft");
-  expect((await app(page, "/projects/").boundingBox())!.x).toBeLessThan(
-    (await app(page, "/blog/").boundingBox())!.x,
-  );
+  expect((await window.boundingBox())!.x).toBeCloseTo(snapped.x - 24, 0);
   await page.goBack();
-  expect((await app(page, "/projects/").boundingBox())!.x).toBeGreaterThan(
-    (await app(page, "/blog/").boundingBox())!.x,
-  );
+  expect(await window.boundingBox()).toEqual(snapped);
 });
 
 test("every edge and corner exposes directional resize and cancellation restores tracks", async ({
@@ -181,7 +179,7 @@ test("crowded pages offer a readable focused view and restore exact tile geometr
   expect(await boxes(page)).toEqual(before);
 });
 
-test("a titlebar drop outside the workspace and viewport resize cancel safely", async ({
+test("pointer cancellation and viewport resize cancel a titlebar drag safely", async ({
   page,
 }) => {
   const title = app(page, "/projects/").locator(".window-titlebar");
@@ -190,6 +188,7 @@ test("a titlebar drop outside the workspace and viewport resize cancel safely", 
   await page.mouse.move(grip.x + 100, grip.y + 22);
   await page.mouse.down();
   await page.mouse.move(5, 5);
+  await title.dispatchEvent("pointercancel");
   await page.mouse.up();
   expect(await boxes(page)).toEqual(before);
   await page.mouse.move(grip.x + 100, grip.y + 22);
@@ -253,4 +252,179 @@ test("keyboard Read full page transfers focus into content and restore keeps a v
       exact: true,
     }),
   ).toBeFocused();
+});
+
+test("titlebar follows the pointer into empty space and retains floating geometry", async ({
+  page,
+}) => {
+  await dock(page, "/");
+  const home = app(page, "/");
+  const title = home.locator(".window-titlebar");
+  const before = (await home.boundingBox())!;
+  await page.mouse.move(before.x + 100, before.y + 22);
+  await page.mouse.down();
+  await page.mouse.move(before.x + 220, before.y + 102, { steps: 5 });
+  const during = (await home.boundingBox())!;
+  expect(during.x).toBeCloseTo(before.x + 120, 0);
+  expect(during.y).toBeCloseTo(before.y + 80, 0);
+  await page.mouse.up();
+  expect(await home.boundingBox()).toEqual(during);
+  await title.focus();
+  await page.keyboard.press("Alt+ArrowLeft");
+  expect((await home.boundingBox())!.x).toBeCloseTo(during.x - 24, 0);
+});
+
+for (const zone of [
+  "left",
+  "right",
+  "top",
+  "bottom",
+  "top-left",
+  "top-right",
+  "bottom-left",
+  "bottom-right",
+]) {
+  test(`pointer previews and snaps the ${zone} workspace rectangle`, async ({
+    page,
+  }) => {
+    await dock(page, "/");
+    const window = app(page, "/");
+    const start = (await window.boundingBox())!;
+    const area = (await page.locator("#workspace").boundingBox())!;
+    const left = zone.includes("left"),
+      right = zone.includes("right"),
+      top = zone.includes("top"),
+      bottom = zone.includes("bottom");
+    const x = left
+      ? area.x + 2
+      : right
+        ? area.x + area.width - 2
+        : area.x + area.width / 2;
+    const y = top
+      ? area.y + 2
+      : bottom
+        ? area.y + area.height - 2
+        : area.y + area.height / 2;
+    const expected = {
+      x: area.x + (right ? area.width / 2 : 0),
+      y: area.y + (bottom ? area.height / 2 : 0),
+      width: left || right ? area.width / 2 : area.width,
+      height: top || bottom ? area.height / 2 : area.height,
+    };
+    await page.mouse.move(start.x + 100, start.y + 22);
+    await page.mouse.down();
+    await page.mouse.move(x, y, { steps: 5 });
+    const preview = page.locator(".window-snap-preview");
+    await expect(preview).toBeVisible();
+    const previewBox = (await preview.boundingBox())!;
+    for (const key of ["x", "y", "width", "height"] as const)
+      expect(previewBox[key]).toBeCloseTo(expected[key], 0);
+    await page.mouse.up();
+    const actual = (await window.boundingBox())!;
+    for (const key of ["x", "y", "width", "height"] as const)
+      expect(actual[key]).toBeCloseTo(expected[key], 0);
+    await expect(preview).toHaveCount(0);
+  });
+}
+
+test("floating window retains all eight anchored resize directions and Escape restores geometry", async ({
+  page,
+}) => {
+  await dock(page, "/");
+  const window = app(page, "/");
+  const title = window.locator(".window-titlebar");
+  await title.focus();
+  await page.keyboard.press("Alt+Shift+ArrowRight");
+  await page.keyboard.press("Alt+Shift+ArrowDown");
+  for (const edge of ["n", "s", "e", "w", "ne", "nw", "se", "sw"]) {
+    const before = (await window.boundingBox())!;
+    const handle = window.locator(`[data-resize-edge="${edge}"]`);
+    const grip = (await handle.boundingBox())!;
+    await page.mouse.move(grip.x + grip.width / 2, grip.y + grip.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(
+      grip.x + grip.width / 2 + 20,
+      grip.y + grip.height / 2 + 20,
+    );
+    const changed = (await window.boundingBox())!;
+    expect(
+      Math.abs(changed.width - before.width) +
+        Math.abs(changed.height - before.height),
+    ).toBeGreaterThan(15);
+    await page.keyboard.press("Escape");
+    await page.mouse.up();
+    expect(await window.boundingBox()).toEqual(before);
+  }
+});
+
+test("a sole full-page app detaches to a movable bounded window", async ({
+  page,
+}) => {
+  await page.goto("/projects/");
+  await ready(page, "/projects/");
+  const window = app(page, "/projects/");
+  const before = (await window.boundingBox())!;
+  await page.mouse.move(before.x + 100, before.y + 22);
+  await page.mouse.down();
+  await page.mouse.move(before.x + 220, before.y + 102, { steps: 5 });
+  await page.mouse.up();
+  const after = (await window.boundingBox())!;
+  expect(after.x).toBeGreaterThan(before.x + 80);
+  expect(after.y).toBeGreaterThan(before.y + 60);
+  expect(after.width).toBeLessThan(before.width);
+  expect(after.height).toBeLessThan(before.height);
+  expect(after.x + after.width).toBeLessThanOrEqual(before.x + before.width);
+  expect(after.y + after.height).toBeLessThanOrEqual(before.y + before.height);
+});
+
+test("cancelling a drag preserves a previously resized welcome window", async ({
+  page,
+}) => {
+  await dock(page, "/");
+  const home = app(page, "/");
+  await home.getByRole("button", { name: "Resize Home", exact: true }).focus();
+  await page.keyboard.press("ArrowLeft");
+  const before = (await home.boundingBox())!;
+  await page.mouse.move(before.x + 100, before.y + 22);
+  await page.mouse.down();
+  await page.mouse.move(before.x + 240, before.y + 110);
+  await page.keyboard.press("Escape");
+  await page.mouse.up();
+  expect(await home.boundingBox()).toEqual(before);
+});
+
+test("native touch dragging follows the pointer and losing capture rolls back", async ({
+  page,
+}) => {
+  await dock(page, "/");
+  const home = app(page, "/");
+  const title = home.locator(".window-titlebar");
+  const before = (await home.boundingBox())!;
+  const session = await page.context().newCDPSession(page);
+  await session.send("Emulation.setTouchEmulationEnabled", { enabled: true });
+  await session.send("Input.dispatchTouchEvent", {
+    type: "touchStart",
+    touchPoints: [{ x: before.x + 100, y: before.y + 22 }],
+  });
+  await session.send("Input.dispatchTouchEvent", {
+    type: "touchMove",
+    touchPoints: [{ x: before.x + 240, y: before.y + 110 }],
+  });
+  expect((await home.boundingBox())!.x).toBeGreaterThan(before.x + 100);
+  await session.send("Input.dispatchTouchEvent", {
+    type: "touchEnd",
+    touchPoints: [],
+  });
+  const floated = (await home.boundingBox())!;
+  await session.send("Emulation.setTouchEmulationEnabled", { enabled: false });
+  await page.mouse.move(floated.x + 100, floated.y + 22);
+  await page.mouse.down();
+  await page.mouse.move(floated.x + 200, floated.y + 82);
+  await title.evaluate((node) => {
+    for (let id = 1; id < 10; id++)
+      if (node.hasPointerCapture(id)) node.releasePointerCapture(id);
+  });
+  await page.mouse.up();
+  expect(await home.boundingBox()).toEqual(floated);
+  await session.detach();
 });

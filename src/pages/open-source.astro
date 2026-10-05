@@ -43,12 +43,9 @@ const originals = [
     <div class="contribution-list" id="oss-list">
       {contributions.map((item) => (
         <article class="contribution-entry" id={item.id} data-category="contributions">
-          <h2 class:list={['contribution-title', { 'langchain-heading': item.id === 'langchain' }]}>
-            {item.logo ? <img class={`project-wordmark ${item.id}`} src={item.logo} alt={item.id === 'posthog' ? 'PostHog' : 'LangChain'} width={item.id === 'posthog' ? 160 : 189} height={item.id === 'posthog' ? 28 : 40} /> : item.name}
-            {item.id === 'langchain' && <span class="related-project">and LangGraph</span>}
-          </h2>
+          <h2 class="contribution-title">{item.name}</h2>
           <p class="contribution-copy" id={item.id === 'posthog' ? 'posthog-pricing' : undefined}>{item.description}</p>
-          <div class="contribution-links"><a href={item.project}>Project <Icon name="arrow-up-right" /></a><a href={item.history}>Contribution history <Icon name="arrow-up-right" /></a></div>
+          <div class="contribution-links"><a class:list={{ "contribution-brand": !!item.logo }} href={item.project} aria-label={`${item.name} project`}>{item.logo ? <img class={`project-wordmark ${item.id}`} src={item.logo} alt="" width={item.id === 'posthog' ? 160 : 189} height={item.id === 'posthog' ? 28 : 40} /> : <>Project <Icon name="arrow-up-right" /></>}</a><a href={item.history}>Contribution history <Icon name="arrow-up-right" /></a></div>
           <div class="contribution-receipts" aria-label={`${item.name} references`}>
             <span>{item.id === 'linux' ? 'Around the desktop' : 'Selected changes'}</span>
             {item.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer" title={link.title} aria-label={`${link.label}: ${link.title} (opens in a new tab)`}>{link.label}<Icon name="arrow-up-right" /></a>)}

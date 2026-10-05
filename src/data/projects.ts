@@ -1,7 +1,6 @@
 export const projects = [
   {
     name: "Copa Ace",
-    mark: "CA",
     description: "Official website for the Copa Ace CS2 tournament.",
     detail:
       "A public tournament website, with the implementation available on GitHub.",
@@ -12,7 +11,6 @@ export const projects = [
   },
   {
     name: "Mutuals",
-    mark: "M",
     description: "Twitch chat, voice, and OBS integration.",
     detail:
       "I built the Twitch/OBS integration with João, connecting the stream experience to Mutuals.",
@@ -30,7 +28,6 @@ export const projects = [
   },
   {
     name: "Bend SDKs",
-    mark: "B",
     description: "Experimental OpenAI and Anthropic libraries for Bend.",
     detail: "Two open-source SDK experiments: openai-bend and anthropic-bend.",
     links: [

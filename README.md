@@ -1,6 +1,6 @@
 # Gabriel Gouvêa’s portfolio
 
-A quiet, black-and-white desktop for projects, open source, and writing. Desktop has tiled windows; mobile has its own Home, apps, and Recents navigation.
+A quiet, black-and-white desktop for projects, open source, and writing. Desktop has movable windows with edge snapping and tiling; mobile has its own Home, apps, and Recents navigation.
 
 Built with **Astro**, static HTML, CSS, and a small TypeScript enhancement. No database, authentication, server functions, or external runtime services. Every page has a real URL and renders usable, indexable content without JavaScript.
 

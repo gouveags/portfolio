@@ -1,4 +1,12 @@
-# Portfolio v4 implementation QA
+# Portfolio implementation QA history
+
+## Current increment: free-moving desktop windows
+
+The latest work adds floating windows, half/quadrant snapping, eight resize directions, and the site-wide typography and header cleanup. Cloud type checking, static build, internal links, asset references, and the exact supplied résumé pass. Independent source review found and fixed Home focus restoration, hidden-window geometry clamping, and the single remaining tile's grid width.
+
+Browser results for this increment are tracked against the exact revision in [PR #6 checks](https://github.com/gouveags/portfolio/pull/6/checks), with rendered screenshots in its `portfolio-verification` artifact. Live cloud-browser inspection is currently blocked by an access denial. No live preview acceptance or complete visual pass is claimed for this increment until that evidence is reviewed. The older acceptance report below applies only to its named revision; it is not current-scope approval.
+
+## Historical v4 implementation report
 
 ## Result
 
