@@ -36,13 +36,19 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run verify
-      - name: Upload browser traces, screenshots, and report
+      - name: Upload browser report and traces
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: portfolio-verification
-          path: |
-            playwright-report/
-            test-results/
+          path: playwright-report/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Upload rendered screenshots
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-screenshots
+          path: test-results/
           if-no-files-found: ignore
           retention-days: 14

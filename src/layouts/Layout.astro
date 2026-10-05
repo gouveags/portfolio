@@ -3,6 +3,7 @@ import Icon from '../components/Icon.astro';
 import WallpaperDots from '../components/WallpaperDots.astro';
 import LocalClock from '../components/LocalClock.astro';
 import Calendar from '../components/Calendar.astro';
+import PhotoViewer from '../components/PhotoViewer.astro';
 import { apps } from '../data/navigation';
 import { getCollection } from 'astro:content';
 import '@fontsource-variable/inter';
@@ -117,6 +118,7 @@ const searchItems = [...apps, ...posts.map(p => ({path: `/blog/${p.id}/`, title:
       <noscript><a href="/guide/">All pages</a></noscript>
     </nav>
     <Calendar />
+    <PhotoViewer />
     <dialog id="launcher" aria-labelledby="launcher-title">
       <div class="dialog-header"><h2 id="launcher-title">Find your way</h2><button data-action="close-dialog" class="icon-button" aria-label="Close search"><Icon name="x" /></button></div>
       <div class="launcher-input"><Icon name="magnifying-glass" /><input id="search-input" type="search" placeholder="Find a page, project or note" aria-label="Search pages, projects and notes" autocomplete="off" /></div>

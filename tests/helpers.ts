@@ -70,11 +70,13 @@ export async function settledScreenshot(page: Page, path: string) {
   await page.evaluate(async () => {
     await document.fonts.ready;
     const images = Array.from(document.images).filter((image) => {
-      if (image.loading !== 'lazy') return true;
       const box = image.getBoundingClientRect();
       const style = getComputedStyle(image);
-      return box.width > 0 && box.height > 0 && style.visibility !== 'hidden'
-        && box.bottom > 0 && box.right > 0 && box.top < innerHeight && box.left < innerWidth;
+      // Closed dialogs and hidden cached windows may intentionally contain an
+      // empty image placeholder. Only decode images that can actually paint.
+      if (box.width === 0 || box.height === 0 || style.visibility === 'hidden') return false;
+      if (image.loading !== 'lazy') return true;
+      return box.bottom > 0 && box.right > 0 && box.top < innerHeight && box.left < innerWidth;
     });
     await Promise.all(images.map(async (image) => {
       // decode() also waits for the selected responsive picture source to load.

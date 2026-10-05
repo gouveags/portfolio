@@ -1498,7 +1498,12 @@ function initializeShell(host: HTMLElement): void {
       if (filter && filter.getAttribute("aria-pressed") !== "true")
         applyFilter(filter, false);
     }
-    if (scroll) anchor.scrollIntoView({ block: "start", behavior: "instant" });
+    if (scroll) {
+      anchor.scrollIntoView({ block: "start", behavior: "instant" });
+      // Explicitly focusable deep-link sections keep keyboard navigation at
+      // the content the visitor chose, rather than at the page's first heading.
+      if (anchor.hasAttribute("tabindex")) anchor.focus({ preventScroll: true });
+    }
   }
 
   host.addEventListener(
@@ -1884,6 +1889,16 @@ function initializeDialogs(): void {
       true,
     );
     dialog.addEventListener("close", () => {
+      if (dialog.id === "photo-viewer") {
+        const image = dialog.querySelector<HTMLImageElement>("#photo-viewer-image");
+        if (image) {
+          image.onload = null;
+          image.onerror = null;
+          image.hidden = true;
+          image.removeAttribute("src");
+          image.parentElement?.setAttribute("aria-busy", "false");
+        }
+      }
       dialog
         .querySelector("#search-input")
         ?.setAttribute("aria-expanded", "false");
@@ -1906,6 +1921,41 @@ function initializeDialogs(): void {
   });
   document.addEventListener("click", (event) => {
     if (!(event.target instanceof Element)) return;
+    const photo = event.target.closest<HTMLAnchorElement>("a[data-photo-viewer]");
+    if (photo && event.button === 0 && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+      const source = new URL(photo.href, location.href);
+      const viewer = document.querySelector<HTMLDialogElement>("#photo-viewer");
+      const image = document.querySelector<HTMLImageElement>("#photo-viewer-image");
+      const title = document.querySelector<HTMLElement>("#photo-viewer-title");
+      const caption = document.querySelector<HTMLElement>("#photo-viewer-caption");
+      const status = document.querySelector<HTMLElement>("#photo-viewer-status");
+      const file = document.querySelector<HTMLAnchorElement>("#photo-viewer-file");
+      if (source.origin === location.origin && source.pathname.startsWith("/photos/about/") && source.pathname.endsWith(".webp") && viewer && image && title && caption && status && file) {
+        event.preventDefault();
+        title.textContent = photo.dataset.photoTitle || "A closer look";
+        caption.textContent = photo.dataset.photoCaption || "";
+        image.alt = photo.dataset.photoAlt || photo.querySelector("img")?.alt || "Personal photograph";
+        image.hidden = true;
+        status.hidden = false;
+        status.textContent = "Loading photo…";
+        image.parentElement?.setAttribute("aria-busy", "true");
+        image.onload = () => {
+          image.hidden = false;
+          status.hidden = true;
+          image.parentElement?.setAttribute("aria-busy", "false");
+        };
+        image.onerror = () => {
+          image.hidden = true;
+          status.hidden = false;
+          status.textContent = "The photo could not load. You can try the image link below.";
+          image.parentElement?.setAttribute("aria-busy", "false");
+        };
+        image.src = source.href;
+        file.href = source.href;
+        openDialog("photo-viewer", photo);
+        return;
+      }
+    }
     const button = event.target.closest<HTMLElement>("[data-action]");
     if (!button) return;
     const action = button.dataset.action;

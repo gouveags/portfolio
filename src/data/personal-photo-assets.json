@@ -1,0 +1,107 @@
+[
+  {
+    "src": "/photos/about/wec-interlagos-480.webp",
+    "width": 480,
+    "height": 270,
+    "bytes": 28040,
+    "sha256": "2408a4886482a00fb7eb2f2a3cdee39edef8fae333b793cf7f912900a6818508"
+  },
+  {
+    "src": "/photos/about/wec-interlagos-800.webp",
+    "width": 800,
+    "height": 450,
+    "bytes": 52334,
+    "sha256": "299f0f9a3922a65372a4a4553962cd4d9c6d1bc48519cb2d2039adaf2a92085e"
+  },
+  {
+    "src": "/photos/about/wec-interlagos-1600.webp",
+    "width": 1600,
+    "height": 900,
+    "bytes": 116440,
+    "sha256": "b832aa4ba9567cf05c6a58d7066402dd29c86f1c77396e4d7484031c540ab0b8"
+  },
+  {
+    "src": "/photos/about/theatro-municipal-480.webp",
+    "width": 480,
+    "height": 853,
+    "bytes": 72854,
+    "sha256": "c7507b3533e30fdae15b7522cf7828dadb9b9256cdbbdf6d8528fa3d73f03d96"
+  },
+  {
+    "src": "/photos/about/theatro-municipal-800.webp",
+    "width": 800,
+    "height": 1421,
+    "bytes": 150706,
+    "sha256": "a1013d678d51fc3cb2c7e8353387b57610e5423fc27e7e444ccb2cf8bd325c74"
+  },
+  {
+    "src": "/photos/about/theatro-municipal-1153.webp",
+    "width": 1153,
+    "height": 2048,
+    "bytes": 265144,
+    "sha256": "53bade5bf4acb72207570459b184daeb24c6ac1a8f8c389505d748a2baaadbb0"
+  },
+  {
+    "src": "/photos/about/porsche-cup-480.webp",
+    "width": 480,
+    "height": 853,
+    "bytes": 89616,
+    "sha256": "0679dedc9ad2121d8ffb615b0d4a139b8f36dd7d668765d0e5edc3907e179cb1"
+  },
+  {
+    "src": "/photos/about/porsche-cup-800.webp",
+    "width": 800,
+    "height": 1422,
+    "bytes": 169300,
+    "sha256": "c57baeaab1a02071f7938c0d0a1835418948dc09a83040e149c9a6e2a4ab1fa2"
+  },
+  {
+    "src": "/photos/about/porsche-cup-1080.webp",
+    "width": 1080,
+    "height": 1920,
+    "bytes": 267102,
+    "sha256": "c38f52fb8147a25fd5632f84cef00c198d9d3af0b607b73c4cbe8fc3ec9ece31"
+  },
+  {
+    "src": "/photos/about/community-evening-480.webp",
+    "width": 480,
+    "height": 853,
+    "bytes": 26780,
+    "sha256": "c2f5254811ef7e9b289e1e70ab1bc4321fb0af1cb6537672e73d2132b231bfda"
+  },
+  {
+    "src": "/photos/about/community-evening-800.webp",
+    "width": 800,
+    "height": 1422,
+    "bytes": 54972,
+    "sha256": "8d4a3df6f45f6f1369d95afdcb75ae49bee3d8d63647365705bbc5ad8ae3a0f0"
+  },
+  {
+    "src": "/photos/about/community-evening-1152.webp",
+    "width": 1152,
+    "height": 2048,
+    "bytes": 108954,
+    "sha256": "a9b1ffe85591f22719615e4fef80049067261ad71b76fb3669f71c831fabe71e"
+  },
+  {
+    "src": "/photos/about/museu-ipiranga-480.webp",
+    "width": 480,
+    "height": 270,
+    "bytes": 49170,
+    "sha256": "6e3ab5cafd2c1d1a4d2a47861e429b6a2c0b53c6f8ce5132f70d7456e5aed859"
+  },
+  {
+    "src": "/photos/about/museu-ipiranga-800.webp",
+    "width": 800,
+    "height": 450,
+    "bytes": 135158,
+    "sha256": "d8efdd694ed2f4673ff892ed207867fa2016af7c76023c3698c9676bad562537"
+  },
+  {
+    "src": "/photos/about/museu-ipiranga-1440.webp",
+    "width": 1440,
+    "height": 810,
+    "bytes": 313634,
+    "sha256": "3cb93a69176259904ee95683eb9e7312d1b3fc808ab4aa9b5302e863f900ec7b"
+  }
+]

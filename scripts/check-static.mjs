@@ -155,6 +155,30 @@ for (const [source, notice] of [
   } catch (error) { failures.push(`Font license verification: ${error.message}`); }
 }
 
+try {
+  const photographs = JSON.parse(await readFile('src/data/personal-photo-assets.json', 'utf8'));
+  check(photographs.length === 15, 'Personal gallery must contain exactly five curated photographs with three variants each');
+  const expected = photographs.map((photo) => photo.src.split('/').at(-1)).sort();
+  for (const directory of ['public', root]) {
+    const actual = (await readdir(path.join(directory, 'photos/about'))).sort();
+    check(JSON.stringify(actual) === JSON.stringify(expected), `${directory}: only approved optimized photo variants may be published`);
+    for (const photo of photographs) {
+      const filename = path.join(directory, photo.src);
+      const bytes = await readFile(filename);
+      check(bytes.length === photo.bytes, `${filename}: unexpected photo size`);
+      check(createHash('sha256').update(bytes).digest('hex') === photo.sha256, `${filename}: photo differs from the reviewed asset`);
+      check(bytes.subarray(0, 4).toString() === 'RIFF' && bytes.subarray(8, 12).toString() === 'WEBP', `${filename}: expected WebP`);
+      for (let offset = 12; offset + 8 <= bytes.length;) {
+        const chunk = bytes.subarray(offset, offset + 4).toString();
+        const length = bytes.readUInt32LE(offset + 4);
+        check(['VP8 ', 'VP8L', 'VP8X', 'ALPH'].includes(chunk), `${filename}: unexpected metadata or animation chunk ${chunk}`);
+        offset += 8 + length + (length % 2);
+        check(offset <= bytes.length, `${filename}: invalid WebP chunk length`);
+      }
+    }
+  }
+} catch (error) { failures.push(`Personal photo verification: ${error.message}`); }
+
 if (failures.length) {
   console.error(`\nStatic verification failed (${failures.length}):\n${failures.map((failure) => `  - ${failure}`).join('\n')}`);
   process.exitCode = 1;

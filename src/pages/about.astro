@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
+import PersonalChapter from '../components/PersonalChapter.astro';
 const experience = [
   { stage: 'Where it started', company: 'Icarus Formula SAE', role: 'Telemetry and data acquisition', detail: 'At Icarus, I worked on telemetry and data acquisition, connecting microcontrollers with desktop tools. It was a hands-on introduction to building software around a physical system and the people who needed to understand it.' },
   { stage: 'Building a product from zero', company: 'Realms / IP.TV · EduxGen.AI', role: 'Software engineer · Jan 2023 – Apr 2025', detail: 'At Realms, I helped build EduxGen.AI from zero with a small team, working across React, Node.js, and the generation backend. The product helps teachers turn a prompt into lessons, slides, handouts, assessments, images and videos. I owned the content-generation backend rework and the retrieval and knowledge layer, connecting agent orchestration, WebSockets, PostgreSQL/pgvector, and Neo4j.' },
@@ -19,7 +20,10 @@ const experience = [
         <p class="lead">I’m Gabriel, a software engineer currently at MOVEdot.</p>
         <p>My work has moved from race-car telemetry to building an AI product from zero, and now to agent infrastructure and product development. Across those settings, I like understanding the whole system and making it useful to the people working with it.</p>
         <p>Open source runs alongside that work. I contribute to tools I use, follow problems across project boundaries, and build a few experiments of my own.</p>
-        <a class="text-link" href="/assets/CV_Gabriel_Silva_Gouvea_en-US.pdf" download>Download résumé <Icon name="arrow-down" /></a>
+        <div class="about-intro-links">
+          <a class="text-link" href="/assets/CV_Gabriel_Silva_Gouvea_en-US.pdf" download>Download résumé <Icon name="arrow-down" /></a>
+          <a class="text-link" href="#personal">A little about me <Icon name="arrow-down" /></a>
+        </div>
       </div>
     </div>
     <section class="timeline" aria-labelledby="experience-title" id="experience">
@@ -41,6 +45,14 @@ const experience = [
       <p>B.Sc. Computer Science at Estácio, expected September 2027.</p>
       <p>Electronic &amp; Computer Engineering coursework at UFRJ, 2018–2024.</p>
     </section>
+    <PersonalChapter />
     <footer class="page-footer"><a class="text-link" href="/contact/">Get in touch <Icon name="arrow-right" /></a></footer>
+    <style is:inline>
+      .about-intro-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 28px;
+      }
+    </style>
   </div>
 </Layout>

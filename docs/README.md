@@ -10,5 +10,6 @@
 - [Local calendar](./LOCAL-CALENDAR.md): device-local clock, calendar, and privacy.
 - [Wallpaper controls](./WALLPAPER-CONTROLS.md): selection dots and verification.
 - [Photograph licenses](./PHOTO-LICENSES.md): wallpaper sources, attribution, and permitted reuse.
+- [Personal photographs](./PERSONAL-PHOTOS.md): the curated About chapter, image sizes, metadata stripping and accessible larger views.
 - [Visual verification](../design-qa.md): existing desktop and mobile QA evidence.
 - [Project README](../README.md): setup, verification commands, and Vercel previews.
